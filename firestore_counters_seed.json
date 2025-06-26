@@ -1,0 +1,6 @@
+{
+  "fields": {
+    "contract_id": { "integerValue": "0" },
+    "invoice_id": { "integerValue": "0" }
+  }
+}

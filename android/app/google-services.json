@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37570910829",
+    "project_id": "fire-auth-060700",
+    "storage_bucket": "fire-auth-060700.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37570910829:android:7f6f5b61b82594935ebd64",
+        "android_client_info": {
+          "package_name": "org.acad.firebase_auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH_v6iiPm4-Zl4IQeWrN48G6IvY-_RLlk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

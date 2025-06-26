@@ -1,0 +1,58 @@
+name: fire_auth
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.1.1
+  firebase_core: ^3.14.0
+  firebase_auth: ^5.6.0
+  equatable: ^2.0.7
+  intl: ^0.20.2
+  firebase_storage: ^12.4.7
+  cloud_firestore: ^5.6.9
+  table_calendar: ^3.2.0
+  flutter_svg: ^2.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/svg/
+
+  fonts:
+    - family: Ubuntu
+      fonts:
+        - asset: assets/fonts/regular.ttf
+          weight: 400
+        - asset: assets/fonts/medium.ttf
+          weight: 500
+        - asset: assets/fonts/bold.ttf
+          weight: 700
+    - family: Poppins
+      fonts: 
+        - asset: assets/fonts/poppins-regular.ttf
+          weight: 400
+        - asset: assets/fonts/poppins-medium.ttf
+          weight: 500
+        - asset: assets/fonts/poppins-semiBold.ttf
+          weight: 600
+        - asset: assets/fonts/poppins-bold.ttf
+          weight: 700

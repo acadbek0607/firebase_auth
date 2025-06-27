@@ -1,5 +1,6 @@
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
+import 'package:fire_auth/ui/history/pages/history_page.dart';
 import 'package:fire_auth/ui/new/pages/create_contract_page.dart';
 import 'package:fire_auth/ui/new/pages/create_invoice_page.dart';
 import 'package:fire_auth/ui/new/pages/new_page.dart';
@@ -119,6 +120,7 @@ class MyApp extends StatelessWidget {
           '/new': (context) => const NewPage(),
           '/create_contract': (context) => const CreateContractPage(),
           '/create_invoice': (context) => const CreateInvoicePage(),
+          '/history': (context) => const HistoryPage(),
         },
         onGenerateRoute: (settings) {
           switch (settings.name) {

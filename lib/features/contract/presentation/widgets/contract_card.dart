@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
@@ -71,12 +72,12 @@ class ContractCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: contract.status.color.withAlpha(77),
+                    color: contract.status.color.withAlpha(44),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     contract.status.label,
-                    style: TextStyle(
+                    style: Kstyle.textStyle.copyWith(
                       color: contract.status.color,
                       fontSize: 12,
                     ),
@@ -85,31 +86,64 @@ class ContractCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(
-              'Fisher: ${contract.fullName}',
-              style: const TextStyle(color: Colors.white),
+            Text.rich(
+              TextSpan(
+                text: 'Fisher: ',
+                style: const TextStyle(color: Colors.white),
+                children: [
+                  TextSpan(
+                    text: contract.fullName,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 4),
+            Text.rich(
+              TextSpan(
+                text: 'Amount: ',
+                style: const TextStyle(color: Colors.white),
+                children: [
+                  TextSpan(
+                    text: contract.amount.toStringAsFixed(2),
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 4),
-            Text(
-              'Amount: \$${contract.amount.toStringAsFixed(2)}',
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Last contract: № $lastContractId',
-              style: const TextStyle(color: Colors.white70),
+            Text.rich(
+              TextSpan(
+                text: 'Last contract: ',
+                style: TextStyle(color: Colors.white),
+                children: [
+                  TextSpan(
+                    text: '№ $lastContractId',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Number of contracts: $totalContracts',
-                  style: const TextStyle(color: Color(0xFF999999)),
+                Text.rich(
+                  TextSpan(
+                    text: 'Number of contracts: ',
+                    style: TextStyle(color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: '$totalContracts',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
                 ),
                 Text(
                   '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
-                  style: const TextStyle(color: Color(0xFF999999)),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),

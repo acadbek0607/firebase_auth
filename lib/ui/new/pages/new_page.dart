@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,6 @@ class NewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     selectedPageNotifier.value = 2;
     return Scaffold(
-      backgroundColor: Colors.black.withAlpha(204),
       body: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
@@ -17,7 +18,6 @@ class NewPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFF1F1F1F),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.tealAccent, width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

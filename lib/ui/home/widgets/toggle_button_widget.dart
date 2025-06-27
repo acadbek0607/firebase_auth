@@ -30,6 +30,7 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                         ? const Color(0xFF00A795)
                         : const Color(0xFF00A795).withAlpha(0),
                   ),
+                  elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: const Text(
                   'Contracts',
@@ -47,6 +48,7 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                         ? const Color(0xFF008F7F)
                         : Colors.transparent,
                   ),
+                  elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: const Text(
                   'Invoices',

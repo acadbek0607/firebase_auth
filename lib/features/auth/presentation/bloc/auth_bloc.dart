@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/domain/entities/user_entity.dart';
 import 'package:fire_auth/features/auth/domain/usecases/usecases.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Loading());
       try {
         final user = await signInWithEmail(event.email, event.password);
+        currentUserNotifier.value =
+            user; // where 'user' is the signed-in UserEntity
+
         emit(Authenticated(user));
       } catch (e) {
         emit(AuthError(e.toString()));
@@ -33,6 +37,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Loading());
       try {
         final user = await signUpWithEmail(event.email, event.password);
+        currentUserNotifier.value =
+            user; // where 'user' is the signed-in UserEntity
+
         emit(Authenticated(user));
       } catch (e) {
         emit(AuthError(e.toString()));
@@ -47,6 +54,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthCheckRequested>((event, emit) async {
       final user = await getCurrentUser();
       if (user != null) {
+        currentUserNotifier.value =
+            user; // where 'user' is the signed-in UserEntity
         emit(Authenticated(user));
       } else {
         emit(Unauthenticated());

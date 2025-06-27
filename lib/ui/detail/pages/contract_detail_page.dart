@@ -3,10 +3,12 @@ import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class ContractDetailPage extends StatelessWidget {
+class ContractDetailPage extends StatefulWidget {
   final ContractEntity contract;
   final List<ContractEntity> allContracts;
 
@@ -15,6 +17,18 @@ class ContractDetailPage extends StatelessWidget {
     required this.contract,
     required this.allContracts,
   });
+
+  @override
+  State<ContractDetailPage> createState() => _ContractDetailPageState();
+}
+
+class _ContractDetailPageState extends State<ContractDetailPage> {
+  bool _isSaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _showDeleteDialog(BuildContext context, String contractId) {
     final controller = TextEditingController();
@@ -26,42 +40,50 @@ class ContractDetailPage extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: Color(0xFF2a2a2d),
+              backgroundColor: const Color(0xFF2a2a2d),
               title: Text(
                 'Why do you want to delete this contract?',
                 style: Kstyle.textStyle,
                 textAlign: TextAlign.center,
               ),
-              content: TextField(
-                controller: controller,
-                maxLines: 3,
-                onChanged: (val) => setState(() => canDelete = val.isNotEmpty),
-                decoration: Kstyle.textFieldStyle.copyWith(
-                  hintText: 'Enter reason...',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+              content: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: const Color(0xFF5C5C5C),
+                ),
+                child: TextField(
+                  controller: controller,
+                  maxLines: 3,
+                  onChanged: (val) =>
+                      setState(() => canDelete = val.isNotEmpty),
+                  decoration: Kstyle.textFieldStyle.copyWith(
+                    hintText: 'Enter reason...',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
+                  style: Kstyle.buttonStyle,
                   child: const Text('Cancel'),
                 ),
                 if (canDelete)
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                    style: Kstyle.buttonStyle.copyWith(
+                      backgroundColor: WidgetStateProperty.all(Colors.red),
                     ),
                     onPressed: () {
                       context.read<ContractBloc>().add(
                         DeleteContractEvent(contractId),
                       );
-                      Navigator.pop(context); // close dialog
-                      Navigator.pop(context); // go back from detail
+                      Navigator.pop(context); // Close dialog
+                      Navigator.pop(context); // Pop detail page
                     },
                     child: const Text('Delete'),
                   ),
@@ -75,12 +97,39 @@ class ContractDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final relatedContracts = allContracts
-        .where((c) => c.fullName == contract.fullName && c.id != contract.id)
+    final contract = widget.contract;
+    final relatedContracts = widget.allContracts
+        .where(
+          (c) =>
+              c.fullName == widget.contract.fullName &&
+              c.id != widget.contract.id,
+        )
         .toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Contract Detail')),
+      appBar: AppBar(
+        title: const Text('Contract Detail'),
+        actions: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) =>
+                ScaleTransition(scale: animation, child: child),
+            child: IconButton(
+              key: ValueKey<bool>(_isSaved),
+              icon: _isSaved
+                  ? SvgPicture.asset('assets/svg/s_saved.svg')
+                  : SvgPicture.asset('assets/svg/saved.svg'),
+              onPressed: () {
+                setState(() {
+                  _isSaved = !_isSaved;
+                });
+              },
+            ),
+          ),
+          SizedBox(width: 10.0),
+        ],
+      ),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -99,7 +148,10 @@ class ContractDetailPage extends StatelessWidget {
                       _detailText('Amount', '${contract.amount}'),
                       _detailText('Address', contract.organizationAddress),
                       _detailText('ITN/IEC', contract.inn),
-                      _detailText('Created at', contract.createdAt.toString()),
+                      _detailText(
+                        'Created at',
+                        '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
+                      ),
                     ],
                   ),
                 ),
@@ -111,9 +163,11 @@ class ContractDetailPage extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => _showDeleteDialog(context, contract.id!),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red.withAlpha(60),
-                      elevation: 0,
+                    style: Kstyle.buttonStyle.copyWith(
+                      backgroundColor: WidgetStateProperty.all(
+                        Colors.red.withAlpha(60),
+                      ),
+                      elevation: WidgetStateProperty.all(0.0),
                     ),
                     child: Text(
                       'Delete contract',
@@ -130,8 +184,10 @@ class ContractDetailPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/create_contract');
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff008F7F),
+                    style: Kstyle.buttonStyle.copyWith(
+                      backgroundColor: WidgetStateProperty.all(
+                        const Color(0xff008F7F),
+                      ),
                     ),
                     child: Text(
                       'Create contract',
@@ -156,7 +212,7 @@ class ContractDetailPage extends StatelessWidget {
                 itemBuilder: (_, i) {
                   return ContractCard(
                     contract: relatedContracts[i],
-                    allContracts: allContracts,
+                    allContracts: widget.allContracts,
                   );
                 },
               ),
@@ -164,6 +220,7 @@ class ContractDetailPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: NavbarWidget(),
     );
   }
 

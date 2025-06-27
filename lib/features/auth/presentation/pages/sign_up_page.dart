@@ -1,4 +1,5 @@
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,6 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         listener: (context, state) {
           if (state is Authenticated) {
+            currentUserNotifier.value = state.user;
             Navigator.pushReplacementNamed(context, '/home');
           } else if (state is AuthError) {
             ScaffoldMessenger.of(

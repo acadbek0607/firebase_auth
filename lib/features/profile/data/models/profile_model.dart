@@ -2,6 +2,7 @@ import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 
 class ProfileModel extends ProfileEntity {
   ProfileModel({
+    required super.dateOfBirth,
     required super.fullName,
     required super.phone,
     required super.profession,
@@ -14,6 +15,7 @@ class ProfileModel extends ProfileEntity {
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
+      dateOfBirth: json['dateOfBirth'] ?? '',
       fullName: json['fullName'] ?? '',
       phone: json['phone'] ?? '',
       profession: json['profession'] ?? '',
@@ -35,6 +37,7 @@ class ProfileModel extends ProfileEntity {
       'photoUrl': photoUrl,
       'savedContractIds': savedContractIds,
       'uid': uid,
+      'dateOfBirth': dateOfBirth,
     };
   }
 
@@ -48,6 +51,7 @@ class ProfileModel extends ProfileEntity {
       photoUrl: entity.photoUrl,
       savedContractIds: entity.savedContractIds,
       uid: entity.uid,
+      dateOfBirth: entity.dateOfBirth,
     );
   }
 

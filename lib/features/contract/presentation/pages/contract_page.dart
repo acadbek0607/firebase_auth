@@ -37,12 +37,20 @@ class ContractsPage extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
-            itemCount: contracts.length,
-            itemBuilder: (context, index) {
-              final contract = contracts[index];
-              return ContractCard(contract: contract, allContracts: contracts);
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<ContractBloc>().add(LoadContracts());
             },
+            child: ListView.builder(
+              itemCount: contracts.length,
+              itemBuilder: (context, index) {
+                final contract = contracts[index];
+                return ContractCard(
+                  contract: contract,
+                  allContracts: contracts,
+                );
+              },
+            ),
           );
         } else if (state is ContractError) {
           return Center(child: Text("Error: ${state.message}"));

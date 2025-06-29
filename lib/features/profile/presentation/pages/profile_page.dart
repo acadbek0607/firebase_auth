@@ -10,6 +10,7 @@ import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart'
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,7 +26,9 @@ class _ProfilePageState extends State<ProfilePage> {
   final _phoneController = TextEditingController();
   final _professionController = TextEditingController();
   final _organizationController = TextEditingController();
+  final _dobController = TextEditingController();
 
+  DateTime? _selectedDate;
   String? _photoUrl;
   File? _pickedImage;
   bool _isProfileSaved = false;
@@ -55,6 +58,23 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> _pickDateOfBirth() async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _dobController.text =
+            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+      });
+    }
+  }
+
   void _submitProfile() {
     if (_formKey.currentState!.validate()) {
       final authUser = context.read<AuthBloc>().state is Authenticated
@@ -70,6 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
         organization: _organizationController.text.trim(),
         email: authUser.email ?? '',
         photoUrl: _photoUrl,
+        dateOfBirth: _selectedDate != null
+            ? "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}"
+            : null,
       );
 
       context.read<ProfileBloc>().add(SaveProfile(profile));
@@ -85,6 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ), // 👈 THIS LINE
           title: const Text(
             'Choose a language',
             style: TextStyle(color: Colors.white),
@@ -105,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                setState(() {}); // Refresh
+                setState(() {}); // Refresh state
               },
               child: const Text('Done'),
             ),
@@ -116,17 +142,26 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildLangOption(String label, String flag) {
-    return RadioListTile(
-      value: label,
-      groupValue: _selectedLanguage,
-      onChanged: (val) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      title: Text('$flag  $label', style: const TextStyle(color: Colors.white)),
+      trailing: Radio<String>(
+        value: label,
+        groupValue: _selectedLanguage,
+        onChanged: (val) {
+          setState(() {
+            _selectedLanguage = val!;
+            _selectedFlag = flag;
+          });
+        },
+        activeColor: Colors.teal,
+      ),
+      onTap: () {
         setState(() {
-          _selectedLanguage = val!;
+          _selectedLanguage = label;
           _selectedFlag = flag;
         });
       },
-      title: Text('$flag  $label', style: const TextStyle(color: Colors.white)),
-      activeColor: Colors.teal,
     );
   }
 
@@ -146,6 +181,13 @@ class _ProfilePageState extends State<ProfilePage> {
           _professionController.text = state.profile.profession;
           _organizationController.text = state.profile.organization;
           _photoUrl = state.profile.photoUrl;
+          _selectedDate = state.profile.dateOfBirth != null
+              ? DateTime.tryParse(state.profile.dateOfBirth!)
+              : null;
+          if (_selectedDate != null) {
+            _dobController.text =
+                "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
+          }
           _isProfileSaved = true;
         }
       },
@@ -153,6 +195,10 @@ class _ProfilePageState extends State<ProfilePage> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Profile'),
+            leading: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+              child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
+            ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout),
@@ -212,6 +258,21 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 12),
             _buildTextField('Organization', _organizationController),
             const SizedBox(height: 12),
+            GestureDetector(
+              onTap: _pickDateOfBirth,
+              child: AbsorbPointer(
+                child: TextFormField(
+                  controller: _dobController,
+                  decoration: Kstyle.textFieldStyle.copyWith(
+                    labelText: 'Date of Birth',
+                  ),
+                  validator: (val) => val == null || val.isEmpty
+                      ? 'Date of Birth is required'
+                      : null,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             TextFormField(
               initialValue: authUser?.email ?? '',
               enabled: false,
@@ -231,55 +292,62 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfileCardView(authUser) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Card(
           color: const Color(0xFF2C2C2E),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
-                const CircleAvatar(radius: 28, child: Icon(Icons.person)),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _fullNameController.text,
-                        style: const TextStyle(
-                          color: Colors.tealAccent,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundImage: _photoUrl != null
+                          ? NetworkImage(_photoUrl!)
+                          : const AssetImage('assets/img/default.png')
+                                as ImageProvider,
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _fullNameController.text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${_professionController.text} • ${_organizationController.text}',
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Phone: ${_phoneController.text}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        'Email: ${authUser?.email ?? ""}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          '${_professionController.text} • ${_organizationController.text}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 8),
+                _infoRow('Phone', _phoneController.text),
+                _infoRow('Email', authUser?.email ?? ''),
+                if (_selectedDate != null)
+                  _infoRow(
+                    'Date of Birth',
+                    "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}",
+                  ),
               ],
             ),
           ),
         ),
         const SizedBox(height: 16),
-        OutlinedButton(
+        FilledButton(
           onPressed: _showLanguageDialog,
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: Colors.grey),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+          style: Kstyle.buttonStyle.copyWith(
+            backgroundColor: WidgetStateProperty.all(const Color(0xFF2B2B2E)),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
           ),
           child: Row(
@@ -305,6 +373,24 @@ class _ProfilePageState extends State<ProfilePage> {
       decoration: Kstyle.textFieldStyle.copyWith(labelText: label),
       validator: (val) =>
           val == null || val.isEmpty ? '$label is required' : null,
+    );
+  }
+
+  Widget _infoRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Row(
+        children: [
+          Text(
+            '$title: ',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(value, style: const TextStyle(color: Colors.grey)),
+        ],
+      ),
     );
   }
 }

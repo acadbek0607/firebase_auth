@@ -1,6 +1,7 @@
 class ProfileEntity {
   final String uid; // <-- required for identifying the user
   final String fullName;
+  final String? dateOfBirth;
   final String phone;
   final String profession;
   final String organization;
@@ -11,6 +12,7 @@ class ProfileEntity {
   ProfileEntity({
     required this.uid,
     required this.fullName,
+    required this.dateOfBirth,
     required this.phone,
     required this.profession,
     required this.organization,
@@ -22,6 +24,7 @@ class ProfileEntity {
   ProfileEntity copyWith({
     String? uid,
     String? fullName,
+    String? dateOfBirth,
     String? phone,
     String? profession,
     String? organization,
@@ -32,6 +35,7 @@ class ProfileEntity {
     return ProfileEntity(
       uid: uid ?? this.uid,
       fullName: fullName ?? this.fullName,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       phone: phone ?? this.phone,
       profession: profession ?? this.profession,
       organization: organization ?? this.organization,

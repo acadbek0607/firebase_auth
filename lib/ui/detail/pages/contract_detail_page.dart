@@ -3,6 +3,9 @@ import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
+import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,11 +26,12 @@ class ContractDetailPage extends StatefulWidget {
 }
 
 class _ContractDetailPageState extends State<ContractDetailPage> {
-  bool _isSaved = false;
-
   @override
   void initState() {
     super.initState();
+    if (widget.contract.id != null) {
+      context.read<ProfileBloc>().add(CheckSavedStatus(widget.contract.id!));
+    }
   }
 
   void _showDeleteDialog(BuildContext context, String contractId) {
@@ -79,11 +83,14 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                       backgroundColor: WidgetStateProperty.all(Colors.red),
                     ),
                     onPressed: () {
+                      context.read<ProfileBloc>().add(
+                        ToggleSavedContractEvent(widget.contract.id!),
+                      );
                       context.read<ContractBloc>().add(
                         DeleteContractEvent(contractId),
                       );
-                      Navigator.pop(context); // Close dialog
-                      Navigator.pop(context); // Pop detail page
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: const Text('Delete'),
                   ),
@@ -110,26 +117,31 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
       appBar: AppBar(
         title: const Text('Contract Detail'),
         actions: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder: (child, animation) =>
-                ScaleTransition(scale: animation, child: child),
-            child: IconButton(
-              key: ValueKey<bool>(_isSaved),
-              icon: _isSaved
-                  ? SvgPicture.asset('assets/svg/s_saved.svg')
-                  : SvgPicture.asset('assets/svg/saved.svg'),
-              onPressed: () {
-                setState(() {
-                  _isSaved = !_isSaved;
-                });
-              },
-            ),
+          BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              bool isSaved = false;
+              if (state is ProfileLoaded) {
+                isSaved = state.savedContractIds.contains(widget.contract.id);
+              }
+
+              return IconButton(
+                icon: isSaved
+                    ? SvgPicture.asset('assets/svg/s_saved.svg')
+                    : SvgPicture.asset('assets/svg/saved.svg'),
+                onPressed: () {
+                  if (widget.contract.id != null) {
+                    context.read<ProfileBloc>().add(
+                      ToggleSavedContractEvent(widget.contract.id!),
+                    );
+                  }
+                },
+              );
+            },
           ),
-          SizedBox(width: 10.0),
+
+          const SizedBox(width: 10),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(

@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/domain/entities/user_entity.dart';
 import 'package:fire_auth/features/auth/domain/usecases/usecases.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -20,46 +20,59 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.signOut,
     required this.getCurrentUser,
   }) : super(AuthInitial()) {
-    on<SignInResquested>((event, emit) async {
-      emit(Loading());
-      try {
-        final user = await signInWithEmail(event.email, event.password);
-        currentUserNotifier.value =
-            user; // where 'user' is the signed-in UserEntity
+    on<SignInResquested>(_onSignInRequested);
+    on<SignUpRequested>(_onSignUpRequested);
+    on<SignOutRequested>(_onSignOutRequested);
+    on<AuthCheckRequested>(_onAuthCheckRequested);
+  }
 
-        emit(Authenticated(user));
-      } catch (e) {
-        emit(AuthError(e.toString()));
-      }
-    });
+  Future<void> _onSignInRequested(
+    SignInResquested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(Loading());
+    try {
+      final user = await signInWithEmail(event.email, event.password);
+      currentUserNotifier.value = user;
+      emit(Authenticated(user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
 
-    on<SignUpRequested>((event, emit) async {
-      emit(Loading());
-      try {
-        final user = await signUpWithEmail(event.email, event.password);
-        currentUserNotifier.value =
-            user; // where 'user' is the signed-in UserEntity
+  Future<void> _onSignUpRequested(
+    SignUpRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(Loading());
+    try {
+      final user = await signUpWithEmail(event.email, event.password);
+      currentUserNotifier.value = user;
+      emit(Authenticated(user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
 
-        emit(Authenticated(user));
-      } catch (e) {
-        emit(AuthError(e.toString()));
-      }
-    });
+  Future<void> _onSignOutRequested(
+    SignOutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await signOut(); // FIX: call the function!
+    currentUserNotifier.value = null;
+    emit(Unauthenticated());
+  }
 
-    on<SignOutRequested>((event, emit) async {
-      signOut;
+  Future<void> _onAuthCheckRequested(
+    AuthCheckRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = await getCurrentUser();
+    if (user != null) {
+      currentUserNotifier.value = user;
+      emit(Authenticated(user));
+    } else {
       emit(Unauthenticated());
-    });
-
-    on<AuthCheckRequested>((event, emit) async {
-      final user = await getCurrentUser();
-      if (user != null) {
-        currentUserNotifier.value =
-            user; // where 'user' is the signed-in UserEntity
-        emit(Authenticated(user));
-      } else {
-        emit(Unauthenticated());
-      }
-    });
+    }
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';

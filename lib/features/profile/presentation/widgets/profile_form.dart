@@ -1,89 +1,108 @@
-import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
+import 'dart:io';
+
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
-import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 
-class ProfileForm extends StatefulWidget {
-  final ProfileEntity profile;
+class ProfileForm extends StatelessWidget {
+  final GlobalKey<FormState> formKey;
+  final TextEditingController fullNameController;
+  final TextEditingController phoneController;
+  final TextEditingController professionController;
+  final TextEditingController organizationController;
+  final TextEditingController dobController;
+  final File? pickedImage;
+  final Function() pickImage;
+  final Function() pickDateOfBirth;
+  final String? email;
+  final Function() submitProfile;
 
-  const ProfileForm({super.key, required this.profile});
-
-  @override
-  State<ProfileForm> createState() => _ProfileFormState();
-}
-
-class _ProfileFormState extends State<ProfileForm> {
-  late final TextEditingController fullNameController;
-  late final TextEditingController phoneController;
-  late final TextEditingController professionController;
-  late final TextEditingController organizationController;
-
-  @override
-  void initState() {
-    super.initState();
-    fullNameController = TextEditingController(text: widget.profile.fullName);
-    phoneController = TextEditingController(text: widget.profile.phone);
-    professionController = TextEditingController(
-      text: widget.profile.profession,
-    );
-    organizationController = TextEditingController(
-      text: widget.profile.organization,
-    );
-  }
-
-  @override
-  void dispose() {
-    fullNameController.dispose();
-    phoneController.dispose();
-    professionController.dispose();
-    organizationController.dispose();
-    super.dispose();
-  }
+  const ProfileForm({
+    super.key,
+    required this.formKey,
+    required this.fullNameController,
+    required this.phoneController,
+    required this.professionController,
+    required this.organizationController,
+    required this.dobController,
+    required this.pickedImage,
+    required this.pickImage,
+    required this.pickDateOfBirth,
+    required this.email,
+    required this.submitProfile,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _field('Full Name', fullNameController),
-        _field('Phone Number', phoneController),
-        _field('Profession', professionController),
-        _field('Organization', organizationController),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            final updated = widget.profile.copyWith(
-              fullName: fullNameController.text,
-              phone: phoneController.text,
-              profession: professionController.text,
-              organization: organizationController.text,
-            );
-            context.read<ProfileBloc>().add(SaveProfile(updated));
-          },
-          child: const Text('Save Profile'),
+    return SingleChildScrollView(
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: pickImage,
+              child: CircleAvatar(
+                radius: 48,
+                backgroundImage: pickedImage != null
+                    ? FileImage(pickedImage!)
+                    : const AssetImage('assets/img/default.png')
+                          as ImageProvider,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black45,
+                    radius: 16,
+                    child: const Icon(Icons.edit, size: 18),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildTextField('Full Name', fullNameController),
+            const SizedBox(height: 12),
+            _buildTextField('Phone', phoneController),
+            const SizedBox(height: 12),
+            _buildTextField('Profession', professionController),
+            const SizedBox(height: 12),
+            _buildTextField('Organization', organizationController),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: pickDateOfBirth,
+              child: AbsorbPointer(
+                child: TextFormField(
+                  controller: dobController,
+                  decoration: Kstyle.textFieldStyle.copyWith(
+                    labelText: 'Date of Birth',
+                  ),
+                  validator: (val) => val == null || val.isEmpty
+                      ? 'Date of Birth is required'
+                      : null,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              initialValue: email ?? '',
+              enabled: false,
+              decoration: Kstyle.textFieldStyle.copyWith(labelText: 'Email'),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: submitProfile,
+              style: Kstyle.buttonStyle,
+              child: const Text('Save Profile'),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
-        TextButton(
-          onPressed: () {
-            context.read<AuthBloc>().add(SignOutRequested());
-          },
-          child: const Text('Sign Out'),
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _field(String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
-      ),
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      decoration: Kstyle.textFieldStyle.copyWith(labelText: label),
+      validator: (val) =>
+          val == null || val.isEmpty ? '$label is required' : null,
     );
   }
 }

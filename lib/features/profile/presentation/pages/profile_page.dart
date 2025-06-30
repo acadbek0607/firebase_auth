@@ -1,18 +1,19 @@
+// profile_page.dart
 import 'dart:io';
 
-import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
+import 'package:fire_auth/features/profile/presentation/widgets/profile_widgets.dart';
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -105,7 +106,6 @@ class _ProfilePageState extends State<ProfilePage> {
         if (uploadedUrl != null) {
           _photoUrl = uploadedUrl;
         } else {
-          // You can show a snackbar or fallback
           debugPrint('Failed to upload image');
         }
       }
@@ -123,108 +123,20 @@ class _ProfilePageState extends State<ProfilePage> {
             : null,
       );
 
-      // ignore: use_build_context_synchronously
       context.read<ProfileBloc>().add(SaveProfile(profile));
     }
   }
 
   void _showLanguageDialog() {
-    String tempLanguage = _selectedLanguage;
-    String tempFlag = _selectedFlag;
-
-    showDialog(
+    LanguageDialog.show(
       context: context,
-      builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setInnerState) {
-            return AlertDialog(
-              backgroundColor: const Color(0xFF1C1C1E),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              title: const Text(
-                'Choose a language',
-                style: TextStyle(color: Colors.white),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildLangOptionDialog(
-                    'O‘zbek (Lotin)',
-                    '🇺🇿',
-                    tempLanguage,
-                    (lang, flag) {
-                      setInnerState(() {
-                        tempLanguage = lang;
-                        tempFlag = flag;
-                      });
-                    },
-                  ),
-                  _buildLangOptionDialog('Русский', '🇷🇺', tempLanguage, (
-                    lang,
-                    flag,
-                  ) {
-                    setInnerState(() {
-                      tempLanguage = lang;
-                      tempFlag = flag;
-                    });
-                  }),
-                  _buildLangOptionDialog(
-                    'English (USA)',
-                    '🇺🇸',
-                    tempLanguage,
-                    (lang, flag) {
-                      setInnerState(() {
-                        tempLanguage = lang;
-                        tempFlag = flag;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context), // cancel
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedLanguage = tempLanguage;
-                      _selectedFlag = tempFlag;
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Done'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildLangOptionDialog(
-    String label,
-    String flag,
-    String groupValue,
-    Function(String, String) onSelected,
-  ) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      title: Text('$flag  $label', style: const TextStyle(color: Colors.white)),
-      trailing: Radio<String>(
-        value: label,
-        groupValue: groupValue,
-        onChanged: (val) {
-          if (val != null) onSelected(val, flag);
-        },
-        activeColor: Colors.teal,
-      ),
-      onTap: () {
-        onSelected(label, flag);
+      currentLanguage: _selectedLanguage,
+      currentFlag: _selectedFlag,
+      onChanged: (lang, flag) {
+        setState(() {
+          _selectedLanguage = lang;
+          _selectedFlag = flag;
+        });
       },
     );
   }
@@ -278,193 +190,36 @@ class _ProfilePageState extends State<ProfilePage> {
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: _isProfileSaved
-                      ? _buildProfileCardView(authUser)
-                      : _buildProfileForm(authUser),
+                      ? ProfileCard(
+                          fullName: _fullNameController.text,
+                          phone: _phoneController.text,
+                          email: authUser?.email ?? '',
+                          profession: _professionController.text,
+                          organization: _organizationController.text,
+                          photoUrl: _photoUrl,
+                          dateOfBirth: _dobController.text,
+                          onEdit: () => setState(() => _isProfileSaved = false),
+                          onLanguageTap: _showLanguageDialog,
+                          selectedLanguage: _selectedLanguage,
+                          selectedFlag: _selectedFlag,
+                        )
+                      : ProfileForm(
+                          formKey: _formKey,
+                          fullNameController: _fullNameController,
+                          phoneController: _phoneController,
+                          professionController: _professionController,
+                          organizationController: _organizationController,
+                          dobController: _dobController,
+                          pickedImage: _pickedImage,
+                          pickImage: _pickImage,
+                          pickDateOfBirth: _pickDateOfBirth,
+                          email: authUser?.email,
+                          submitProfile: _submitProfile,
+                        ),
                 ),
           bottomNavigationBar: NavbarWidget(),
         );
       },
-    );
-  }
-
-  Widget _buildProfileForm(authUser) {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 48,
-                backgroundImage: _pickedImage != null
-                    ? FileImage(_pickedImage!)
-                    : (_photoUrl != null
-                              ? NetworkImage(_photoUrl!)
-                              : const AssetImage('assets/img/default.png'))
-                          as ImageProvider,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black45,
-                    radius: 16,
-                    child: const Icon(Icons.edit, size: 18),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildTextField('Full Name', _fullNameController),
-            const SizedBox(height: 12),
-            _buildTextField('Phone', _phoneController),
-            const SizedBox(height: 12),
-            _buildTextField('Profession', _professionController),
-            const SizedBox(height: 12),
-            _buildTextField('Organization', _organizationController),
-            const SizedBox(height: 12),
-            GestureDetector(
-              onTap: _pickDateOfBirth,
-              child: AbsorbPointer(
-                child: TextFormField(
-                  controller: _dobController,
-                  decoration: Kstyle.textFieldStyle.copyWith(
-                    labelText: 'Date of Birth',
-                  ),
-                  validator: (val) => val == null || val.isEmpty
-                      ? 'Date of Birth is required'
-                      : null,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              initialValue: authUser?.email ?? '',
-              enabled: false,
-              decoration: Kstyle.textFieldStyle.copyWith(labelText: 'Email'),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _submitProfile,
-              style: Kstyle.buttonStyle,
-              child: const Text('Save Profile'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileCardView(authUser) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isProfileSaved = false;
-        });
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            color: const Color(0xFF2C2C2E),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundImage: _photoUrl != null
-                            ? NetworkImage(_photoUrl!)
-                            : const AssetImage('assets/img/default.png')
-                                  as ImageProvider,
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _fullNameController.text,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '${_professionController.text} • ${_organizationController.text}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  _infoRow('Phone', _phoneController.text),
-                  _infoRow('Email', authUser?.email ?? ''),
-                  if (_selectedDate != null)
-                    _infoRow(
-                      'Date of Birth',
-                      "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}",
-                    ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          FilledButton(
-            onPressed: _showLanguageDialog,
-            style: Kstyle.buttonStyle.copyWith(
-              backgroundColor: WidgetStateProperty.all(const Color(0xFF2B2B2E)),
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(_selectedLanguage),
-                  Text(_selectedFlag, style: const TextStyle(fontSize: 20)),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-    String label,
-    TextEditingController controller, {
-    bool enabled = true,
-  }) {
-    return TextFormField(
-      controller: controller,
-      enabled: enabled,
-      decoration: Kstyle.textFieldStyle.copyWith(labelText: label),
-      validator: (val) =>
-          val == null || val.isEmpty ? '$label is required' : null,
-    );
-  }
-
-  Widget _infoRow(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Row(
-        children: [
-          Text(
-            '$title: ',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(value, style: const TextStyle(color: Colors.grey)),
-        ],
-      ),
     );
   }
 }

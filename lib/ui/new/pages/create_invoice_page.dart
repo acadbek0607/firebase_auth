@@ -1,6 +1,7 @@
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   final _formKey = GlobalKey<FormState>();
   final _serviceNameController = TextEditingController();
   final _costController = TextEditingController();
-  final StatusType _status = StatusType.inProcess;
+  StatusType _status = StatusType.inProcess;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +56,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               SizedBox(height: 6.0),
               CustomDropdown(
                 label: 'Status',
-                value: _status.toFirestoreString(),
-                items: StatusType.values
-                    .map((s) => s.toFirestoreString())
-                    .toList(),
+                value: _status.label,
+                items: StatusType.values.map((s) => s.label).toList(),
                 onChanged: (val) {
                   if (val != null) {
-                    setState(() => StatusTypeExtension.fromString(val));
+                    setState(() {
+                      _status = StatusTypeExtension.fromLabel(val);
+                    });
                   }
                 },
               ),
@@ -88,6 +89,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           ),
         ),
       ),
+      bottomNavigationBar: NavbarWidget(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class InvoiceCard extends StatelessWidget {
   final InvoiceEntity invoice;
@@ -28,12 +29,18 @@ class InvoiceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '№ ${invoice.id ?? '—'}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              Row(
+                children: [
+                  SvgPicture.asset('assets/svg/invoice.svg'),
+                  SizedBox(width: 8.0),
+                  Text(
+                    '№ ${invoice.id ?? '—'}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -61,7 +68,7 @@ class InvoiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Amount: \$${invoice.cost.toStringAsFixed(2)}',
+                '''Amount: ${invoice.cost} so'm''',
                 style: const TextStyle(color: Colors.white),
               ),
               Text(

@@ -37,12 +37,17 @@ class InvoicesPage extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
-            itemCount: invoices.length,
-            itemBuilder: (context, index) {
-              final invoice = invoices[index];
-              return InvoiceCard(invoice: invoice, allInvoices: []);
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<InvoiceBloc>().add(LoadInvoices());
             },
+            child: ListView.builder(
+              itemCount: invoices.length,
+              itemBuilder: (context, index) {
+                final invoice = invoices[index];
+                return InvoiceCard(invoice: invoice, allInvoices: []);
+              },
+            ),
           );
         } else if (state is InvoiceError) {
           return Center(child: Text("Error: ${state.message}"));

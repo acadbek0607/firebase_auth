@@ -122,14 +122,13 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       CustomDropdown(
                         label: 'Status',
-                        value: _selectedStatus.toFirestoreString(),
-                        items: StatusType.values
-                            .map((s) => s.toFirestoreString())
-                            .toList(),
+                        // value: _selectedStatus.toFirestoreString(),
+                        value: _selectedStatus.label,
+                        items: StatusType.values.map((s) => s.label).toList(),
                         onChanged: (val) {
                           if (val != null) {
                             setState(() {
-                              _selectedStatus = StatusTypeExtension.fromString(
+                              _selectedStatus = StatusTypeExtension.fromLabel(
                                 val,
                               );
                             });

@@ -30,18 +30,14 @@ extension StatusTypeExtension on StatusType {
   }
 
   static StatusType fromString(String status) {
-    switch (status.toLowerCase()) {
-      case 'paid':
-        return StatusType.paid;
-      case 'in_process':
-        return StatusType.inProcess;
-      case 'rejected_by_payme':
-        return StatusType.rejectedByPayme;
-      case 'rejected_by_iq':
-        return StatusType.rejectedByIQ;
-      default:
-        return StatusType.inProcess;
-    }
+    return StatusType.values.firstWhere(
+      (e) => e.name == status,
+      orElse: () => StatusType.inProcess,
+    );
+  }
+
+  static StatusType fromLabel(String label) {
+    return StatusType.values.firstWhere((e) => e.label == label);
   }
 
   String toFirestoreString() {

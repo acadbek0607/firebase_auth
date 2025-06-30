@@ -26,6 +26,7 @@ class ContractDetailPage extends StatefulWidget {
 }
 
 class _ContractDetailPageState extends State<ContractDetailPage> {
+  bool isSaved = false;
   @override
   void initState() {
     super.initState();
@@ -119,8 +120,7 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
         actions: [
           BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
-              bool isSaved = false;
-              if (state is ProfileLoaded) {
+              if (state is ProfileLoaded && widget.contract.id != null) {
                 isSaved = state.savedContractIds.contains(widget.contract.id);
               }
 
@@ -130,6 +130,9 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                     : SvgPicture.asset('assets/svg/saved.svg'),
                 onPressed: () {
                   if (widget.contract.id != null) {
+                    setState(() {
+                      isSaved = !isSaved;
+                    });
                     context.read<ProfileBloc>().add(
                       ToggleSavedContractEvent(widget.contract.id!),
                     );

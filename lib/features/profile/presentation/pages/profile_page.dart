@@ -8,6 +8,7 @@ import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
 import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -75,12 +76,39 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _submitProfile() {
+  Future<String?> _uploadProfilePhoto(String uid, File file) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('$uid.jpg');
+      await ref.putFile(file);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      debugPrint('Upload failed: $e');
+      return null;
+    }
+  }
+
+  void _submitProfile() async {
     if (_formKey.currentState!.validate()) {
       final authUser = context.read<AuthBloc>().state is Authenticated
           ? (context.read<AuthBloc>().state as Authenticated).user
           : null;
       if (authUser == null) return;
+
+      if (_pickedImage != null) {
+        final uploadedUrl = await _uploadProfilePhoto(
+          authUser.uid,
+          _pickedImage!,
+        );
+        if (uploadedUrl != null) {
+          _photoUrl = uploadedUrl;
+        } else {
+          // You can show a snackbar or fallback
+          debugPrint('Failed to upload image');
+        }
+      }
 
       final profile = ProfileEntity(
         uid: authUser.uid,
@@ -100,67 +128,102 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showLanguageDialog() {
+    String tempLanguage = _selectedLanguage;
+    String tempFlag = _selectedFlag;
+
     showDialog(
       context: context,
       builder: (_) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF1C1C1E),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          insetPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ), // 👈 THIS LINE
-          title: const Text(
-            'Choose a language',
-            style: TextStyle(color: Colors.white),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildLangOption('O‘zbek (Lotin)', '🇺🇿'),
-              _buildLangOption('Русский', '🇷🇺'),
-              _buildLangOption('English (USA)', '🇺🇸'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {}); // Refresh state
-              },
-              child: const Text('Done'),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setInnerState) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF1C1C1E),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+              title: const Text(
+                'Choose a language',
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildLangOptionDialog(
+                    'O‘zbek (Lotin)',
+                    '🇺🇿',
+                    tempLanguage,
+                    (lang, flag) {
+                      setInnerState(() {
+                        tempLanguage = lang;
+                        tempFlag = flag;
+                      });
+                    },
+                  ),
+                  _buildLangOptionDialog('Русский', '🇷🇺', tempLanguage, (
+                    lang,
+                    flag,
+                  ) {
+                    setInnerState(() {
+                      tempLanguage = lang;
+                      tempFlag = flag;
+                    });
+                  }),
+                  _buildLangOptionDialog(
+                    'English (USA)',
+                    '🇺🇸',
+                    tempLanguage,
+                    (lang, flag) {
+                      setInnerState(() {
+                        tempLanguage = lang;
+                        tempFlag = flag;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context), // cancel
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedLanguage = tempLanguage;
+                      _selectedFlag = tempFlag;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  Widget _buildLangOption(String label, String flag) {
+  Widget _buildLangOptionDialog(
+    String label,
+    String flag,
+    String groupValue,
+    Function(String, String) onSelected,
+  ) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       title: Text('$flag  $label', style: const TextStyle(color: Colors.white)),
       trailing: Radio<String>(
         value: label,
-        groupValue: _selectedLanguage,
+        groupValue: groupValue,
         onChanged: (val) {
-          setState(() {
-            _selectedLanguage = val!;
-            _selectedFlag = flag;
-          });
+          if (val != null) onSelected(val, flag);
         },
         activeColor: Colors.teal,
       ),
       onTap: () {
-        setState(() {
-          _selectedLanguage = label;
-          _selectedFlag = flag;
-        });
+        onSelected(label, flag);
       },
     );
   }
@@ -291,74 +354,81 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileCardView(authUser) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Card(
-          color: const Color(0xFF2C2C2E),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundImage: _photoUrl != null
-                          ? NetworkImage(_photoUrl!)
-                          : const AssetImage('assets/img/default.png')
-                                as ImageProvider,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _fullNameController.text,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isProfileSaved = false;
+        });
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            color: const Color(0xFF2C2C2E),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundImage: _photoUrl != null
+                            ? NetworkImage(_photoUrl!)
+                            : const AssetImage('assets/img/default.png')
+                                  as ImageProvider,
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _fullNameController.text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '${_professionController.text} • ${_organizationController.text}',
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _infoRow('Phone', _phoneController.text),
-                _infoRow('Email', authUser?.email ?? ''),
-                if (_selectedDate != null)
-                  _infoRow(
-                    'Date of Birth',
-                    "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}",
+                          Text(
+                            '${_professionController.text} • ${_organizationController.text}',
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 8),
+                  _infoRow('Phone', _phoneController.text),
+                  _infoRow('Email', authUser?.email ?? ''),
+                  if (_selectedDate != null)
+                    _infoRow(
+                      'Date of Birth',
+                      "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}",
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          FilledButton(
+            onPressed: _showLanguageDialog,
+            style: Kstyle.buttonStyle.copyWith(
+              backgroundColor: WidgetStateProperty.all(const Color(0xFF2B2B2E)),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_selectedLanguage),
+                Text(_selectedFlag, style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        FilledButton(
-          onPressed: _showLanguageDialog,
-          style: Kstyle.buttonStyle.copyWith(
-            backgroundColor: WidgetStateProperty.all(const Color(0xFF2B2B2E)),
-            shape: WidgetStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(_selectedLanguage),
-              Text(_selectedFlag, style: const TextStyle(fontSize: 20)),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

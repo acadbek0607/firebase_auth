@@ -106,7 +106,7 @@ class ContractCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
-                    text: contract.amount.toStringAsFixed(2),
+                    text: '''${contract.amount.toString()} so'm''',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],

@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 16.0),
               title: const Text(
                 'Choose a language',
                 style: TextStyle(color: Colors.white),
@@ -420,12 +420,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_selectedLanguage),
-                Text(_selectedFlag, style: const TextStyle(fontSize: 20)),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(_selectedLanguage),
+                  Text(_selectedFlag, style: const TextStyle(fontSize: 20)),
+                ],
+              ),
             ),
           ),
         ],

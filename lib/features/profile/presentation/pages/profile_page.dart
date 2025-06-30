@@ -123,6 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
             : null,
       );
 
+      // ignore: use_build_context_synchronously
       context.read<ProfileBloc>().add(SaveProfile(profile));
     }
   }

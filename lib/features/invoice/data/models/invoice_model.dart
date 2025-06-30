@@ -4,6 +4,7 @@ import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 
 class InvoiceModel extends InvoiceEntity {
   @override
+  // ignore: overridden_fields
   final String id;
 
   InvoiceModel({

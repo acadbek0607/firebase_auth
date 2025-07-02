@@ -17,7 +17,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     required this.updateInvoice,
     required this.deleteInvoice,
     required this.getInvoices,
-  }) : super(InvoiceInitial()) {
+  }) : super(InvoiceState.initial()) {
     on<LoadInvoices>(_onLoadInvoices);
     on<CreateInvoiceEvent>(_onCreateInvoice);
     on<UpdateInvoiceEvent>(_onUpdateInvoice);
@@ -28,12 +28,12 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     LoadInvoices event,
     Emitter<InvoiceState> emit,
   ) async {
-    emit(InvoiceLoading());
+    emit(state.copyWith(status: InvoiceStatus.loading, errorMesaage: null));
     try {
       final invoices = await getInvoices();
-      emit(InvoiceLoaded(invoices));
+      emit(state.copyWith(status: InvoiceStatus.loaded, invoices: invoices));
     } catch (e) {
-      emit(InvoiceError(e.toString()));
+      emit(state.copyWith(errorMesaage: e.toString()));
     }
   }
 
@@ -45,7 +45,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       await createInvoice(event.invoice);
       add(LoadInvoices());
     } catch (e) {
-      emit(InvoiceError(e.toString()));
+      emit(state.copyWith(errorMesaage: e.toString()));
     }
   }
 
@@ -57,7 +57,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       await updateInvoice(event.invoice);
       add(LoadInvoices());
     } catch (e) {
-      emit(InvoiceError(e.toString()));
+      emit(state.copyWith(errorMesaage: e.toString()));
     }
   }
 
@@ -69,7 +69,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       await deleteInvoice(event.invoiceId);
       add(LoadInvoices());
     } catch (e) {
-      emit(InvoiceError(e.toString()));
+      emit(state.copyWith(errorMesaage: e.toString()));
     }
   }
 }

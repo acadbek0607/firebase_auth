@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String label;
-  final String value;
+  final String? value;
   final List<String> items;
   final ValueChanged<String?> onChanged;
 
@@ -26,7 +26,7 @@ class CustomDropdown extends StatelessWidget {
       ),
       child: DropdownButtonFormField<String>(
         isExpanded: true,
-        value: value,
+        value: value!.isNotEmpty ? value : null,
         onChanged: onChanged,
         decoration: const InputDecoration(
           border: InputBorder.none,

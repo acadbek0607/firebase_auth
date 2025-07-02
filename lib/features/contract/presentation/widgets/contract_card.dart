@@ -18,6 +18,9 @@ class ContractCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedAmount = KDataFormat.amountFormat.format(contract.amount);
+    final formattedDate = KDataFormat.dateFormat.format(contract.createdAt);
+
     // Filter contracts belonging to the same fullName
     final relatedContracts = allContracts
         .where((c) => c.fullName == contract.fullName)
@@ -88,7 +91,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text.rich(
               TextSpan(
-                text: 'Fisher: ',
+                text: 'Fish:  ',
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -102,11 +105,11 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: 'Amount: ',
+                text: 'Amount:  ',
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
-                    text: '''${contract.amount.toString()} so'm''',
+                    text: '$formattedAmount UZS',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],
@@ -115,7 +118,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: 'Last contract: ',
+                text: 'Last contract:   ',
                 style: TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -131,7 +134,7 @@ class ContractCard extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                    text: 'Number of contracts: ',
+                    text: 'Number of contracts:   ',
                     style: TextStyle(color: Colors.white),
                     children: [
                       TextSpan(
@@ -142,7 +145,7 @@ class ContractCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
+                  formattedDate,
                   style: const TextStyle(color: Colors.white),
                 ),
               ],

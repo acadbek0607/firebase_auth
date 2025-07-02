@@ -1,81 +1,68 @@
+// lib/ui/home/filter/pages/filter_page.dart
+import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/ui/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:fire_auth/core/constants/classes.dart';
-import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/ui/home/filter/widgets/custom_checkbox_tile.dart';
 
 class FilterPage extends StatefulWidget {
-  final List<ContractEntity> allContracts;
+  final FilterWidget? initialFilter;
+  final int originIndex;
 
-  const FilterPage({super.key, required this.allContracts});
+  const FilterPage({super.key, this.initialFilter, this.originIndex = 0});
 
   @override
   State<FilterPage> createState() => _FilterPageState();
 }
 
 class _FilterPageState extends State<FilterPage> {
-  final DateFormat dateFormat = KDataFormat.dateFormat;
+  final DateFormat formatter = DateFormat('dd.MM.yyyy');
 
-  bool paid = false;
-  bool inProcess = false;
-  bool rejectedByIQ = false;
-  bool rejectedByPayme = false;
-
+  late bool paid;
+  late bool inProcess;
+  late bool rejectedByIQ;
+  late bool rejectedByPayme;
   DateTime? fromDate;
   DateTime? toDate;
 
-  List<ContractEntity> filteredContracts = [];
+  @override
+  void initState() {
+    final filter = widget.initialFilter ?? FilterWidget.empty;
+    paid = filter.statuses.contains(StatusType.paid);
+    inProcess = filter.statuses.contains(StatusType.inProcess);
+    rejectedByIQ = filter.statuses.contains(StatusType.rejectedByIQ);
+    rejectedByPayme = filter.statuses.contains(StatusType.rejectedByPayme);
+    fromDate = filter.fromDate;
+    toDate = filter.toDate;
+    super.initState();
+  }
 
   void _applyFilters() {
-    final selectedStatuses = <String>[];
-    if (paid) selectedStatuses.add("paid");
-    if (inProcess) selectedStatuses.add("inProcess");
-    if (rejectedByIQ) selectedStatuses.add("rejectedByIQ");
-    if (rejectedByPayme) selectedStatuses.add("rejectedByPayme");
+    final selectedStatuses = <StatusType>[];
+    if (paid) selectedStatuses.add(StatusType.paid);
+    if (inProcess) selectedStatuses.add(StatusType.inProcess);
+    if (rejectedByIQ) selectedStatuses.add(StatusType.rejectedByIQ);
+    if (rejectedByPayme) selectedStatuses.add(StatusType.rejectedByPayme);
 
-    final DateTime? startDate = fromDate != null
-        ? DateTime(fromDate!.year, fromDate!.month, fromDate!.day, 0, 0, 0)
-        : null;
-    final DateTime? endDate = toDate != null
-        ? DateTime(toDate!.year, toDate!.month, toDate!.day, 23, 59, 59)
-        : null;
+    final result = FilterWidget(
+      statuses: selectedStatuses,
+      fromDate: fromDate,
+      toDate: toDate,
+    );
 
-    final result = widget.allContracts.where((contract) {
-      final statusMatch =
-          selectedStatuses.isEmpty ||
-          selectedStatuses.contains(contract.status.name);
-
-      final created = contract.createdAt;
-
-      final dateMatch =
-          (startDate == null || !created.isBefore(startDate)) &&
-          (endDate == null || !created.isAfter(endDate));
-
-      return statusMatch && dateMatch;
-    }).toList();
-
-    setState(() {
-      filteredContracts = result;
-    });
+    Navigator.pop(context, result);
   }
 
   void _cancelFilters() {
-    setState(() {
-      paid = false;
-      inProcess = false;
-      rejectedByIQ = false;
-      rejectedByPayme = false;
-      fromDate = null;
-      toDate = null;
-      filteredContracts = [];
-    });
+    Navigator.pop(context, FilterWidget.empty);
   }
 
-  Future<void> _selectDate(BuildContext context, bool isFrom) async {
-    final now = DateTime.now();
+  Future<void> _selectDate(bool isFrom) async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2200),
     );
@@ -93,142 +80,152 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Filter Contracts"), centerTitle: true),
+      appBar: AppBar(title: const Text("Filters"), centerTitle: true),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Status", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-
-            // ✅ STATUS ROWS
-            Row(
+            Column(
               children: [
-                Flexible(
-                  child: CheckboxListTile(
-                    value: paid,
-                    onChanged: (val) => setState(() => paid = val!),
-                    title: const Text('Paid'),
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-                Flexible(
-                  child: CheckboxListTile(
-                    value: rejectedByIQ,
-                    onChanged: (val) => setState(() => rejectedByIQ = val!),
-                    title: const Text('Rejected by IQ'),
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: CheckboxListTile(
-                    value: inProcess,
-                    onChanged: (val) => setState(() => inProcess = val!),
-                    title: const Text('In Process'),
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-                Flexible(
-                  child: CheckboxListTile(
-                    value: rejectedByPayme,
-                    onChanged: (val) => setState(() => rejectedByPayme = val!),
-                    title: const Text('Rejected by Payme'),
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-            const Text("Date", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-
-            // ✅ DATE PICKERS
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _selectDate(context, true),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'From',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        contentPadding: const EdgeInsets.all(12),
-                      ),
-                      child: Text(
-                        fromDate != null
-                            ? dateFormat.format(fromDate!)
-                            : 'Select',
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Flexible(
+                      child: CustomCheckboxTile(
+                        label: "Paid",
+                        value: paid,
+                        onChanged: (val) => setState(() => paid = val),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                const Icon(Icons.arrow_forward, size: 16),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => _selectDate(context, false),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'To',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        contentPadding: const EdgeInsets.all(12),
-                      ),
-                      child: Text(
-                        toDate != null ? dateFormat.format(toDate!) : 'Select',
+                    Flexible(
+                      child: CustomCheckboxTile(
+                        label: "Rejected by IQ",
+                        value: rejectedByIQ,
+                        onChanged: (val) => setState(() => rejectedByIQ = val),
                       ),
                     ),
-                  ),
+                  ],
                 ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Flexible(
+                      child: CustomCheckboxTile(
+                        label: "In Process",
+                        value: inProcess,
+                        onChanged: (val) => setState(() => inProcess = val),
+                      ),
+                    ),
+                    Flexible(
+                      child: CustomCheckboxTile(
+                        label: "Rejected by Payme",
+                        value: rejectedByPayme,
+                        onChanged: (val) =>
+                            setState(() => rejectedByPayme = val),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 120.0,
+                      child: InkWell(
+                        onTap: () => _selectDate(true),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[850],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                fromDate != null
+                                    ? formatter.format(fromDate!)
+                                    : "From",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              SvgPicture.asset('assets/svg/calendar.svg'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: 120.0,
+                      child: InkWell(
+                        onTap: () => _selectDate(false),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[850],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                toDate != null
+                                    ? formatter.format(toDate!)
+                                    : "To",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              SvgPicture.asset('assets/svg/calendar.svg'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 32.0),
               ],
             ),
-
-            const SizedBox(height: 16),
-
-            // ✅ FILTER ACTIONS
-            Row(
+            Column(
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _cancelFilters,
-                    child: const Text("Reset"),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _cancelFilters,
+                        style: Kstyle.buttonStyle.copyWith(
+                          backgroundColor: WidgetStateProperty.all(
+                            Color(0xFF008F7F).withAlpha(50),
+                          ),
+                        ),
+                        child: Text(
+                          "Cancel",
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF008F7F),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _applyFilters,
+                        style: Kstyle.buttonStyle,
+                        child: Text(
+                          "Apply filters",
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFFDFDFD),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _applyFilters,
-                    child: const Text("Apply"),
-                  ),
-                ),
+                SizedBox(height: 30),
               ],
             ),
-
-            const SizedBox(height: 16),
-
-            // ✅ SCROLLABLE CONTRACT LIST
-            if (filteredContracts.isNotEmpty)
-              Expanded(
-                child: ListView.separated(
-                  itemCount: filteredContracts.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    return ContractCard(
-                      contract: filteredContracts[index],
-                      allContracts: widget.allContracts,
-                    );
-                  },
-                ),
-              ),
           ],
         ),
       ),

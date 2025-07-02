@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       title: Text("Already have an account?"),
                     ),
                   ),
-                  if (state is Loading)
+                  if (state.status == AuthStatus.loading)
                     Center(child: const CircularProgressIndicator.adaptive()),
                   Spacer(flex: 4),
                 ],
@@ -103,13 +103,13 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         },
         listener: (context, state) {
-          if (state is Authenticated) {
+          if (state.status == AuthStatus.authenticated) {
             currentUserNotifier.value = state.user;
             Navigator.pushReplacementNamed(context, '/home');
-          } else if (state is AuthError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+          } else if (state.status == AuthStatus.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage.toString())),
+            );
           }
         },
       ),

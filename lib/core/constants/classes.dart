@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 class KDataFormat {
   static DateFormat dateFormat = DateFormat('dd.MM.yyyy');
+  static NumberFormat amountFormat = NumberFormat('#,##0', 'en_US');
 }
 
 class Kstyle {
@@ -15,11 +16,7 @@ class Kstyle {
     padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.all(12.0)),
   );
 
-  static TextStyle textStyle = TextStyle(
-    fontFamily: 'Ubuntu',
-    fontWeight: FontWeight.w500,
-    color: Color(0xFFE7E7E7),
-  );
+  static TextStyle textStyle = TextStyle(color: Color(0xFFE7E7E7));
 
   static InputDecoration textFieldStyle = InputDecoration(
     enabledBorder: OutlineInputBorder(

@@ -1,41 +1,46 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 
-abstract class ProfileState extends Equatable {
-  const ProfileState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class ProfileInitial extends ProfileState {}
-
-class ProfileLoading extends ProfileState {}
-
-class ProfileLoaded extends ProfileState {
-  final ProfileEntity profile;
+class ProfileState extends Equatable {
+  final BlocStatus status;
+  final ProfileEntity? profile;
   final List<String> savedContractIds;
+  final String? errorMessage;
+  final bool? isSaved;
 
-  const ProfileLoaded({required this.profile, required this.savedContractIds});
+  const ProfileState({
+    this.status = BlocStatus.initial,
+    this.profile,
+    this.savedContractIds = const [],
+    this.errorMessage,
+    this.isSaved,
+  });
+
+  factory ProfileState.intial() => const ProfileState();
+
+  ProfileState copyWith({
+    BlocStatus? status,
+    ProfileEntity? profile,
+    List<String>? savedContractIds,
+    String? errorMessage,
+    bool? isSaved,
+  }) {
+    return ProfileState(
+      status: status ?? this.status,
+      profile: profile ?? this.profile,
+      savedContractIds: savedContractIds ?? this.savedContractIds,
+      errorMessage: errorMessage,
+      isSaved: isSaved ?? this.isSaved,
+    );
+  }
 
   @override
-  List<Object?> get props => [profile, savedContractIds];
-}
-
-class ProfileError extends ProfileState {
-  final String message;
-
-  const ProfileError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class ContractSavedStatus extends ProfileState {
-  final bool isSaved;
-
-  const ContractSavedStatus(this.isSaved);
-
-  @override
-  List<Object?> get props => [isSaved];
+  List<Object?> get props => [
+    status,
+    profile,
+    savedContractIds,
+    errorMessage,
+    isSaved,
+  ];
 }

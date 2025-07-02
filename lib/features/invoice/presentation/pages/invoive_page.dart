@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
@@ -12,9 +13,9 @@ class InvoicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InvoiceBloc, InvoiceState>(
       builder: (context, state) {
-        if (state is InvoiceLoading) {
+        if (state.status == InvoiceStatus.loading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is InvoiceLoaded) {
+        } else if (state.status == InvoiceStatus.loaded) {
           final List<InvoiceEntity> invoices = state.invoices;
 
           if (invoices.isEmpty) {
@@ -22,14 +23,20 @@ class InvoicesPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/svg/contracts.svg'),
+                  SvgPicture.asset(
+                    'assets/svg/contracts.svg',
+                    colorFilter: ColorFilter.mode(
+                      Color(0xFF323232),
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   SizedBox(height: 12.0),
-                  const Text(
+                  Text(
                     "No invoices available",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.blueGrey,
+                    style: Kstyle.textStyle.copyWith(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF323232),
                     ),
                   ),
                 ],
@@ -49,8 +56,8 @@ class InvoicesPage extends StatelessWidget {
               },
             ),
           );
-        } else if (state is InvoiceError) {
-          return Center(child: Text("Error: ${state.message}"));
+        } else if (state.status == InvoiceStatus.error) {
+          return Center(child: Text("Error: ${state.errorMessage}"));
         }
 
         return const SizedBox.shrink();

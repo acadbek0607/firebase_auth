@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/profile/data/repos/profile_repo_impl.dart';
 import 'package:fire_auth/features/profile/domain/usecase/create_or_update_profile.dart';
@@ -5,13 +6,11 @@ import 'package:fire_auth/features/profile/domain/usecase/get_profile.dart';
 import 'package:fire_auth/features/profile/domain/usecase/is_saved_contract.dart';
 import 'package:fire_auth/features/profile/domain/usecase/toggle_saved_contract.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:fire_auth/features/profile/presentation/pages/profile_page.dart';
 import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
-import 'package:fire_auth/ui/history/pages/history_page.dart';
-import 'package:fire_auth/ui/new/pages/create_contract_page.dart';
-import 'package:fire_auth/ui/new/pages/create_invoice_page.dart';
-import 'package:fire_auth/ui/new/pages/new_page.dart';
-import 'package:fire_auth/ui/saved/pages/saved_page.dart';
+import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
+import 'package:fire_auth/ui/home/widgets/main_scaffold.dart';
+import 'package:fire_auth/ui/home/widgets/search_page.dart';
+import 'package:fire_auth/ui/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +26,6 @@ import 'package:fire_auth/features/auth/domain/usecases/usecases.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fire_auth/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:fire_auth/features/auth/presentation/pages/sign_up_page.dart';
-import 'package:fire_auth/features/auth/presentation/pages/welcome_page.dart';
 
 // Contract Feature
 import 'package:fire_auth/features/contract/data/datasources/contract_remote_data_source_impl.dart';
@@ -44,7 +42,6 @@ import 'package:fire_auth/features/invoice/domain/usecases/invoice_usecases.dart
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 
 // UI
-import 'package:fire_auth/ui/home/page/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -137,20 +134,29 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'iBilling',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData.dark(useMaterial3: true),
+          theme: ThemeData.dark(useMaterial3: true).copyWith(
+            textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Ubuntu'),
+          ),
           initialRoute: '/',
           routes: {
             '/': (context) => const SignInPage(),
+            '/main': (context) => const MainScaffold(),
             '/signin': (context) => const SignInPage(),
             '/signup': (context) => const SignUpPage(),
-            '/welcome': (context) => const WelcomePage(),
-            '/home': (context) => const HomePage(),
-            '/new': (context) => const NewPage(),
-            '/create_contract': (context) => const CreateContractPage(),
-            '/create_invoice': (context) => const CreateInvoicePage(),
-            '/history': (context) => const HistoryPage(),
-            '/saved': (context) => const SavedPage(),
-            '/profile': (context) => const ProfilePage(),
+            '/home': (context) => const MainScaffold(),
+            '/new': (context) => const MainScaffold(),
+            '/create_contract': (context) {
+              selectedPageNotifier.value = 5;
+              return const MainScaffold();
+            },
+            '/create_invoice': (context) {
+              selectedPageNotifier.value = 6;
+              return const MainScaffold();
+            },
+            '/history': (context) => const MainScaffold(),
+            '/saved': (context) => const MainScaffold(),
+            '/profile': (context) => const MainScaffold(),
+            '/search': (context) => const SearchPage(),
           },
           onGenerateRoute: (settings) {
             switch (settings.name) {
@@ -163,6 +169,17 @@ class MyApp extends StatelessWidget {
                   builder: (context) => ContractDetailPage(
                     contract: contract,
                     allContracts: allContracts,
+                  ),
+                );
+              case '/filter':
+                final args = settings.arguments as Map<String, dynamic>;
+                final filter = args['currentFilter'] as FilterWidget;
+                final originIndex = args['originIndex'] as int;
+
+                return MaterialPageRoute(
+                  builder: (_) => FilterPage(
+                    initialFilter: filter,
+                    originIndex: originIndex,
                   ),
                 );
             }

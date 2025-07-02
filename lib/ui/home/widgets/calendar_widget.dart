@@ -1,61 +1,91 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 
 class CalendarWidget extends StatefulWidget {
-  const CalendarWidget({super.key});
+  final DateTime? initialDate;
+  final ValueChanged<DateTime>? onDaySelected;
+
+  const CalendarWidget({super.key, this.initialDate, this.onDaySelected});
 
   @override
   State<CalendarWidget> createState() => _CalendarWidgetState();
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime.now();
+  late DateTime _focusedWeekStart;
+  late DateTime _selectedDay;
 
-  List<DateTime> _getVisibleWeekDay(DateTime focusedDay) {
-    final startOfWeek = focusedDay.subtract(
-      Duration(days: focusedDay.weekday - 1),
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = widget.initialDate ?? DateTime.now();
+    _focusedWeekStart = _getMonday(_selectedDay);
+  }
+
+  DateTime _getMonday(DateTime date) {
+    return date.subtract(Duration(days: date.weekday - 1));
+  }
+
+  List<DateTime> _getVisibleWeekDays() {
+    return List.generate(
+      6,
+      (index) => _focusedWeekStart.add(Duration(days: index)),
     );
-    return List.generate(7, (index) => startOfWeek.add(Duration(days: index)));
   }
 
   void _goToPreviousWeek() {
     setState(() {
-      _focusedDay = _focusedDay.subtract(const Duration(days: 7));
+      _focusedWeekStart = _focusedWeekStart.subtract(const Duration(days: 7));
     });
   }
 
   void _goToNextWeek() {
     setState(() {
-      _focusedDay = _focusedDay.add(const Duration(days: 7));
+      _focusedWeekStart = _focusedWeekStart.add(const Duration(days: 7));
     });
   }
 
-  bool isSameDay(DateTime day1, DateTime day2) {
+  bool _isSameDay(DateTime day1, DateTime day2) {
     return day1.year == day2.year &&
         day1.month == day2.month &&
         day1.day == day2.day;
   }
 
+  void _selectDay(DateTime day) {
+    if (!_isSameDay(_selectedDay, day)) {
+      setState(() {
+        _selectedDay = day;
+
+        // only update focused week if tapped day is outside the visible week
+        final visibleDays = _getVisibleWeekDays();
+        final isOutsideWeek = !visibleDays.any((d) => _isSameDay(d, day));
+        if (isOutsideWeek) {
+          _focusedWeekStart = _getMonday(day);
+        }
+      });
+      widget.onDaySelected?.call(day);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final weekDays = _getVisibleWeekDay(_focusedDay);
+    final weekDays = _getVisibleWeekDays();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      color: const Color(0xFF2C2C2E),
       child: Column(
         children: [
-          // Month title and arrows
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                DateFormat.yMMM().format(_focusedDay),
-                style: const TextStyle(
+                DateFormat.yMMM().format(_focusedWeekStart),
+                style: Kstyle.textStyle.copyWith(
                   fontSize: 18,
-                  fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFFDADADA),
+                  color: Colors.white,
                 ),
               ),
               Row(
@@ -75,20 +105,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             ],
           ),
           const SizedBox(height: 16.0),
-
-          // Weekdays row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: weekDays.map((day) {
-              final isSelected = isSameDay(day, _selectedDay);
-
+              final isSelected = _isSameDay(day, _selectedDay);
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedDay = day;
-                    _focusedDay = day.subtract(Duration(days: day.weekday - 1));
-                  });
-                },
+                onTap: () => _selectDay(day),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 8.0,
@@ -104,25 +126,30 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     children: [
                       Text(
                         DateFormat.E().format(day),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                        style: Kstyle.textStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: isSelected
+                              ? Colors.white
+                              : const Color(0xFFdadada),
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${day.day}',
-                        style: const TextStyle(color: Color(0xFFD1D1D1)),
-                      ),
-                      if (isSelected)
-                        Container(
-                          margin: const EdgeInsets.only(top: 4),
-                          height: 2,
-                          width: 20,
-                          color: Colors.white,
+                        style: Kstyle.textStyle.copyWith(
+                          color: isSelected
+                              ? Colors.white
+                              : const Color(0xFFdadada),
                         ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        height: 1,
+                        width: 20,
+                        color: isSelected
+                            ? Colors.white
+                            : const Color(0xFFdadada),
+                      ),
                     ],
                   ),
                 ),

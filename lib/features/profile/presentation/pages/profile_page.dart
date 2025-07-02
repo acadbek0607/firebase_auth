@@ -1,14 +1,13 @@
 // profile_page.dart
 import 'dart:io';
 
-import 'package:fire_auth/core/constants/notifier.dart';
+import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
 import 'package:fire_auth/features/profile/presentation/widgets/profile_widgets.dart';
-import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,9 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    final user = context.read<AuthBloc>().state is Authenticated
-        ? (context.read<AuthBloc>().state as Authenticated).user
-        : null;
+    final state = context.read<AuthBloc>().state;
+    final user = state.status == AuthStatus.authenticated ? state.user : null;
 
     if (user != null) {
       context.read<ProfileBloc>().add(LoadProfile(uid: user.uid));
@@ -93,8 +91,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _submitProfile() async {
     if (_formKey.currentState!.validate()) {
-      final authUser = context.read<AuthBloc>().state is Authenticated
-          ? (context.read<AuthBloc>().state as Authenticated).user
+      final state = context.read<AuthBloc>().state;
+      final authUser = state.status == AuthStatus.authenticated
+          ? state.user
           : null;
       if (authUser == null) return;
 
@@ -123,6 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
             : null,
       );
 
+      // ignore: use_build_context_synchronously
       context.read<ProfileBloc>().add(SaveProfile(profile));
     }
   }
@@ -143,22 +143,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    selectedPageNotifier.value = 4;
-
-    final authUser = context.read<AuthBloc>().state is Authenticated
-        ? (context.read<AuthBloc>().state as Authenticated).user
+    final state = context.read<AuthBloc>().state;
+    final authUser = state.status == AuthStatus.authenticated
+        ? state.user
         : null;
 
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is ProfileLoaded) {
-          _fullNameController.text = state.profile.fullName;
-          _phoneController.text = state.profile.phone;
-          _professionController.text = state.profile.profession;
-          _organizationController.text = state.profile.organization;
-          _photoUrl = state.profile.photoUrl;
-          _selectedDate = state.profile.dateOfBirth != null
-              ? DateTime.tryParse(state.profile.dateOfBirth!)
+        if (state.status == BlocStatus.loaded) {
+          _fullNameController.text = state.profile!.fullName;
+          _phoneController.text = state.profile!.phone;
+          _professionController.text = state.profile!.profession;
+          _organizationController.text = state.profile!.organization;
+          _photoUrl = state.profile!.photoUrl;
+          _selectedDate = state.profile!.dateOfBirth != null
+              ? DateTime.tryParse(state.profile!.dateOfBirth!)
               : null;
           if (_selectedDate != null) {
             _dobController.text =
@@ -185,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ],
           ),
-          body: state is ProfileLoading
+          body: state.status == BlocStatus.loading
               ? const Center(child: CircularProgressIndicator())
               : Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -217,7 +216,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           submitProfile: _submitProfile,
                         ),
                 ),
-          bottomNavigationBar: NavbarWidget(),
         );
       },
     );

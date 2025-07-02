@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/features/profile/domain/usecase/profile_usecases.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'profile_event.dart';
@@ -18,7 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     required this.isContractSaved,
     required FirebaseAuth firebaseAuth,
   }) : _auth = firebaseAuth,
-       super(ProfileInitial()) {
+       super(ProfileState.intial()) {
     on<LoadProfile>(_onLoadProfile);
     on<SaveProfile>(_onSaveProfile);
     on<ToggleSavedContractEvent>(_onToggleSavedContract);
@@ -29,21 +30,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     LoadProfile event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(ProfileLoading());
+    emit(state.copyWith(status: BlocStatus.loading, errorMessage: null));
     try {
       final profile = await getProfile(event.uid);
       if (profile != null) {
         emit(
-          ProfileLoaded(
+          state.copyWith(
+            status: BlocStatus.loaded,
             profile: profile,
             savedContractIds: profile.savedContractIds,
           ),
         );
       } else {
-        emit(ProfileError('Profile not found.'));
+        emit(
+          state.copyWith(
+            status: BlocStatus.error,
+            errorMessage: 'Profile not found.',
+          ),
+        );
       }
     } catch (e) {
-      emit(ProfileError(e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
     }
   }
 
@@ -54,13 +61,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       await createOrUpdateProfile(event.profile);
       emit(
-        ProfileLoaded(
+        state.copyWith(
+          status: BlocStatus.loaded,
           profile: event.profile,
           savedContractIds: event.profile.savedContractIds,
         ),
       );
     } catch (e) {
-      emit(ProfileError(e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
     }
   }
 
@@ -76,14 +84,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final updatedProfile = await getProfile(uid);
       if (updatedProfile != null) {
         emit(
-          ProfileLoaded(
+          state.copyWith(
+            status: BlocStatus.loaded,
             profile: updatedProfile,
             savedContractIds: updatedProfile.savedContractIds,
           ),
         );
       }
     } catch (e) {
-      emit(ProfileError(e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
     }
   }
 
@@ -98,14 +107,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final profile = await getProfile(uid);
       if (profile != null) {
         emit(
-          ProfileLoaded(
+          state.copyWith(
+            status: BlocStatus.loaded,
             profile: profile,
             savedContractIds: profile.savedContractIds,
           ),
         );
       }
     } catch (e) {
-      emit(ProfileError(e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
     }
   }
 }

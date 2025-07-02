@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/domain/entities/user_entity.dart';
 import 'package:fire_auth/features/auth/domain/usecases/usecases.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
@@ -19,7 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.signUpWithEmail,
     required this.signOut,
     required this.getCurrentUser,
-  }) : super(AuthInitial()) {
+  }) : super(AuthState.initial()) {
     on<SignInResquested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<SignOutRequested>(_onSignOutRequested);
@@ -30,13 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SignInResquested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(Loading());
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
     try {
       final user = await signInWithEmail(event.email, event.password);
       currentUserNotifier.value = user;
-      emit(Authenticated(user));
+      emit(state.copyWith(status: AuthStatus.authenticated, user: user));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(
+        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -44,13 +45,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SignUpRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(Loading());
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
     try {
       final user = await signUpWithEmail(event.email, event.password);
       currentUserNotifier.value = user;
-      emit(Authenticated(user));
+      emit(state.copyWith(status: AuthStatus.authenticated, user: user));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(
+        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -58,9 +61,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SignOutRequested event,
     Emitter<AuthState> emit,
   ) async {
-    await signOut(); // FIX: call the function!
+    await signOut();
     currentUserNotifier.value = null;
-    emit(Unauthenticated());
+    emit(state.copyWith(status: AuthStatus.unauthenticated, user: null));
   }
 
   Future<void> _onAuthCheckRequested(
@@ -70,9 +73,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final user = await getCurrentUser();
     if (user != null) {
       currentUserNotifier.value = user;
-      emit(Authenticated(user));
+      emit(state.copyWith(status: AuthStatus.authenticated, user: user));
     } else {
-      emit(Unauthenticated());
+      emit(state.copyWith(status: AuthStatus.unauthenticated, user: null));
     }
   }
 }

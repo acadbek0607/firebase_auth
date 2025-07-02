@@ -19,13 +19,13 @@ extension StatusTypeExtension on StatusType {
   Color get color {
     switch (this) {
       case StatusType.paid:
-        return const Color(0xff00C566);
+        return const Color(0xFF49B7A5);
       case StatusType.inProcess:
-        return const Color(0xffFFB800);
+        return const Color(0xFFFDAB2A);
       case StatusType.rejectedByPayme:
-        return const Color(0xffFF426D);
+        return const Color(0xFFFF426D);
       case StatusType.rejectedByIQ:
-        return const Color(0xffFF426D);
+        return const Color(0xFFFF426D);
     }
   }
 

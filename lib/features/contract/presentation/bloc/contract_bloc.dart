@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/helpers/metadata_helper.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/contract_usecases.dart';
@@ -23,7 +23,7 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
     required this.updateContract,
     required this.deleteContract,
     required this.getContracts,
-  }) : super(ContractInitial()) {
+  }) : super(ContractState.initial()) {
     on<LoadContracts>(_onLoadContracts);
     on<CreateContractEvent>(_onCreateContract);
     on<UpdateContractEvent>(_onUpdateContract);
@@ -35,14 +35,16 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
     LoadContracts event,
     Emitter<ContractState> emit,
   ) async {
-    emit(ContractLoading());
+    emit(state.copyWith(status: BlocStatus.loading, errorMessage: null));
     try {
       final contracts = await getContracts();
       final enriched = enrichContracts(contracts);
       _allContracts = enriched; // Save for filtering
-      emit(ContractLoaded(enriched));
+      emit(state.copyWith(status: BlocStatus.loaded, contracts: enriched));
     } catch (e) {
-      emit(ContractError(e.toString()));
+      emit(
+        state.copyWith(status: BlocStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -54,7 +56,9 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       await createContract(event.contract);
       add(LoadContracts());
     } catch (e) {
-      emit(ContractError(e.toString()));
+      emit(
+        state.copyWith(status: BlocStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -66,7 +70,9 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       await updateContract(event.contract);
       add(LoadContracts());
     } catch (e) {
-      emit(ContractError(e.toString()));
+      emit(
+        state.copyWith(status: BlocStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -78,7 +84,9 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       await deleteContract(event.contractId);
       add(LoadContracts());
     } catch (e) {
-      emit(ContractError(e.toString()));
+      emit(
+        state.copyWith(status: BlocStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -104,6 +112,6 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
           .toList();
     }
 
-    emit(ContractLoaded(filtered));
+    emit(state.copyWith(status: BlocStatus.loaded, contracts: filtered));
   }
 }

@@ -1,5 +1,7 @@
 // contract_detail_page.dart
+import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
@@ -7,7 +9,6 @@ import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart'
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
 import 'package:fire_auth/ui/detail/widgets/contract_detail_info_card.dart';
 import 'package:fire_auth/ui/detail/widgets/delete_contract_dialog.dart';
-import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,7 +27,8 @@ class ContractDetailPage extends StatefulWidget {
   State<ContractDetailPage> createState() => _ContractDetailPageState();
 }
 
-class _ContractDetailPageState extends State<ContractDetailPage> {
+class _ContractDetailPageState extends State<ContractDetailPage>
+    with SingleTickerProviderStateMixin {
   bool isSaved = false;
 
   @override
@@ -46,14 +48,35 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contract Detail'),
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 0, 14),
+          child: SvgPicture.asset('assets/svg/contract.svg'),
+        ),
+        title: Text(
+          '№ ${contract.id}',
+          style: Kstyle.textStyle.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+          ),
+        ),
         actions: [
-          BlocBuilder<ProfileBloc, ProfileState>(
-            builder: (context, state) {
-              if (state is ProfileLoaded && contract.id != null) {
-                isSaved = state.savedContractIds.contains(contract.id);
+          BlocConsumer<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state.status == BlocStatus.loaded && contract.id != null) {
+                setState(() {
+                  isSaved = state.savedContractIds.contains(contract.id);
+                });
+              } else if (state.status == BlocStatus.error) {
+                setState(() => isSaved = !isSaved);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Failed to save contract.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
-
+            },
+            builder: (context, state) {
               return IconButton(
                 icon: isSaved
                     ? SvgPicture.asset('assets/svg/s_saved.svg')
@@ -106,7 +129,8 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/create_contract');
+                      selectedPageNotifier.value = 5;
+                      Navigator.pushReplacementNamed(context, '/main');
                     },
                     style: Kstyle.buttonStyle.copyWith(
                       backgroundColor: WidgetStateProperty.all(
@@ -144,7 +168,6 @@ class _ContractDetailPageState extends State<ContractDetailPage> {
           ],
         ),
       ),
-      bottomNavigationBar: NavbarWidget(),
     );
   }
 }

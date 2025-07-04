@@ -1,4 +1,5 @@
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,15 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
+  late List<ContractEntity> contracts;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    contracts = (args?['allContracts'] as List?)?.cast<ContractEntity>() ?? [];
+  }
 
   @override
   void dispose() {

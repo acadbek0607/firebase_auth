@@ -29,7 +29,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   List<DateTime> _getVisibleWeekDays() {
     return List.generate(
-      6,
+      6, // Monday to Saturday
       (index) => _focusedWeekStart.add(Duration(days: index)),
     );
   }
@@ -53,24 +53,68 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   void _selectDay(DateTime day) {
-    if (!_isSameDay(_selectedDay, day)) {
-      setState(() {
-        _selectedDay = day;
+    setState(() {
+      _selectedDay = day;
 
-        // only update focused week if tapped day is outside the visible week
-        final visibleDays = _getVisibleWeekDays();
-        final isOutsideWeek = !visibleDays.any((d) => _isSameDay(d, day));
-        if (isOutsideWeek) {
-          _focusedWeekStart = _getMonday(day);
-        }
-      });
-      widget.onDaySelected?.call(day);
-    }
+      final startOfNewWeek = _getMonday(day);
+      if (!_isSameDay(startOfNewWeek, _focusedWeekStart)) {
+        _focusedWeekStart = startOfNewWeek;
+      }
+
+      // widget.onDaySelected?.call(day);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final weekDays = _getVisibleWeekDays();
+
+    final weekRow = Row(
+      key: ValueKey(_focusedWeekStart.toIso8601String()),
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: weekDays.map((day) {
+        final isSelected = _isSameDay(day, _selectedDay);
+        return GestureDetector(
+          onTap: () => _selectDay(day),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 10.0,
+            ),
+            decoration: isSelected
+                ? BoxDecoration(
+                    color: Colors.teal,
+                    borderRadius: BorderRadius.circular(8),
+                  )
+                : null,
+            child: Column(
+              children: [
+                Text(
+                  DateFormat.E().format(day),
+                  style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isSelected ? Colors.white : const Color(0xFFdadada),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${day.day}',
+                  style: Kstyle.textStyle.copyWith(
+                    color: isSelected ? Colors.white : const Color(0xFFdadada),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  height: 1,
+                  width: 20,
+                  color: isSelected ? Colors.white : const Color(0xFFdadada),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -105,56 +149,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             ],
           ),
           const SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: weekDays.map((day) {
-              final isSelected = _isSameDay(day, _selectedDay);
-              return GestureDetector(
-                onTap: () => _selectDay(day),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: isSelected
-                      ? BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(8),
-                        )
-                      : null,
-                  child: Column(
-                    children: [
-                      Text(
-                        DateFormat.E().format(day),
-                        style: Kstyle.textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? Colors.white
-                              : const Color(0xFFdadada),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${day.day}',
-                        style: Kstyle.textStyle.copyWith(
-                          color: isSelected
-                              ? Colors.white
-                              : const Color(0xFFdadada),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        height: 1,
-                        width: 20,
-                        color: isSelected
-                            ? Colors.white
-                            : const Color(0xFFdadada),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: weekRow,
           ),
         ],
       ),

@@ -39,6 +39,12 @@ class _ContractDetailPageState extends State<ContractDetailPage>
     }
   }
 
+  Future<bool> _onPop() async {
+    selectedPageNotifier.value = 0;
+    Navigator.pushReplacementNamed(context, '/main');
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final contract = widget.contract;
@@ -46,126 +52,131 @@ class _ContractDetailPageState extends State<ContractDetailPage>
         .where((c) => c.fullName == contract.fullName && c.id != contract.id)
         .toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 0, 14),
-          child: SvgPicture.asset('assets/svg/contract.svg'),
-        ),
-        title: Text(
-          '№ ${contract.id}',
-          style: Kstyle.textStyle.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () => _onPop(),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 0, 14),
+            child: SvgPicture.asset('assets/svg/contract.svg'),
           ),
-        ),
-        actions: [
-          BlocConsumer<ProfileBloc, ProfileState>(
-            listener: (context, state) {
-              if (state.status == BlocStatus.loaded && contract.id != null) {
-                setState(() {
-                  isSaved = state.savedContractIds.contains(contract.id);
-                });
-              } else if (state.status == BlocStatus.error) {
-                setState(() => isSaved = !isSaved);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Failed to save contract.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return IconButton(
-                icon: isSaved
-                    ? SvgPicture.asset('assets/svg/s_saved.svg')
-                    : SvgPicture.asset('assets/svg/saved.svg'),
-                onPressed: () {
-                  if (contract.id != null) {
-                    setState(() => isSaved = !isSaved);
-                    context.read<ProfileBloc>().add(
-                      ToggleSavedContractEvent(contract.id!),
-                    );
-                  }
-                },
-              );
-            },
+          title: Text(
+            '№ ${contract.id}',
+            style: Kstyle.textStyle.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+            ),
           ),
-          const SizedBox(width: 10),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            ContractDetailInfoCard(contract: contract),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => showDeleteContractDialog(
-                      context,
-                      contract.id!,
-                      contract,
+          actions: [
+            BlocConsumer<ProfileBloc, ProfileState>(
+              listener: (context, state) {
+                if (state.status == BlocStatus.loaded && contract.id != null) {
+                  setState(() {
+                    isSaved = state.savedContractIds.contains(contract.id);
+                  });
+                } else if (state.status == BlocStatus.error) {
+                  setState(() => isSaved = !isSaved);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Failed to save contract.'),
+                      backgroundColor: Colors.red,
                     ),
-                    style: Kstyle.buttonStyle.copyWith(
-                      backgroundColor: WidgetStateProperty.all(
-                        Colors.red.withAlpha(60),
-                      ),
-                      elevation: WidgetStateProperty.all(0.0),
-                    ),
-                    child: Text(
-                      'Delete contract',
-                      style: Kstyle.textStyle.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xffFF426D),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      selectedPageNotifier.value = 5;
-                      Navigator.pushReplacementNamed(context, '/main');
-                    },
-                    style: Kstyle.buttonStyle.copyWith(
-                      backgroundColor: WidgetStateProperty.all(
-                        const Color(0xff008F7F),
-                      ),
-                    ),
-                    child: Text(
-                      'Create contract',
-                      style: Kstyle.textStyle.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Other contracts with ${contract.fullName}',
-              style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.builder(
-                itemCount: relatedContracts.length,
-                itemBuilder: (_, i) {
-                  return ContractCard(
-                    contract: relatedContracts[i],
-                    allContracts: widget.allContracts,
                   );
-                },
-              ),
+                }
+              },
+              builder: (context, state) {
+                return IconButton(
+                  icon: isSaved
+                      ? SvgPicture.asset('assets/svg/s_saved.svg')
+                      : SvgPicture.asset('assets/svg/saved.svg'),
+                  onPressed: () {
+                    if (contract.id != null) {
+                      setState(() => isSaved = !isSaved);
+                      context.read<ProfileBloc>().add(
+                        ToggleSavedContractEvent(contract.id!),
+                      );
+                    }
+                  },
+                );
+              },
             ),
+            const SizedBox(width: 10),
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ContractDetailInfoCard(contract: contract),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => showDeleteContractDialog(
+                        context,
+                        contract.id!,
+                        contract,
+                      ),
+                      style: Kstyle.buttonStyle.copyWith(
+                        backgroundColor: WidgetStateProperty.all(
+                          Colors.red.withAlpha(60),
+                        ),
+                        elevation: WidgetStateProperty.all(0.0),
+                      ),
+                      child: Text(
+                        'Delete contract',
+                        style: Kstyle.textStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xffFF426D),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        selectedPageNotifier.value = 5;
+                        Navigator.pushReplacementNamed(context, '/main');
+                      },
+                      style: Kstyle.buttonStyle.copyWith(
+                        backgroundColor: WidgetStateProperty.all(
+                          const Color(0xff008F7F),
+                        ),
+                      ),
+                      child: Text(
+                        'Create contract',
+                        style: Kstyle.textStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Other contracts with ${contract.fullName}',
+                style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: relatedContracts.length,
+                  itemBuilder: (_, i) {
+                    return ContractCard(
+                      contract: relatedContracts[i],
+                      allContracts: widget.allContracts,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -25,6 +25,8 @@ dependencies:
   shared_preferences: ^2.5.3
   image_pickers: ^2.0.6
   image_picker: ^1.1.2
+  easy_localization: ^3.0.7+1
+  flutter_gen: ^5.10.0
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +35,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
+  generate: true
 
   uses-material-design: true
 
@@ -41,6 +44,8 @@ flutter:
     - assets/svg/
     - assets/img/
     - assets/fonts/
+    - assets/flags/
+    - assets/translations/
 
   fonts:
     - family: Ubuntu

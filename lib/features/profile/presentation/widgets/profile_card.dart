@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProfileCard extends StatelessWidget {
   final String fullName;
@@ -45,6 +46,7 @@ class ProfileCard extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 28,
+                        backgroundColor: Color(0xFF2C2C2E),
                         backgroundImage: photoUrl != null
                             ? NetworkImage(photoUrl!)
                             : const AssetImage('assets/img/default.png')
@@ -57,14 +59,14 @@ class ProfileCard extends StatelessWidget {
                           Text(
                             fullName,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Color(0xFF00A795),
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             '$profession • $organization',
-                            style: const TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Color(0xFFE7E7E7)),
                           ),
                         ],
                       ),
@@ -80,20 +82,24 @@ class ProfileCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          FilledButton(
-            onPressed: onLanguageTap,
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF2B2B2E),
-              shape: RoundedRectangleBorder(
+          GestureDetector(
+            onTap: onLanguageTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF2B2B2E),
                 borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(selectedLanguage, style: TextStyle(color: Colors.white)),
-                Text(selectedFlag, style: const TextStyle(fontSize: 20)),
-              ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    selectedLanguage,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  SvgPicture.asset(selectedFlag, height: 48),
+                ],
+              ),
             ),
           ),
         ],

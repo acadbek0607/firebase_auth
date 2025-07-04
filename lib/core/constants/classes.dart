@@ -13,7 +13,9 @@ class Kstyle {
     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
     ),
-    padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.all(12.0)),
+    padding: WidgetStateProperty.all<EdgeInsets>(
+      EdgeInsets.symmetric(horizontal: 12.0),
+    ),
   );
 
   static TextStyle textStyle = TextStyle(color: Color(0xFFE7E7E7));

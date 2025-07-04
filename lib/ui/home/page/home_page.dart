@@ -1,11 +1,11 @@
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
+import 'package:fire_auth/core/utils/filter_utils.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
-import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
 import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
 import 'package:fire_auth/ui/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
   final ValueNotifier<DateTime> selectedDateNotifier = ValueNotifier(
     DateTime.now(),
   );
-  List<ContractEntity>? _filteredContracts;
   FilterWidget _currentFilter = FilterWidget.empty;
+  List<ContractEntity>? _filteredContracts;
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +57,17 @@ class _HomePageState extends State<HomePage> {
                       '/filter',
                       arguments: {
                         'currentFilter': _currentFilter,
-                        'originIndex': 0, // 0 = Home, 1 = History, 3 = Saved
+                        'originIndex': 0,
+                        'allContracts': state.contracts,
                       },
                     );
 
-                    if (result is FilterWidget) {
+                    if (result != null && result is FilterWidget) {
                       setState(() {
                         _currentFilter = result;
-                        _filteredContracts = _currentFilter.apply(
+                        _filteredContracts = FilterUtils.apply(
                           state.contracts,
+                          _currentFilter,
                         );
                       });
                     }
@@ -82,10 +84,15 @@ class _HomePageState extends State<HomePage> {
         builder: (context, viewType, _) {
           return Column(
             children: [
-              CalendarWidget(
-                initialDate: selectedDateNotifier.value,
-                onDaySelected: (day) {
-                  selectedDateNotifier.value = day;
+              ValueListenableBuilder<DateTime>(
+                valueListenable: selectedDateNotifier,
+                builder: (context, selectedDate, _) {
+                  return CalendarWidget(
+                    initialDate: selectedDate,
+                    onDaySelected: (day) {
+                      selectedDateNotifier.value = day;
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 32),

@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isProfileSaved = false;
 
   String _selectedLanguage = 'English (USA)';
-  String _selectedFlag = '🇺🇸';
+  String _selectedFlagPath = 'assets/flags/us.svg';
 
   @override
   void initState() {
@@ -131,11 +131,11 @@ class _ProfilePageState extends State<ProfilePage> {
     LanguageDialog.show(
       context: context,
       currentLanguage: _selectedLanguage,
-      currentFlag: _selectedFlag,
-      onChanged: (lang, flag) {
+      currentFlagPath: _selectedFlagPath,
+      onChanged: (lang, flagPath) {
         setState(() {
           _selectedLanguage = lang;
-          _selectedFlag = flag;
+          _selectedFlagPath = flagPath;
         });
       },
     );
@@ -200,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onEdit: () => setState(() => _isProfileSaved = false),
                           onLanguageTap: _showLanguageDialog,
                           selectedLanguage: _selectedLanguage,
-                          selectedFlag: _selectedFlag,
+                          selectedFlag: _selectedFlagPath,
                         )
                       : ProfileForm(
                           formKey: _formKey,

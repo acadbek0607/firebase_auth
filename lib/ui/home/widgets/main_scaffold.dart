@@ -19,8 +19,6 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  final PageController _pageController = PageController();
-
   final List<Widget> _pages = const [
     HomePage(), // 0
     HistoryPage(), // 1

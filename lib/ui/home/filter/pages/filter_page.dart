@@ -1,5 +1,6 @@
 // lib/ui/home/filter/pages/filter_page.dart
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/ui/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +11,14 @@ import 'package:fire_auth/ui/home/filter/widgets/custom_checkbox_tile.dart';
 class FilterPage extends StatefulWidget {
   final FilterWidget? initialFilter;
   final int originIndex;
+  final List<ContractEntity> contracts;
 
-  const FilterPage({super.key, this.initialFilter, this.originIndex = 0});
+  const FilterPage({
+    super.key,
+    required this.contracts,
+    this.initialFilter,
+    this.originIndex = 0,
+  });
 
   @override
   State<FilterPage> createState() => _FilterPageState();
@@ -46,13 +53,14 @@ class _FilterPageState extends State<FilterPage> {
     if (rejectedByIQ) selectedStatuses.add(StatusType.rejectedByIQ);
     if (rejectedByPayme) selectedStatuses.add(StatusType.rejectedByPayme);
 
-    final result = FilterWidget(
+    final filter = FilterWidget(
       statuses: selectedStatuses,
       fromDate: fromDate,
       toDate: toDate,
     );
 
-    Navigator.pop(context, result);
+    Navigator.pop(context, filter);
+    // return filtered contracts
   }
 
   void _cancelFilters() {
@@ -155,7 +163,13 @@ class _FilterPageState extends State<FilterPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 8.0),
+                    Container(
+                      width: 10.0,
+                      height: 2.0,
+                      color: Color(0xFFD1D1D1),
+                    ),
+                    const SizedBox(width: 8.0),
                     SizedBox(
                       width: 120.0,
                       child: InkWell(

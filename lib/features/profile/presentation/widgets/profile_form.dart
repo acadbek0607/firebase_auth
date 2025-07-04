@@ -42,6 +42,7 @@ class ProfileForm extends StatelessWidget {
               onTap: pickImage,
               child: CircleAvatar(
                 radius: 48,
+                backgroundColor: Colors.transparent,
                 backgroundImage: pickedImage != null
                     ? FileImage(pickedImage!)
                     : const AssetImage('assets/img/default.png')

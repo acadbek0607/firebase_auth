@@ -41,8 +41,6 @@ import 'package:fire_auth/features/invoice/domain/repos/invoice_repo.dart';
 import 'package:fire_auth/features/invoice/domain/usecases/invoice_usecases.dart';
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 
-// UI
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -172,12 +170,26 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               case '/filter':
-                final args = settings.arguments as Map<String, dynamic>;
-                final filter = args['currentFilter'] as FilterWidget;
-                final originIndex = args['originIndex'] as int;
+                final args = settings.arguments as Map<String, dynamic>? ?? {};
+                final filter =
+                    args['currentFilter'] as FilterWidget? ??
+                    FilterWidget.empty;
+                final originIndex = args['originIndex'] as int? ?? 0;
+
+                final contracts = args['allContracts'];
+                if (contracts is! List<ContractEntity>) {
+                  return MaterialPageRoute(
+                    builder: (_) => const Scaffold(
+                      body: Center(
+                        child: Text('No contracts provided to filter.'),
+                      ),
+                    ),
+                  );
+                }
 
                 return MaterialPageRoute(
                   builder: (_) => FilterPage(
+                    contracts: contracts,
                     initialFilter: filter,
                     originIndex: originIndex,
                   ),

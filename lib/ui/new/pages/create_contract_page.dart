@@ -51,6 +51,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
 
             Navigator.pushReplacement(
               context,
+
               MaterialPageRoute(
                 builder: (_) => ContractDetailPage(
                   contract: match,

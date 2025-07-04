@@ -1,14 +1,13 @@
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
-import 'package:fire_auth/core/constants/notifier.dart';
-import 'package:fire_auth/ui/home/widgets/navbar_widget.dart';
+import 'package:fire_auth/core/utils/filter_utils.dart';
+import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
+import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/ui/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
-import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -18,6 +17,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  FilterWidget currentFilter = FilterWidget.empty;
   DateTime? fromDate;
   DateTime? toDate;
 
@@ -31,12 +31,13 @@ class _HistoryPageState extends State<HistoryPage> {
       context: context,
       initialDate: initialDate,
       firstDate: DateTime(2000),
-      lastDate: now, // Prevent picking a future date
+      lastDate: now,
     );
 
     if (picked != null) {
       if (isFrom) {
         if (toDate != null && picked.isAfter(toDate!)) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("From date must be before To date")),
           );
@@ -45,6 +46,7 @@ class _HistoryPageState extends State<HistoryPage> {
         setState(() => fromDate = picked);
       } else {
         if (fromDate != null && picked.isBefore(fromDate!)) {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("To date must be after From date")),
           );
@@ -53,15 +55,6 @@ class _HistoryPageState extends State<HistoryPage> {
         setState(() => toDate = picked);
       }
     }
-  }
-
-  List<ContractEntity> _applyDateFilter(List<ContractEntity> contracts) {
-    return contracts.where((contract) {
-      final created = contract.createdAt;
-      final matchFrom = fromDate == null || !created.isBefore(fromDate!);
-      final matchTo = toDate == null || !created.isAfter(toDate!);
-      return matchFrom && matchTo;
-    }).toList();
   }
 
   @override
@@ -74,32 +67,39 @@ class _HistoryPageState extends State<HistoryPage> {
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
         actions: [
-          Row(
-            children: [
-              IconButton(
-                icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
-                onPressed: () async {
-                  // Get latest contracts from bloc state
-                  final state = context.read<ContractBloc>().state;
-                  if (state.status == BlocStatus.loaded) {
-                    Navigator.pushNamed(
-                      context,
-                      '/filter',
-                      arguments: {'allContracts': state.contracts},
-                    );
-                  }
-                },
-              ),
-              SizedBox(width: 4.0),
-              SvgPicture.asset('assets/svg/divider.svg'),
-              SizedBox(width: 4.0),
-              IconButton(
-                icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
-                onPressed: () => Navigator.pushNamed(context, '/search'),
-              ),
-              SizedBox(width: 16.0),
-            ],
+          IconButton(
+            icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
+            onPressed: () async {
+              final state = context.read<ContractBloc>().state;
+              if (state.status == BlocStatus.loaded) {
+                final result = await Navigator.pushNamed(
+                  context,
+                  '/filter',
+                  arguments: {
+                    'allContracts': state.contracts,
+                    'currentFilter': currentFilter,
+                    'originIndex': 1,
+                  },
+                );
+
+                if (result != null && result is FilterWidget) {
+                  setState(() {
+                    currentFilter = result;
+                    fromDate = result.fromDate;
+                    toDate = result.toDate;
+                  });
+                }
+              }
+            },
           ),
+          const SizedBox(width: 4.0),
+          SvgPicture.asset('assets/svg/divider.svg'),
+          const SizedBox(width: 4.0),
+          IconButton(
+            icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
+            onPressed: () => Navigator.pushNamed(context, '/search'),
+          ),
+          const SizedBox(width: 16.0),
         ],
       ),
       body: Padding(
@@ -110,7 +110,10 @@ class _HistoryPageState extends State<HistoryPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == BlocStatus.loaded) {
-              final filtered = _applyDateFilter(state.contracts);
+              final contracts = FilterUtils.apply(
+                state.contracts,
+                currentFilter,
+              );
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +128,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           onTap: () => _selectDate(context, true),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[850], // Your background color
+                              color: Colors.grey[850],
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.all(12),
@@ -138,7 +141,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                       : 'From',
                                   style: const TextStyle(color: Colors.white),
                                 ),
-                                SizedBox(width: 4.0),
                                 SvgPicture.asset('assets/svg/calendar.svg'),
                               ],
                             ),
@@ -154,7 +156,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           onTap: () => _selectDate(context, false),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[850], // Your background color
+                              color: Colors.grey[850],
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.all(12),
@@ -177,7 +179,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: filtered.isEmpty
+                    child: contracts.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -185,14 +187,14 @@ class _HistoryPageState extends State<HistoryPage> {
                                 SvgPicture.asset(
                                   'assets/svg/contracts.svg',
                                   height: 88,
-                                  colorFilter: ColorFilter.mode(
+                                  colorFilter: const ColorFilter.mode(
                                     Color(0xFF323232),
                                     BlendMode.srcIn,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
+                                const SizedBox(height: 8.0),
                                 Text(
-                                  'No history for this  period',
+                                  'No history for this period',
                                   style: Kstyle.textStyle.copyWith(
                                     color: Color(0xFF323232),
                                     fontFamily: 'Poppins',
@@ -203,11 +205,11 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           )
                         : ListView.separated(
-                            itemCount: filtered.length,
+                            itemCount: contracts.length,
                             separatorBuilder: (_, __) =>
                                 const SizedBox(height: 12),
                             itemBuilder: (_, index) => ContractCard(
-                              contract: filtered[index],
+                              contract: contracts[index],
                               allContracts: state.contracts,
                             ),
                           ),

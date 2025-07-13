@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedAmount = KDataFormat.amountFormat.format(invoice.cost);
+    final formattedDate = KDataFormat.dateFormat.format(invoice.createdAt);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       padding: const EdgeInsets.all(16.0),
@@ -68,11 +71,11 @@ class InvoiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '''Amount: ${invoice.cost} so'm''',
+                '''Amount: $formattedAmount so'm''',
                 style: const TextStyle(color: Colors.white),
               ),
               Text(
-                '${invoice.createdAt.day}/${invoice.createdAt.month}/${invoice.createdAt.year}',
+                formattedDate,
                 style: const TextStyle(color: Color(0xFF999999)),
               ),
             ],

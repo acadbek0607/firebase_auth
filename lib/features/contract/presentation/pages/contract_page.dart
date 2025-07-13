@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
 
-class ContractsPage extends StatelessWidget {
+class ContractsPage extends StatefulWidget {
   final List<ContractEntity> contracts;
   final bool canLoadMore;
   final bool isLoadingMore;
@@ -21,11 +21,29 @@ class ContractsPage extends StatelessWidget {
   });
 
   @override
+  State<ContractsPage> createState() => _ContractsPageState();
+}
+
+class _ContractsPageState extends State<ContractsPage> {
+  int _itemsToShow = 20;
+  bool _isLoadingMore = false;
+
+  void _loadMore(int total) async {
+    if (_isLoadingMore || _itemsToShow >= total) return;
+    setState(() => _isLoadingMore = true);
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      _isLoadingMore = false;
+      _itemsToShow = (_itemsToShow + 10).clamp(0, total);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (isLoadingMore && contracts.isEmpty) {
+    if (widget.isLoadingMore && widget.contracts.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (contracts.isEmpty) {
+    if (widget.contracts.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,13 +66,18 @@ class ContractsPage extends StatelessWidget {
       );
     }
     return ListView.builder(
-      itemCount: contracts.length + (canLoadMore || isLoadingMore ? 1 : 0),
+      itemCount:
+          widget.contracts.length +
+          (widget.canLoadMore || widget.isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index < contracts.length) {
-          final contract = contracts[index];
-          return ContractCard(contract: contract, allContracts: contracts);
+        if (index < widget.contracts.length) {
+          final contract = widget.contracts[index];
+          return ContractCard(
+            contract: contract,
+            allContracts: widget.contracts,
+          );
         } else {
-          if (isLoadingMore) {
+          if (widget.isLoadingMore) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: Center(
@@ -70,14 +93,14 @@ class ContractsPage extends StatelessWidget {
               ),
             );
           }
-          if (!canLoadMore) {
+          if (!widget.canLoadMore) {
             return const SizedBox.shrink();
           }
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
               child: ElevatedButton(
-                onPressed: onLoadMore,
+                onPressed: widget.onLoadMore,
                 style: Kstyle.buttonStyle,
                 child: Text('Load more', style: Kstyle.textStyle),
               ),

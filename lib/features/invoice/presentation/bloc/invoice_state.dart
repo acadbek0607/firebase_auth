@@ -18,12 +18,12 @@ class InvoiceState extends Equatable {
   InvoiceState copyWith({
     InvoiceStatus? status,
     List<InvoiceEntity>? invoices,
-    String? errorMesaage,
+    String? errorMessage,
   }) {
     return InvoiceState(
       status: status ?? this.status,
       invoices: invoices ?? this.invoices,
-      errorMessage: errorMesaage,
+      errorMessage: errorMessage,
     );
   }
 

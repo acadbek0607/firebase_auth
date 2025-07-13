@@ -1,7 +1,7 @@
 // lib/ui/home/filter/pages/filter_page.dart
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +9,7 @@ import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/ui/home/filter/widgets/custom_checkbox_tile.dart';
 
 class FilterPage extends StatefulWidget {
-  final FilterWidget? initialFilter;
+  final Filters? initialFilter;
   final int originIndex;
   final List<ContractEntity> contracts;
 
@@ -36,7 +36,7 @@ class _FilterPageState extends State<FilterPage> {
 
   @override
   void initState() {
-    final filter = widget.initialFilter ?? FilterWidget.empty;
+    final filter = widget.initialFilter ?? Filters.empty;
     paid = filter.statuses.contains(StatusType.paid);
     inProcess = filter.statuses.contains(StatusType.inProcess);
     rejectedByIQ = filter.statuses.contains(StatusType.rejectedByIQ);
@@ -53,7 +53,7 @@ class _FilterPageState extends State<FilterPage> {
     if (rejectedByIQ) selectedStatuses.add(StatusType.rejectedByIQ);
     if (rejectedByPayme) selectedStatuses.add(StatusType.rejectedByPayme);
 
-    final filter = FilterWidget(
+    final filter = Filters(
       statuses: selectedStatuses,
       fromDate: fromDate,
       toDate: toDate,
@@ -64,7 +64,7 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   void _cancelFilters() {
-    Navigator.pop(context, FilterWidget.empty);
+    Navigator.pop(context, Filters.empty);
   }
 
   Future<void> _selectDate(bool isFrom) async {

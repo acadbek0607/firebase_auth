@@ -3,7 +3,7 @@ import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/filter_utils.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,7 +17,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  FilterWidget currentFilter = FilterWidget.empty;
+  Filters currentFilter = Filters.empty;
   DateTime? fromDate;
   DateTime? toDate;
 
@@ -82,7 +82,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   },
                 );
 
-                if (result != null && result is FilterWidget) {
+                if (result != null && result is Filters) {
                   setState(() {
                     currentFilter = result;
                     fromDate = result.fromDate;

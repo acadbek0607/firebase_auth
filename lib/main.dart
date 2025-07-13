@@ -10,7 +10,7 @@ import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
 import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/main_scaffold.dart';
 import 'package:fire_auth/ui/home/widgets/search_page.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -109,6 +109,7 @@ class MyApp extends StatelessWidget {
               updateContract: UpdateContract(contractRepo),
               deleteContract: DeleteContract(contractRepo),
               getContracts: GetContracts(contractRepo),
+              repo: contractRepo,
             )..add(LoadContracts()),
           ),
           BlocProvider<InvoiceBloc>(
@@ -172,8 +173,7 @@ class MyApp extends StatelessWidget {
               case '/filter':
                 final args = settings.arguments as Map<String, dynamic>? ?? {};
                 final filter =
-                    args['currentFilter'] as FilterWidget? ??
-                    FilterWidget.empty;
+                    args['currentFilter'] as Filters? ?? Filters.empty;
                 final originIndex = args['originIndex'] as int? ?? 0;
 
                 final contracts = args['allContracts'];

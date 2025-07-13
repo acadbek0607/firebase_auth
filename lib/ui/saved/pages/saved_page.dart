@@ -6,7 +6,7 @@ import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,10 +19,10 @@ class SavedPage extends StatefulWidget {
 }
 
 class _SavedPageState extends State<SavedPage> {
-  FilterWidget currentFilter = FilterWidget.empty;
+  Filters currentFilter = Filters.empty;
   List<ContractEntity>? filteredContracts;
 
-  bool get isFiltered => currentFilter != FilterWidget.empty;
+  bool get isFiltered => currentFilter != Filters.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _SavedPageState extends State<SavedPage> {
           Row(
             children: [
               IconButton(
-                icon: SvgPicture.asset('assets/svg/filter.svg', height: 24.0),
+                icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
                 onPressed: () async {
                   final contractState = context.read<ContractBloc>().state;
                   final profileState = context.read<ProfileBloc>().state;
@@ -60,7 +60,7 @@ class _SavedPageState extends State<SavedPage> {
                       },
                     );
 
-                    if (result != null && result is FilterWidget) {
+                    if (result != null && result is Filters) {
                       setState(() {
                         currentFilter = result;
                         filteredContracts = isFiltered
@@ -75,7 +75,7 @@ class _SavedPageState extends State<SavedPage> {
               SvgPicture.asset('assets/svg/divider.svg'),
               const SizedBox(width: 4.0),
               IconButton(
-                icon: SvgPicture.asset('assets/svg/search.svg', height: 20.0),
+                icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
                 onPressed: () {
                   final state = context.read<ContractBloc>().state;
                   final savedIds =

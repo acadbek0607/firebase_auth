@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/data/datasources/contract_remote_data_source.dart';
 import 'package:fire_auth/features/contract/data/models/contract_model.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -27,8 +29,22 @@ class ContractRepositoryImpl implements ContractRepository {
   }
 
   @override
-  Future<List<ContractEntity>> getContracts() async {
-    final models = await _dataSource.getContracts();
+  Future<List<ContractEntity>> getContracts({
+    DateTime? day,
+    List<StatusType>? statuses,
+    DateTime? fromDate,
+    DateTime? toDate,
+    DocumentSnapshot? startAfterDoc,
+    int limit = 10,
+  }) async {
+    final models = await _dataSource.getContracts(
+      day: day,
+      statuses: statuses,
+      fromDate: fromDate,
+      toDate: toDate,
+      startAfterDoc: startAfterDoc,
+      limit: limit,
+    );
     return models.map((model) => model.toEntity()).toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/data/models/contract_model.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'contract_remote_data_source.dart';
@@ -50,9 +51,60 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
   }
 
   @override
-  Future<List<ContractModel>> getContracts() async {
-    final snapshot = await firestore.collection('contracts').get();
-    return snapshot.docs
+  Future<List<ContractModel>> getContracts({
+    DateTime? day,
+    List<StatusType>? statuses,
+    DateTime? fromDate,
+    DateTime? toDate,
+    DocumentSnapshot? startAfterDoc,
+    int limit = 10,
+  }) async {
+    var query = firestore
+        .collection('contracts')
+        .orderBy('createdAt', descending: false);
+
+    if (day != null) {
+      final start = DateTime(day.year, day.month, day.day);
+      final end = start.add(Duration(days: 1));
+
+      query = query
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
+          .where('createdAt', isLessThan: Timestamp.fromDate(end));
+    }
+
+    if (statuses != null && statuses.isNotEmpty) {
+      if (statuses.length == 1) {
+        query = query.where(
+          'status',
+          isEqualTo: statuses.first.toFirestoreString(),
+        );
+      } else if (statuses.length < 10) {
+        query = query.where(
+          'status',
+          whereIn: statuses.map((s) => s.toFirestoreString()).toList(),
+        );
+      }
+    }
+
+    if (fromDate != null) {
+      query = query.where(
+        'createdAt',
+        isGreaterThanOrEqualTo: Timestamp.fromDate(fromDate),
+      );
+    }
+    if (toDate != null) {
+      query = query.where(
+        'createdAt',
+        isLessThanOrEqualTo: Timestamp.fromDate(toDate),
+      );
+    }
+    if (startAfterDoc != null) {
+      query = query.startAfterDocument(startAfterDoc);
+    }
+    query = query.limit(limit);
+
+    final snap = await query.get();
+    return snap.docs
         .map((doc) => ContractModel.fromJson(doc.data(), doc.id))
         .toList();
   }

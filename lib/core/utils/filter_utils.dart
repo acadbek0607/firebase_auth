@@ -1,10 +1,10 @@
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 
 class FilterUtils {
   static List<ContractEntity> apply(
     List<ContractEntity> contracts,
-    FilterWidget filter,
+    Filters filter,
   ) {
     return contracts.where((contract) {
       final statusMatch =

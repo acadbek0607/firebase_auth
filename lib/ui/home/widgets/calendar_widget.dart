@@ -61,7 +61,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         _focusedWeekStart = startOfNewWeek;
       }
 
-      // widget.onDaySelected?.call(day);
+      widget.onDaySelected?.call(day);
     });
   }
 

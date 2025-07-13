@@ -1,13 +1,12 @@
-import 'package:fire_auth/core/constants/bloc_status.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
-import 'package:fire_auth/core/utils/filter_utils.dart';
-import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
+import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
 import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
-import 'package:fire_auth/ui/widgets/filter_widget.dart';
+import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,17 +15,89 @@ enum HomeViewType { contract, invoice }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final ValueNotifier<DateTime> selectedDateNotifier = ValueNotifier(
-    DateTime.now(),
-  );
-  FilterWidget _currentFilter = FilterWidget.empty;
-  List<ContractEntity>? _filteredContracts;
+  DateTime? _selectedDay = DateTime.now();
+  DocumentSnapshot? _lastDocSnap;
+  Filters _currentFilter = Filters.empty;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContracts();
+  }
+
+  void _loadContracts({bool nextPage = false}) {
+    final bloc = context.read<ContractBloc>();
+    bloc.add(
+      LoadContracts(
+        day: _selectedDay,
+        statuses: _currentFilter.statuses.isNotEmpty
+            ? _currentFilter.statuses
+            : null,
+        fromDate: _selectedDay == null ? _currentFilter.fromDate : null,
+        toDate: _selectedDay == null ? _currentFilter.toDate : null,
+        startAfterDoc: nextPage ? _lastDocSnap : null,
+        limit: 10,
+      ),
+    );
+  }
+
+  void _onCalendarDaySelected(DateTime day) {
+    setState(() {
+      _selectedDay = day;
+      _currentFilter = Filters.empty;
+    });
+    _loadContracts();
+  }
+
+  void _onFilterApplied(Filters filter) {
+    setState(() {
+      _currentFilter = filter;
+      if (_currentFilter.fromDate != _selectedDay ||
+          _currentFilter.toDate != _selectedDay) {
+        _selectedDay = null;
+      }
+    });
+    _loadContracts();
+  }
+
+  void _onLoadMore() {
+    _loadContracts(nextPage: true);
+  }
+
+  Future<void> openReusableFilterPage({
+    required BuildContext context,
+    required Filters currentFilter,
+    required void Function(Filters) onFilterApplied,
+  }) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            FilterPage(contracts: [], initialFilter: currentFilter),
+      ),
+    );
+    // If cancel or empty, always reset to Filters.empty
+    if (result == null || (result is Filters && result == Filters.empty)) {
+      onFilterApplied(Filters.empty);
+      return;
+    }
+    if (result is Filters) {
+      onFilterApplied(result);
+    }
+  }
+
+  Future<void> _openFilterPage() async {
+    await openReusableFilterPage(
+      context: context,
+      currentFilter: _currentFilter,
+      onFilterApplied: _onFilterApplied,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,30 +120,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 4.0),
               IconButton(
                 icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
-                onPressed: () async {
-                  final state = context.read<ContractBloc>().state;
-                  if (state.status == BlocStatus.loaded) {
-                    final result = await Navigator.pushNamed(
-                      context,
-                      '/filter',
-                      arguments: {
-                        'currentFilter': _currentFilter,
-                        'originIndex': 0,
-                        'allContracts': state.contracts,
-                      },
-                    );
-
-                    if (result != null && result is FilterWidget) {
-                      setState(() {
-                        _currentFilter = result;
-                        _filteredContracts = FilterUtils.apply(
-                          state.contracts,
-                          _currentFilter,
-                        );
-                      });
-                    }
-                  }
-                },
+                onPressed: _openFilterPage,
               ),
               const SizedBox(width: 16.0),
             ],
@@ -84,16 +132,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context, viewType, _) {
           return Column(
             children: [
-              ValueListenableBuilder<DateTime>(
-                valueListenable: selectedDateNotifier,
-                builder: (context, selectedDate, _) {
-                  return CalendarWidget(
-                    initialDate: selectedDate,
-                    onDaySelected: (day) {
-                      selectedDateNotifier.value = day;
-                    },
-                  );
-                },
+              CalendarWidget(
+                initialDate: _selectedDay,
+                onDaySelected: _onCalendarDaySelected,
               ),
               const SizedBox(height: 32),
               const ToggleButtonsWidget(),
@@ -102,8 +143,17 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: viewType == HomeViewType.contract
-                      ? ContractsPage(filteredContracts: _filteredContracts)
-                      : const InvoicesPage(),
+                      ? BlocBuilder<ContractBloc, ContractState>(
+                          builder: (context, state) {
+                            return ContractsPage(
+                              contracts: state.contracts,
+                              canLoadMore: state.canLoadMore,
+                              isLoadingMore: state.isLoadingMore,
+                              onLoadMore: _onLoadMore,
+                            );
+                          },
+                        )
+                      : InvoicesPage(),
                 ),
               ),
             ],

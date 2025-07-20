@@ -2,10 +2,10 @@ import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/filter_utils.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
+import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
-import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/ui/saved/bloc/saved_bloc.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +25,23 @@ class _SavedPageState extends State<SavedPage> {
   bool get isFiltered => currentFilter != Filters.empty;
 
   @override
+  void initState() {
+    super.initState();
+    final profileState = context.read<ProfileBloc>().state;
+    if (profileState.status == BlocStatus.loaded) {
+      _loadInitial(profileState.profile!.savedContractIds);
+    }
+  }
+
+  void _loadInitial(List<String> ids) {
+    context.read<SavedBloc>().add(LoadSavedContracts(ids: ids));
+  }
+
+  void _loadMore(List<String> ids) {
+    context.read<SavedBloc>().add(LoadSavedContracts(ids: ids, loadMore: true));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,16 +56,9 @@ class _SavedPageState extends State<SavedPage> {
               IconButton(
                 icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
                 onPressed: () async {
-                  final contractState = context.read<ContractBloc>().state;
-                  final profileState = context.read<ProfileBloc>().state;
-
-                  if (contractState.status == BlocStatus.loaded &&
-                      profileState.status == BlocStatus.loaded) {
-                    final allContracts = contractState.contracts;
-                    final savedIds = profileState.profile!.savedContractIds;
-                    final savedContracts = allContracts
-                        .where((c) => savedIds.contains(c.id))
-                        .toList();
+                  final savedState = context.read<SavedBloc>().state;
+                  if (savedState.status == BlocStatus.loaded) {
+                    final savedContracts = savedState.contracts;
 
                     final result = await Navigator.pushNamed(
                       context,
@@ -77,19 +87,10 @@ class _SavedPageState extends State<SavedPage> {
               IconButton(
                 icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
                 onPressed: () {
-                  final state = context.read<ContractBloc>().state;
-                  final savedIds =
-                      context
-                          .read<ProfileBloc>()
-                          .state
-                          .profile
-                          ?.savedContractIds ??
-                      [];
+                  final state = context.read<SavedBloc>().state;
 
                   if (state.status == BlocStatus.loaded) {
-                    final savedContracts = state.contracts
-                        .where((c) => savedIds.contains(c.id))
-                        .toList();
+                    final savedContracts = state.contracts;
 
                     Navigator.pushNamed(
                       context,
@@ -107,72 +108,81 @@ class _SavedPageState extends State<SavedPage> {
           ),
         ],
       ),
-      body: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, profileState) {
-          if (profileState.status != BlocStatus.loaded) {
-            return const Center(child: Text('No saved contracts.'));
+      body: BlocListener<ProfileBloc, ProfileState>(
+        listenWhen: (p, c) => p.savedContractIds != c.savedContractIds,
+        listener: (context, profileState) {
+          if (profileState.status == BlocStatus.loaded) {
+            _loadInitial(profileState.profile!.savedContractIds);
           }
+        },
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, profileState) {
+            if (profileState.status != BlocStatus.loaded) {
+              return const Center(child: Text('No saved contracts.'));
+            }
 
-          final savedIds = profileState.profile!.savedContractIds;
+            final savedIds = profileState.profile!.savedContractIds;
 
-          return BlocBuilder<ContractBloc, ContractState>(
-            builder: (context, contractState) {
-              if (contractState.status == BlocStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (contractState.status == BlocStatus.loaded) {
-                final allContracts = contractState.contracts;
-                final savedContracts = allContracts
-                    .where((c) => savedIds.contains(c.id))
-                    .toList();
-
-                final contractsToShow = isFiltered
-                    ? (filteredContracts ??
-                          FilterUtils.apply(savedContracts, currentFilter))
-                    : savedContracts;
-
-                if (contractsToShow.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svg/bookmark.svg',
-                          height: 88.0,
-                          colorFilter: const ColorFilter.mode(
-                            Color(0xFF323232),
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Text(
-                          'No saved contracts.',
-                          style: Kstyle.textStyle.copyWith(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF323232),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+            return BlocBuilder<SavedBloc, SavedContractsState>(
+              builder: (context, state) {
+                if (state.status == BlocStatus.initial) {
+                  _loadInitial(savedIds);
+                  return const Center(child: CircularProgressIndicator());
                 }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: contractsToShow.length,
-                  itemBuilder: (_, i) {
-                    return ContractCard(
-                      contract: contractsToShow[i],
-                      allContracts: allContracts,
+                if (state.status == BlocStatus.loading &&
+                    state.contracts.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state.status == BlocStatus.loaded ||
+                    state.isLoadingMore) {
+                  final contractsToShow = isFiltered
+                      ? (filteredContracts ??
+                            FilterUtils.apply(state.contracts, currentFilter))
+                      : state.contracts;
+
+                  if (contractsToShow.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svg/bookmark.svg',
+                            height: 88.0,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF323232),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Text(
+                            'No saved contracts.',
+                            style: Kstyle.textStyle.copyWith(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF323232),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
-                  },
-                );
-              } else {
-                return const Center(child: Text('Failed to load contracts.'));
-              }
-            },
-          );
-        },
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
+                    child: ContractsPage(
+                      contracts: contractsToShow,
+                      canLoadMore: state.canLoadMore,
+                      isLoadingMore: state.isLoadingMore,
+                      onLoadMore: () => _loadMore(savedIds),
+                    ),
+                  );
+                } else {
+                  return const Center(child: Text('Failed to load contracts.'));
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }

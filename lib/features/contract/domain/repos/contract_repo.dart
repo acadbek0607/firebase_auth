@@ -16,4 +16,5 @@ abstract class ContractRepository {
     DocumentSnapshot? startAfterDoc,
     int limit,
   });
+  Future<List<ContractEntity>> getContractsByIds(List<String> ids);
 }

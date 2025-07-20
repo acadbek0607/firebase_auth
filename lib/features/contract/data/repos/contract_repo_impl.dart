@@ -49,4 +49,10 @@ class ContractRepositoryImpl implements ContractRepository {
     final entities = result.contracts.map((m) => m.toEntity()).toList();
     return PaginatedContracts(contracts: entities, lastDoc: result.lastDoc);
   }
+
+  @override
+  Future<List<ContractEntity>> getContractsByIds(List<String> ids) async {
+    final models = await _dataSource.getContractsByIds(ids);
+    return models.map((m) => m.toEntity()).toList();
+  }
 }

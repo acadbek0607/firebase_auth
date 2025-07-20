@@ -10,6 +10,7 @@ import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
 import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/main_scaffold.dart';
 import 'package:fire_auth/ui/home/widgets/search_page.dart';
+import 'package:fire_auth/ui/saved/bloc/saved_bloc.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,6 +129,10 @@ class MyApp extends StatelessWidget {
               isContractSaved: IsContractSaved(profileRepo),
               firebaseAuth: firebaseAuth,
             ),
+          ),
+          BlocProvider<SavedBloc>(
+            create: (_) =>
+                SavedBloc(getContractsByIds: GetContractsByIds(contractRepo)),
           ),
         ],
         child: MaterialApp(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/features/contract/data/models/contract_model.dart';
 import 'package:fire_auth/features/contract/data/models/contract_query_result.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 
@@ -18,4 +19,6 @@ abstract class ContractRemoteDataSource {
     DocumentSnapshot? startAfterDoc,
     int limit,
   });
+
+  Future<List<ContractModel>> getContractsByIds(List<String> contractIds);
 }

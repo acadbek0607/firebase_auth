@@ -57,8 +57,9 @@ class _HomePageState extends State<HomePage> {
       _currentFilter = filter;
       if (filter == Filters.empty) {
         _selectedDay = DateTime.now();
-      } else if (_currentFilter.fromDate != _selectedDay ||
-          _currentFilter.toDate != _selectedDay) {
+      } else if ((_currentFilter.fromDate != null ||
+              _currentFilter.toDate != null) ||
+          (_currentFilter.fromDate != null && _currentFilter.toDate != null)) {
         _selectedDay = null;
       }
     });

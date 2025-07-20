@@ -1,5 +1,6 @@
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
@@ -8,14 +9,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
-class HistoryPage extends StatefulWidget {
+import '../../../features/contract/domain/usecases/contract_usecases.dart';
+
+class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
   @override
-  State<HistoryPage> createState() => _HistoryPageState();
+  Widget build(BuildContext context) {
+    final repo = context.read<ContractRepository>();
+    return BlocProvider(
+      create: (_) => ContractBloc(
+        createContract: CreateContract(repo),
+        updateContract: UpdateContract(repo),
+        deleteContract: DeleteContract(repo),
+        getContracts: GetContracts(repo),
+        repo: repo,
+      )..add(LoadContracts()),
+      child: const _HistoryPage(),
+    );
+  }
 }
 
-class _HistoryPageState extends State<HistoryPage> {
+class _HistoryPage extends StatefulWidget {
+  const _HistoryPage();
+
+  @override
+  State<_HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<_HistoryPage> {
   Filters currentFilter = Filters.empty;
   DateTime? fromDate;
   DateTime? toDate;

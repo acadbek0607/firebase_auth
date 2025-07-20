@@ -14,13 +14,13 @@ class CalendarWidget extends StatefulWidget {
 
 class _CalendarWidgetState extends State<CalendarWidget> {
   late DateTime _focusedWeekStart;
-  late DateTime _selectedDay;
+  DateTime? _selectedDay;
 
   @override
   void initState() {
     super.initState();
-    _selectedDay = widget.initialDate ?? DateTime.now();
-    _focusedWeekStart = _getMonday(_selectedDay);
+    _selectedDay = widget.initialDate;
+    _focusedWeekStart = _getMonday(_selectedDay ?? DateTime.now());
   }
 
   DateTime _getMonday(DateTime date) {
@@ -73,7 +73,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       key: ValueKey(_focusedWeekStart.toIso8601String()),
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: weekDays.map((day) {
-        final isSelected = _isSameDay(day, _selectedDay);
+        final isSelected =
+            _selectedDay != null && _isSameDay(day, _selectedDay!);
         return GestureDetector(
           onTap: () => _selectDay(day),
           child: Container(

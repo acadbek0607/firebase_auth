@@ -3,6 +3,7 @@ import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/data/datasources/contract_remote_data_source.dart';
 import 'package:fire_auth/features/contract/data/models/contract_model.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
+import 'package:fire_auth/features/contract/domain/entities/paginated_contracts.dart';
 import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
 
 class ContractRepositoryImpl implements ContractRepository {
@@ -29,7 +30,7 @@ class ContractRepositoryImpl implements ContractRepository {
   }
 
   @override
-  Future<List<ContractEntity>> getContracts({
+  Future<PaginatedContracts> getContracts({
     DateTime? day,
     List<StatusType>? statuses,
     DateTime? fromDate,
@@ -37,7 +38,7 @@ class ContractRepositoryImpl implements ContractRepository {
     DocumentSnapshot? startAfterDoc,
     int limit = 10,
   }) async {
-    final models = await _dataSource.getContracts(
+    final result = await _dataSource.getContracts(
       day: day,
       statuses: statuses,
       fromDate: fromDate,
@@ -45,6 +46,7 @@ class ContractRepositoryImpl implements ContractRepository {
       startAfterDoc: startAfterDoc,
       limit: limit,
     );
-    return models.map((model) => model.toEntity()).toList();
+    final entities = result.contracts.map((m) => m.toEntity()).toList();
+    return PaginatedContracts(contracts: entities, lastDoc: result.lastDoc);
   }
 }

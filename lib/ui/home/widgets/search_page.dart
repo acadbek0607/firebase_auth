@@ -73,11 +73,11 @@ class _SearchPageState extends State<SearchPage> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final contracts = state.contracts;
+          final source = contracts.isNotEmpty ? contracts : state.contracts;
 
           final results = _query.isEmpty
               ? []
-              : contracts.where((contract) {
+              : source.where((contract) {
                   final query = _query.toLowerCase();
                   final fullName = contract.fullName.toLowerCase();
                   final status = contract.status.label.toLowerCase();
@@ -112,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
             itemBuilder: (_, index) {
               return ContractCard(
                 contract: results[index],
-                allContracts: contracts,
+                allContracts: source,
               );
             },
           );

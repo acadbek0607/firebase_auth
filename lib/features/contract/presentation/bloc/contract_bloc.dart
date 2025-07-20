@@ -17,7 +17,6 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
   final DeleteContract deleteContract;
   final GetContracts getContracts;
   final ContractRepository repo;
-  DocumentSnapshot? lastDocSnap;
 
   final List<ContractEntity> _allContracts = [];
 
@@ -48,7 +47,7 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       emit(state.copyWith(status: BlocStatus.loading, errorMessage: null));
     }
     try {
-      final contracts = await repo.getContracts(
+      final res = await repo.getContracts(
         day: event.day,
         statuses: event.statuses,
         fromDate: event.fromDate,
@@ -56,6 +55,8 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
         startAfterDoc: event.startAfterDoc,
         limit: event.limit,
       );
+      final contracts = res.contracts;
+      final lastDoc = res.lastDoc;
       final canLoadMore = contracts.length == event.limit;
       emit(
         state.copyWith(
@@ -65,6 +66,7 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
               : contracts,
           isLoadingMore: false,
           canLoadMore: canLoadMore,
+          lastDocSnap: lastDoc,
         ),
       );
     } catch (e) {

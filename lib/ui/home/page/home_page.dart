@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime? _selectedDay = DateTime.now();
-  DocumentSnapshot? _lastDocSnap;
   Filters _currentFilter = Filters.empty;
 
   @override
@@ -40,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             : null,
         fromDate: _selectedDay == null ? _currentFilter.fromDate : null,
         toDate: _selectedDay == null ? _currentFilter.toDate : null,
-        startAfterDoc: nextPage ? _lastDocSnap : null,
+        startAfterDoc: nextPage ? bloc.state.lastDocSnap : null,
         limit: 10,
       ),
     );

@@ -97,7 +97,19 @@ class _HistoryPageState extends State<HistoryPage> {
           const SizedBox(width: 4.0),
           IconButton(
             icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
-            onPressed: () => Navigator.pushNamed(context, '/search'),
+            onPressed: () {
+              final state = context.read<ContractBloc>().state;
+              if (state.status == BlocStatus.loaded) {
+                Navigator.pushNamed(
+                  context,
+                  '/search',
+                  arguments: {
+                    'allContracts': state.contracts,
+                    'currentFilter': currentFilter,
+                  },
+                );
+              }
+            },
           ),
           const SizedBox(width: 16.0),
         ],

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/data/models/contract_model.dart';
+import 'package:fire_auth/features/contract/data/models/contract_query_result.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'contract_remote_data_source.dart';
 
@@ -51,7 +52,7 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
   }
 
   @override
-  Future<List<ContractModel>> getContracts({
+  Future<ContractQueryResult> getContracts({
     DateTime? day,
     List<StatusType>? statuses,
     DateTime? fromDate,
@@ -104,8 +105,10 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
     query = query.limit(limit);
 
     final snap = await query.get();
-    return snap.docs
+    final contracts = snap.docs
         .map((doc) => ContractModel.fromJson(doc.data(), doc.id))
         .toList();
+    final lastDoc = snap.docs.isNotEmpty ? snap.docs.last : null;
+    return ContractQueryResult(contracts: contracts, lastDoc: lastDoc);
   }
 }

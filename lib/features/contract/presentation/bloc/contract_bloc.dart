@@ -45,6 +45,7 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       emit(state.copyWith(isLoadingMore: true));
     } else {
       emit(state.copyWith(status: BlocStatus.loading, errorMessage: null));
+      _allContracts.clear();
     }
     try {
       final res = await repo.getContracts(
@@ -58,6 +59,7 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
       final contracts = res.contracts;
       final lastDoc = res.lastDoc;
       final canLoadMore = contracts.length == event.limit;
+      _allContracts.addAll(contracts);
       emit(
         state.copyWith(
           status: BlocStatus.loaded,

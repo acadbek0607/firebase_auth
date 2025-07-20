@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/domain/usecases/get_contracts_by_ids.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'saved_event.dart';
 part 'saved_state.dart';

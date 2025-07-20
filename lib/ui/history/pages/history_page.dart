@@ -21,7 +21,32 @@ class _HistoryPageState extends State<HistoryPage> {
   DateTime? fromDate;
   DateTime? toDate;
 
-  final DateFormat formatter = DateFormat('dd.MM.yyyy');
+  final DateFormat formatter = KDataFormat.dateFormat;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContracts();
+  }
+
+  void _loadContracts({bool nextPage = false}) {
+    final bloc = context.read<ContractBloc>();
+    bloc.add(
+      LoadContracts(
+        statuses: currentFilter.statuses.isNotEmpty
+            ? currentFilter.statuses
+            : null,
+        fromDate: fromDate,
+        toDate: toDate,
+        startAfterDoc: nextPage ? bloc.state.lastDocSnap : null,
+        limit: 10,
+      ),
+    );
+  }
+
+  void _onLoadMore() {
+    _loadContracts(nextPage: true);
+  }
 
   Future<void> _selectDate(BuildContext context, bool isFrom) async {
     final now = DateTime.now();

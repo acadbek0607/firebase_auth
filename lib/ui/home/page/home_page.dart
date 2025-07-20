@@ -55,7 +55,9 @@ class _HomePageState extends State<HomePage> {
   void _onFilterApplied(Filters filter) {
     setState(() {
       _currentFilter = filter;
-      if (_currentFilter.fromDate != _selectedDay ||
+      if (filter == Filters.empty) {
+        _selectedDay = DateTime.now();
+      } else if (_currentFilter.fromDate != _selectedDay ||
           _currentFilter.toDate != _selectedDay) {
         _selectedDay = null;
       }

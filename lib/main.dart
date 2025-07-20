@@ -110,7 +110,7 @@ class MyApp extends StatelessWidget {
               deleteContract: DeleteContract(contractRepo),
               getContracts: GetContracts(contractRepo),
               repo: contractRepo,
-            )..add(LoadContracts()),
+            )..add(LoadContracts(day: DateTime.now())),
           ),
           BlocProvider<InvoiceBloc>(
             create: (_) => InvoiceBloc(

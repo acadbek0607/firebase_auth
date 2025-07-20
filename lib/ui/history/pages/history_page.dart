@@ -1,8 +1,7 @@
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
-import 'package:fire_auth/core/utils/filter_utils.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
-import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,6 +68,7 @@ class _HistoryPageState extends State<HistoryPage> {
           return;
         }
         setState(() => fromDate = picked);
+        _loadContracts();
       } else {
         if (fromDate != null && picked.isBefore(fromDate!)) {
           // ignore: use_build_context_synchronously
@@ -78,6 +78,7 @@ class _HistoryPageState extends State<HistoryPage> {
           return;
         }
         setState(() => toDate = picked);
+        _loadContracts();
       }
     }
   }
@@ -113,6 +114,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     fromDate = result.fromDate;
                     toDate = result.toDate;
                   });
+                  _loadContracts();
                 }
               }
             },
@@ -147,10 +149,7 @@ class _HistoryPageState extends State<HistoryPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == BlocStatus.loaded) {
-              final contracts = FilterUtils.apply(
-                state.contracts,
-                currentFilter,
-              );
+              final contracts = state.contracts;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,14 +240,11 @@ class _HistoryPageState extends State<HistoryPage> {
                               ],
                             ),
                           )
-                        : ListView.separated(
-                            itemCount: contracts.length,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (_, index) => ContractCard(
-                              contract: contracts[index],
-                              allContracts: state.contracts,
-                            ),
+                        : ContractsPage(
+                            contracts: contracts,
+                            onLoadMore: _onLoadMore,
+                            canLoadMore: state.canLoadMore,
+                            isLoadingMore: state.isLoadingMore,
                           ),
                   ),
                 ],

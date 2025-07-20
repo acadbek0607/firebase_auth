@@ -19,14 +19,14 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  final List<Widget> _pages = const [
-    HomePage(), // 0
+  final List<Widget> _pages = [
+    const HomePage(), // 0
     HistoryPage(), // 1
-    NewPage(), // 2
-    SavedPage(), // 3
-    ProfilePage(), // 4
-    CreateContractPage(), // 5 (subpage of New)
-    CreateInvoicePage(), // 6 (subpage of New)
+    const NewPage(), // 2
+    const SavedPage(), // 3
+    const ProfilePage(), // 4
+    const CreateContractPage(), // 5 (subpage of New)
+    const CreateInvoicePage(), // 6 (subpage of New)
   ];
 
   static const List<String> _labels = [

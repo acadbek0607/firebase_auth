@@ -82,6 +82,7 @@ class CustomDropdown extends StatelessWidget {
   }
 
   String _capitalize(String s) {
+    if (s.contains(' ')) return s;
     return s
         .split('_')
         .map((word) {

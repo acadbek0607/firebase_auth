@@ -179,10 +179,12 @@ class MyApp extends StatelessWidget {
                 final contract = args['contract'] as ContractEntity;
                 final allContracts =
                     args['allContracts'] as List<ContractEntity>;
+                final fromDetail = args['fromDetail'] as bool? ?? false;
                 return MaterialPageRoute(
                   builder: (context) => ContractDetailPage(
                     contract: contract,
                     allContracts: allContracts,
+                    openFromDetail: fromDetail,
                   ),
                 );
               case '/filter':

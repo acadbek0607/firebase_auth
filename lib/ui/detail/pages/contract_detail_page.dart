@@ -17,11 +17,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ContractDetailPage extends StatefulWidget {
   final ContractEntity contract;
   final List<ContractEntity> allContracts;
+  final bool openFromDetail;
 
   const ContractDetailPage({
     super.key,
     required this.contract,
     required this.allContracts,
+    this.openFromDetail = false,
   });
 
   @override
@@ -41,8 +43,12 @@ class _ContractDetailPageState extends State<ContractDetailPage>
   }
 
   Future<bool> _onPop() async {
-    selectedPageNotifier.value = 0;
-    Navigator.pushReplacementNamed(context, '/main');
+    if (widget.openFromDetail) {
+      Navigator.pop(context);
+    } else {
+      selectedPageNotifier.value = 0;
+      Navigator.pushReplacementNamed(context, '/main');
+    }
     return false;
   }
 
@@ -172,6 +178,17 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                     return ContractCard(
                       contract: relatedContracts[i],
                       allContracts: widget.allContracts,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/contract_detail',
+                          arguments: {
+                            'contract': relatedContracts[i],
+                            'allContracts': widget.allContracts,
+                            'fromDetail': true,
+                          },
+                        );
+                      },
                     );
                   },
                 ),

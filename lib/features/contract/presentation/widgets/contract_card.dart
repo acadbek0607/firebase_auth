@@ -36,13 +36,18 @@ class ContractCard extends StatelessWidget {
     final totalContracts = relatedContracts.length;
 
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/contract_detail',
-          arguments: {'contract': contract, 'allContracts': relatedContracts},
-        );
-      },
+      onTap:
+          onTap ??
+          () {
+            Navigator.pushNamed(
+              context,
+              '/contract_detail',
+              arguments: {
+                'contract': contract,
+                'allContracts': relatedContracts,
+              },
+            );
+          },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6.0),
         padding: const EdgeInsets.all(16.0),

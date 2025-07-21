@@ -197,7 +197,11 @@ class MyApp extends StatelessWidget {
                 if (contracts is! List<ContractEntity>) {
                   return MaterialPageRoute(
                     builder: (_) => Scaffold(
-                      body: Center(child: Text(tr('no_contracts_provided'))),
+                      body: Center(
+                        child: Text(
+                          tr('no_contracts_provided', context: context),
+                        ),
+                      ),
                     ),
                   );
                 }

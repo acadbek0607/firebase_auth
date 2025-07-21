@@ -86,7 +86,9 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                   setState(() => isSaved = !isSaved);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(tr('failed_to_save_contract')),
+                      content: Text(
+                        tr('failed_to_save_contract', context: context),
+                      ),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -134,7 +136,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                         elevation: WidgetStateProperty.all(0.0),
                       ),
                       child: Text(
-                        tr('delete_contract'),
+                        tr('delete_contract', context: context),
                         style: Kstyle.textStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           color: const Color(0xffFF426D),
@@ -155,7 +157,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                         ),
                       ),
                       child: Text(
-                        tr('create_contract'),
+                        tr('create_contract', context: context),
                         style: Kstyle.textStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -167,7 +169,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
               ),
               const SizedBox(height: 24),
               Text(
-                '${tr('other_contracts')} ${contract.fullName}',
+                '${tr('other_contracts', context: context)} ${contract.fullName}',
                 style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),

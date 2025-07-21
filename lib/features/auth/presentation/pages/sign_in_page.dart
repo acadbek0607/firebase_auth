@@ -26,7 +26,10 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(tr('sign_in')), centerTitle: true),
+      appBar: AppBar(
+        title: Text(tr('sign_in', context: context)),
+        centerTitle: true,
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
           return Padding(
@@ -42,7 +45,7 @@ class _SignInPageState extends State<SignInPage> {
                     child: TextField(
                       controller: _emailController,
                       decoration: Kstyle.textFieldStyle.copyWith(
-                        labelText: tr('email'),
+                        labelText: tr('email', context: context),
                       ),
                     ),
                   ),
@@ -54,7 +57,7 @@ class _SignInPageState extends State<SignInPage> {
                           obscureText: _obscure,
                           controller: _passwordController,
                           decoration: Kstyle.textFieldStyle.copyWith(
-                            labelText: tr('password'),
+                            labelText: tr('password', context: context),
                           ),
                         ),
                         Positioned(
@@ -99,13 +102,13 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () =>
                             Navigator.pushReplacementNamed(context, '/signup'),
                         child: Text(
-                          tr('sign_up'),
+                          tr('sign_up', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      title: Text(tr('dont_have_account')),
+                      title: Text(tr('dont_have_account', context: context)),
                     ),
                   ),
                   if (state.status == AuthStatus.loading)

@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 enum StatusType { paid, inProcess, rejectedByPayme, rejectedByIQ }
 
 extension StatusTypeExtension on StatusType {
-  String get label {
+  String label(BuildContext context) {
     switch (this) {
       case StatusType.paid:
-        return tr('paid');
+        return tr('paid', context: context);
       case StatusType.inProcess:
-        return tr('in_process');
+        return tr('in_process', context: context);
       case StatusType.rejectedByPayme:
-        return tr('rejected_payme');
+        return tr('rejected_payme', context: context);
       case StatusType.rejectedByIQ:
-        return tr('rejected_iq');
+        return tr('rejected_iq', context: context);
     }
   }
 
@@ -38,6 +38,7 @@ extension StatusTypeExtension on StatusType {
   }
 
   static StatusType fromLabel(String label) {
+    // ignore: unrelated_type_equality_checks
     return StatusType.values.firstWhere((e) => e.label == label);
   }
 

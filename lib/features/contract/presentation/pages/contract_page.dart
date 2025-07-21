@@ -37,7 +37,7 @@ class ContractsPage extends StatelessWidget {
             ),
             SizedBox(height: 12.0),
             Text(
-              tr('no_contracts'),
+              tr('no_contracts', context: context),
               style: Kstyle.textStyle.copyWith(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -60,7 +60,7 @@ class ContractsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: Center(
                 child: Text(
-                  tr('loading'),
+                  tr('loading', context: context),
                   style: Kstyle.textStyle.copyWith(
                     fontFamily: 'Poppins',
                     fontSize: 16.0,
@@ -80,7 +80,10 @@ class ContractsPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onLoadMore,
                 style: Kstyle.buttonStyle,
-                child: Text(tr('load_more'), style: Kstyle.textStyle),
+                child: Text(
+                  tr('load_more', context: context),
+                  style: Kstyle.textStyle,
+                ),
               ),
             ),
           );

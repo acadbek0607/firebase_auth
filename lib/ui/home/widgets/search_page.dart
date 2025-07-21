@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
           autofocus: true,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: tr('search'),
+            hintText: tr('search', context: context),
             hintStyle: const TextStyle(color: Colors.grey),
             border: InputBorder.none,
           ),
@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
               : source.where((contract) {
                   final query = _query.toLowerCase();
                   final fullName = contract.fullName.toLowerCase();
-                  final status = contract.status.label.toLowerCase();
+                  final status = contract.status.label(context).toLowerCase();
                   final amount = contract.amount.toString();
                   final sum = contract.contractCount?.toString() ?? '';
                   final lastInvoice = contract.lastContractId?.toString() ?? '';
@@ -99,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
           if (_query.isNotEmpty && results.isEmpty) {
             return Center(
               child: Text(
-                tr('no_results_found'),
+                tr('no_results_found', context: context),
                 style: TextStyle(color: Colors.grey),
               ),
             );

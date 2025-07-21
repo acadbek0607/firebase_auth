@@ -34,7 +34,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tr('new_contract'),
+          tr('new_contract', context: context),
           style: Kstyle.textStyle.copyWith(
             fontWeight: FontWeight.w500,
             fontSize: 18.0,
@@ -85,52 +85,72 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       Text('Entity', style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: tr('entity_type'),
+                        label: tr('entity_type', context: context),
                         value: _selectedType ?? '',
-                        items: [tr('personal'), tr('legal')],
+                        items: [
+                          tr('personal', context: context),
+                          tr('legal', context: context),
+                        ],
                         onChanged: (val) {
                           if (val != null) setState(() => _selectedType = val);
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      Text(tr('fisher'), style: Kstyle.textStyle),
+                      Text(
+                        tr('fisher', context: context),
+                        style: Kstyle.textStyle,
+                      ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _fullNameController,
                         decoration: Kstyle.textFieldStyle,
-                        validator: (value) =>
-                            value!.isEmpty ? tr('required') : null,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
                       ),
                       const SizedBox(height: 16.0),
-                      Text(tr('address_of'), style: Kstyle.textStyle),
+                      Text(
+                        tr('address_of', context: context),
+                        style: Kstyle.textStyle,
+                      ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _addressController,
                         decoration: Kstyle.textFieldStyle,
-                        validator: (value) =>
-                            value!.isEmpty ? tr('required') : null,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
                         keyboardType: TextInputType.multiline,
                         minLines: 1,
                         maxLines: 2,
                       ),
                       const SizedBox(height: 16.0),
-                      Text(tr('iec'), style: Kstyle.textStyle),
+                      Text(
+                        tr('iec', context: context),
+                        style: Kstyle.textStyle,
+                      ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _innController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
-                        validator: (value) =>
-                            value!.isEmpty ? tr('required') : null,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
                       ),
                       const SizedBox(height: 16.0),
-                      Text(tr('status_of_contract'), style: Kstyle.textStyle),
+                      Text(
+                        tr('status_of_contract', context: context),
+                        style: Kstyle.textStyle,
+                      ),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: tr('status'),
+                        label: tr('status', context: context),
                         // value: _selectedStatus.toFirestoreString(),
-                        value: _selectedStatus?.label ?? '',
-                        items: StatusType.values.map((s) => s.label).toList(),
+                        value: _selectedStatus?.label as String? ?? '',
+                        items: StatusType.values
+                            .map((s) => s.label(context))
+                            .toList(),
                         onChanged: (val) {
                           if (val != null) {
                             setState(() {
@@ -148,8 +168,9 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         controller: _amountController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
-                        validator: (value) =>
-                            value!.isEmpty ? tr('required') : null,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
@@ -174,7 +195,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         },
                         style: Kstyle.buttonStyle,
                         child: Text(
-                          tr('save_contract'),
+                          tr('save_contract', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.0,

@@ -18,7 +18,11 @@ class Kstyle {
     ),
   );
 
-  static TextStyle textStyle = TextStyle(color: Color(0xFFE7E7E7));
+  static TextStyle textStyle = TextStyle(
+    color: Color(0xFFE7E7E7),
+    fontSize: 14.0,
+    fontWeight: FontWeight.w400,
+  );
 
   static InputDecoration textFieldStyle = InputDecoration(
     enabledBorder: OutlineInputBorder(

@@ -31,11 +31,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   ];
 
   List<String> _labels() => [
-    tr('contracts'),
-    tr('history'),
-    tr('new'),
-    tr('saved'),
-    tr('profile'),
+    tr('contracts', context: context),
+    tr('history', context: context),
+    tr('new', context: context),
+    tr('saved', context: context),
+    tr('profile', context: context),
   ];
 
   static const List<String> _icons = [

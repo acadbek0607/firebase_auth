@@ -74,10 +74,13 @@ class ProfileCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _infoRow(tr('phone'), phone),
-                  _infoRow(tr('email'), email),
+                  _infoRow(tr('phone', context: context), phone),
+                  _infoRow(tr('email', context: context), email),
                   if (dateOfBirth != null)
-                    _infoRow(tr('date_of_birth'), dateOfBirth!),
+                    _infoRow(
+                      tr('date_of_birth', context: context),
+                      dateOfBirth!,
+                    ),
                 ],
               ),
             ),

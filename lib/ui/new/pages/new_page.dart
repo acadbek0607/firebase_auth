@@ -23,13 +23,13 @@ class NewPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                tr('what_create'),
+                tr('what_create', context: context),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 16),
               _CreateButton(
                 icon: 'assets/svg/contract.svg',
-                text: tr('contract'),
+                text: tr('contract', context: context),
                 onPressed: () {
                   selectedPageNotifier.value = 5;
                 },
@@ -37,7 +37,7 @@ class NewPage extends StatelessWidget {
               const SizedBox(height: 12),
               _CreateButton(
                 icon: 'assets/svg/invoice.svg',
-                text: tr('invoice'),
+                text: tr('invoice', context: context),
                 onPressed: () {
                   selectedPageNotifier.value = 6;
                 },

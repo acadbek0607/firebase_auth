@@ -33,7 +33,7 @@ class InvoicesPage extends StatelessWidget {
                   ),
                   SizedBox(height: 12.0),
                   Text(
-                    tr('no_invoices'),
+                    tr('no_invoices', context: context),
                     style: Kstyle.textStyle.copyWith(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
@@ -58,7 +58,11 @@ class InvoicesPage extends StatelessWidget {
             ),
           );
         } else if (state.status == InvoiceStatus.error) {
-          return Center(child: Text("${tr('error')} ${state.errorMessage}"));
+          return Center(
+            child: Text(
+              "${tr('error', context: context)} ${state.errorMessage}",
+            ),
+          );
         }
 
         return const SizedBox.shrink();

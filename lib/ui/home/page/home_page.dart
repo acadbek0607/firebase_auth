@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr('contracts')),
+        title: Text(tr('contracts', context: context)),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),

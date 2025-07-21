@@ -37,7 +37,7 @@ class LanguageDialog {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          tr('choose_language'),
+                          tr('choose_language', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -89,7 +89,7 @@ class LanguageDialog {
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
-                                  tr('cancel'),
+                                  tr('cancel', context: context),
                                   style: Kstyle.textStyle.copyWith(
                                     color: const Color(0xFF008F7F),
                                     fontFamily: 'Poppins',
@@ -111,7 +111,7 @@ class LanguageDialog {
                                   Navigator.pop(context);
                                 },
                                 child: Text(
-                                  tr('done'),
+                                  tr('done', context: context),
                                   style: Kstyle.textStyle.copyWith(
                                     color: const Color(0xFFFDFDFD),
                                     fontFamily: 'Poppins',

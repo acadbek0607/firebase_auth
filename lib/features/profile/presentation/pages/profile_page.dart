@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              tr('profile'),
+              tr('profile', context: context),
               style: Kstyle.textStyle.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18.0,

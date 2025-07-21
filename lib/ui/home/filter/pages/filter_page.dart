@@ -90,7 +90,7 @@ class _FilterPageState extends State<FilterPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tr('filters'),
+          tr('filters', context: context),
           style: Kstyle.textStyle.copyWith(
             fontWeight: FontWeight.w500,
             fontSize: 18.0,
@@ -110,14 +110,14 @@ class _FilterPageState extends State<FilterPage> {
                   children: [
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: tr('paid'),
+                        label: tr('paid', context: context),
                         value: paid,
                         onChanged: (val) => setState(() => paid = val),
                       ),
                     ),
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: tr('rejected_iq'),
+                        label: tr('rejected_iq', context: context),
                         value: rejectedByIQ,
                         onChanged: (val) => setState(() => rejectedByIQ = val),
                       ),
@@ -129,14 +129,14 @@ class _FilterPageState extends State<FilterPage> {
                   children: [
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: tr('in_process'),
+                        label: tr('in_process', context: context),
                         value: inProcess,
                         onChanged: (val) => setState(() => inProcess = val),
                       ),
                     ),
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: tr('rejected_payme'),
+                        label: tr('rejected_payme', context: context),
                         value: rejectedByPayme,
                         onChanged: (val) =>
                             setState(() => rejectedByPayme = val),
@@ -163,7 +163,7 @@ class _FilterPageState extends State<FilterPage> {
                               Text(
                                 fromDate != null
                                     ? formatter.format(fromDate!)
-                                    : tr('from'),
+                                    : tr('from', context: context),
                                 style: const TextStyle(color: Colors.white),
                               ),
                               SvgPicture.asset('assets/svg/calendar.svg'),
@@ -195,7 +195,7 @@ class _FilterPageState extends State<FilterPage> {
                               Text(
                                 toDate != null
                                     ? formatter.format(toDate!)
-                                    : tr('to'),
+                                    : tr('to', context: context),
                                 style: const TextStyle(color: Colors.white),
                               ),
                               SvgPicture.asset('assets/svg/calendar.svg'),
@@ -222,7 +222,7 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                         ),
                         child: Text(
-                          tr('cancel'),
+                          tr('cancel', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF008F7F),
@@ -236,7 +236,7 @@ class _FilterPageState extends State<FilterPage> {
                         onPressed: _applyFilters,
                         style: Kstyle.buttonStyle,
                         child: Text(
-                          tr('apply'),
+                          tr('apply', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Color(0xFFFDFDFD),

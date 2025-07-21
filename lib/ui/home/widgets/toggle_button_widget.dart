@@ -34,7 +34,7 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                   elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: Text(
-                  tr('contracts'),
+                  tr('contracts', context: context),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -52,7 +52,7 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                   elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: Text(
-                  tr('invoices'),
+                  tr('invoices', context: context),
                   style: TextStyle(color: Colors.white),
                 ),
               ),

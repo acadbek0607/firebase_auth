@@ -56,7 +56,7 @@ class InvoiceCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  invoice.status.label,
+                  invoice.status.label(context),
                   style: TextStyle(color: invoice.status.color, fontSize: 12),
                 ),
               ),
@@ -64,7 +64,7 @@ class InvoiceCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '${tr('service')} ${invoice.serviceName}',
+            '${tr('service', context: context)} ${invoice.serviceName}',
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(height: 4),
@@ -72,7 +72,7 @@ class InvoiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '''${tr('amount')} $formattedAmount so'm''',
+                '''${tr('amount', context: context)} $formattedAmount so'm''',
                 style: const TextStyle(color: Colors.white),
               ),
               Text(

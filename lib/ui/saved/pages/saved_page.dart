@@ -119,7 +119,9 @@ class _SavedPageState extends State<SavedPage> {
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, profileState) {
             if (profileState.status != BlocStatus.loaded) {
-              return Center(child: Text(tr('no_saved_contracts')));
+              return Center(
+                child: Text(tr('no_saved_contracts', context: context)),
+              );
             }
 
             final savedIds = profileState.profile!.savedContractIds;
@@ -156,7 +158,7 @@ class _SavedPageState extends State<SavedPage> {
                           ),
                           const SizedBox(height: 16.0),
                           Text(
-                            tr('no_saved_contracts'),
+                            tr('no_saved_contracts', context: context),
                             style: Kstyle.textStyle.copyWith(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
@@ -178,7 +180,11 @@ class _SavedPageState extends State<SavedPage> {
                     ),
                   );
                 } else {
-                  return Center(child: Text(tr('failed_to_load_contracts')));
+                  return Center(
+                    child: Text(
+                      tr('failed_to_load_contracts', context: context),
+                    ),
+                  );
                 }
               },
             );

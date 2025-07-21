@@ -21,13 +21,19 @@ class ContractDetailInfoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _detailText(tr('fisher'), contract.fullName),
-              _detailText(tr('status'), contract.status.label),
-              _detailText(tr('amount'), '${contract.amount}'),
-              _detailText(tr('address'), contract.organizationAddress),
-              _detailText(tr('itn'), contract.inn),
+              _detailText(tr('fisher', context: context), contract.fullName),
               _detailText(
-                tr('created_at'),
+                tr('status', context: context),
+                contract.status.label(context),
+              ),
+              _detailText(tr('amount', context: context), '${contract.amount}'),
+              _detailText(
+                tr('address', context: context),
+                contract.organizationAddress,
+              ),
+              _detailText(tr('itn', context: context), contract.inn),
+              _detailText(
+                tr('created_at', context: context),
                 '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
               ),
             ],

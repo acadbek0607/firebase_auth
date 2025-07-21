@@ -59,13 +59,22 @@ class ProfileForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            _buildTextField(tr('full_name'), fullNameController),
+            _buildTextField(
+              tr('full_name', context: context),
+              fullNameController,
+            ),
             const SizedBox(height: 12),
-            _buildTextField(tr('phone'), phoneController),
+            _buildTextField(tr('phone', context: context), phoneController),
             const SizedBox(height: 12),
-            _buildTextField(tr('profession'), professionController),
+            _buildTextField(
+              tr('profession', context: context),
+              professionController,
+            ),
             const SizedBox(height: 12),
-            _buildTextField(tr('organization'), organizationController),
+            _buildTextField(
+              tr('organization', context: context),
+              organizationController,
+            ),
             const SizedBox(height: 12),
             GestureDetector(
               onTap: pickDateOfBirth,
@@ -73,10 +82,11 @@ class ProfileForm extends StatelessWidget {
                 child: TextFormField(
                   controller: dobController,
                   decoration: Kstyle.textFieldStyle.copyWith(
-                    labelText: tr('date_of_birth'),
+                    labelText: tr('date_of_birth', context: context),
                   ),
-                  validator: (val) =>
-                      val == null || val.isEmpty ? tr('date_required') : null,
+                  validator: (val) => val == null || val.isEmpty
+                      ? tr('date_required', context: context)
+                      : null,
                 ),
               ),
             ),
@@ -85,14 +95,14 @@ class ProfileForm extends StatelessWidget {
               initialValue: email ?? '',
               enabled: false,
               decoration: Kstyle.textFieldStyle.copyWith(
-                labelText: tr('email'),
+                labelText: tr('email', context: context),
               ),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: submitProfile,
               style: Kstyle.buttonStyle,
-              child: Text(tr('save_profile')),
+              child: Text(tr('save_profile', context: context)),
             ),
           ],
         ),

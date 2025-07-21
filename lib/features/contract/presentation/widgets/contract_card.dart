@@ -85,7 +85,7 @@ class ContractCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    contract.status.label,
+                    contract.status.label(context),
                     style: Kstyle.textStyle.copyWith(
                       color: contract.status.color,
                       fontSize: 12,
@@ -97,7 +97,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text.rich(
               TextSpan(
-                text: tr('fish'),
+                text: tr('fish', context: context),
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -111,11 +111,12 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: tr('amount'),
+                text: tr('amount', context: context),
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
-                    text: '$formattedAmount ${tr('currency')}',
+                    text:
+                        '$formattedAmount ${tr('currency', context: context)}',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],
@@ -124,7 +125,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: tr('last_contract'),
+                text: tr('last_contract', context: context),
                 style: TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -140,7 +141,7 @@ class ContractCard extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                    text: tr('number_of_contracts'),
+                    text: tr('number_of_contracts', context: context),
                     style: TextStyle(color: Colors.white),
                     children: [
                       TextSpan(

@@ -60,7 +60,7 @@ class ContractsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: Center(
                 child: Text(
-                  "Loading...",
+                  tr('loading'),
                   style: Kstyle.textStyle.copyWith(
                     fontFamily: 'Poppins',
                     fontSize: 16.0,

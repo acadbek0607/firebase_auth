@@ -77,5 +77,8 @@
   "cost": "Cost of invoice",
   "status_of_invoice": "Status of invoice",
   "save_invoice": "Save invoice",
-  "no_saved_contracts": "No saved contracts."
+  "no_saved_contracts": "No saved contracts.",
+  "no_invoices": "No invoices available",
+  "loading": "Loading...",
+  "no_contracts_provided": "No contracts provided to filter."
 }

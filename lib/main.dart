@@ -194,10 +194,8 @@ class MyApp extends StatelessWidget {
                 final contracts = args['allContracts'];
                 if (contracts is! List<ContractEntity>) {
                   return MaterialPageRoute(
-                    builder: (_) => const Scaffold(
-                      body: Center(
-                        child: Text('No contracts provided to filter.'),
-                      ),
+                    builder: (_) => Scaffold(
+                      body: Center(child: Text(tr('no_contracts_provided'))),
                     ),
                   );
                 }

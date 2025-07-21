@@ -30,7 +30,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     const CreateInvoicePage(), // 6 (subpage of New)
   ];
 
-  static final List<String> _labels = [
+  List<String> _labels() => [
     tr('contracts'),
     tr('history'),
     tr('new'),
@@ -75,6 +75,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    final labels = _labels();
     return Scaffold(
       body:
           widget.child ?? IndexedStack(index: _selectedIndex, children: _pages),
@@ -90,7 +91,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             icon: SvgPicture.asset(
               'assets/svg/${isSelected ? 's_' : ''}${_icons[i]}.svg',
             ),
-            label: _labels[i],
+            label: labels[i],
           );
         }),
       ),

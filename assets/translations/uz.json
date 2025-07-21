@@ -77,5 +77,8 @@
   "cost": "Hisob-faktura summasi",
   "status_of_invoice": "Hisob-faktura holati",
   "save_invoice": "Hisob-fakturani saqlash",
-  "no_saved_contracts": "Saqlangan kontraktlar yo‘q."
+  "no_saved_contracts": "Saqlangan kontraktlar yo‘q.",
+  "no_invoices": "Hisob-fakturalar mavjud emas",
+  "loading": "Yuklanmoqda...",
+  "no_contracts_provided": "Filtrlash uchun kontraktlar berilmagan"
 }

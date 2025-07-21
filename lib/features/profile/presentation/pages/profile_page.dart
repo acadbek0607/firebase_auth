@@ -36,8 +36,30 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _pickedImage;
   bool _isProfileSaved = false;
 
-  String _selectedLanguage = tr('us');
+  String _selectedLanguage = 'English (USA)';
   String _selectedFlagPath = 'assets/flags/us.svg';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateLanguageFromLocale(context.locale);
+  }
+
+  void _updateLanguageFromLocale(Locale locale) {
+    switch (locale.languageCode) {
+      case 'uz':
+        _selectedLanguage = 'O‘zbek (Lotin)';
+        _selectedFlagPath = 'assets/flags/uz.svg';
+        break;
+      case 'ru':
+        _selectedLanguage = 'Русский';
+        _selectedFlagPath = 'assets/flags/ru.svg';
+        break;
+      default:
+        _selectedLanguage = 'English (USA)';
+        _selectedFlagPath = 'assets/flags/us.svg';
+    }
+  }
 
   @override
   void initState() {
@@ -135,12 +157,28 @@ class _ProfilePageState extends State<ProfilePage> {
       currentLanguage: _selectedLanguage,
       currentFlagPath: _selectedFlagPath,
       onChanged: (lang, flagPath) {
+        final local = _localeFromLanguage(lang);
+        if (local != null) {
+          context.setLocale(local);
+        }
         setState(() {
           _selectedLanguage = lang;
           _selectedFlagPath = flagPath;
         });
       },
     );
+  }
+
+  Locale? _localeFromLanguage(String lang) {
+    switch (lang) {
+      case 'O‘zbek (Lotin)':
+        return const Locale('uz');
+      case 'Русский':
+        return const Locale('ru');
+      case 'English (USA)':
+        return const Locale('en');
+    }
+    return null;
   }
 
   @override

@@ -33,7 +33,7 @@ class InvoicesPage extends StatelessWidget {
                   ),
                   SizedBox(height: 12.0),
                   Text(
-                    "No invoices available",
+                    tr('no_invoices'),
                     style: Kstyle.textStyle.copyWith(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,

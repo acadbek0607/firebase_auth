@@ -77,5 +77,8 @@
   "cost": "Стоимость счета",
   "status_of_invoice": "Статус счета",
   "save_invoice": "Сохранить счет",
-  "no_saved_contracts": "Нет сохранённых контрактов."
+  "no_saved_contracts": "Нет сохранённых контрактов.",
+  "no_invoices": "Нет доступных счетов",
+  "loading": "Загрузка...",
+  "no_contracts_provided": "Контракты для фильтрации не переданы."
 }

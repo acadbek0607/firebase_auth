@@ -156,7 +156,7 @@ class _SavedPageState extends State<SavedPage> {
                           ),
                           const SizedBox(height: 16.0),
                           Text(
-                            'No saved contracts.',
+                            tr('no_saved_contracts'),
                             style: Kstyle.textStyle.copyWith(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,

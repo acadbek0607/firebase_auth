@@ -111,7 +111,7 @@ class LanguageDialog {
                                   Navigator.pop(context);
                                 },
                                 child: Text(
-                                  'Done',
+                                  tr('done'),
                                   style: Kstyle.textStyle.copyWith(
                                     color: const Color(0xFFFDFDFD),
                                     fontFamily: 'Poppins',

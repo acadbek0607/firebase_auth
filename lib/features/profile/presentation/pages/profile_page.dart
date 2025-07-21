@@ -38,11 +38,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String _selectedLanguage = 'English (USA)';
   String _selectedFlagPath = 'assets/flags/us.svg';
+  Locale? _prevLocale;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _updateLanguageFromLocale(context.locale);
+    final locale = context.locale;
+    if (_prevLocale != locale) {
+      _prevLocale = locale;
+      setState(() => _updateLanguageFromLocale(locale));
+    }
   }
 
   void _updateLanguageFromLocale(Locale locale) {

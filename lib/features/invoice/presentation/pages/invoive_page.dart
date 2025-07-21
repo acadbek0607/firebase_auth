@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +58,7 @@ class InvoicesPage extends StatelessWidget {
             ),
           );
         } else if (state.status == InvoiceStatus.error) {
-          return Center(child: Text("Error: ${state.errorMessage}"));
+          return Center(child: Text("${tr('error')} ${state.errorMessage}"));
         }
 
         return const SizedBox.shrink();

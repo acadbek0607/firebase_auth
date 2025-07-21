@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -73,10 +74,10 @@ class ProfileCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _infoRow('Phone', phone),
-                  _infoRow('Email', email),
+                  _infoRow(tr('phone'), phone),
+                  _infoRow(tr('email'), email),
                   if (dateOfBirth != null)
-                    _infoRow('Date of Birth', dateOfBirth!),
+                    _infoRow(tr('date_of_birth'), dateOfBirth!),
                 ],
               ),
             ),

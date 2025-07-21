@@ -1,7 +1,9 @@
 // profile_page.dart
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
@@ -34,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _pickedImage;
   bool _isProfileSaved = false;
 
-  String _selectedLanguage = 'English (USA)';
+  String _selectedLanguage = tr('us');
   String _selectedFlagPath = 'assets/flags/us.svg';
 
   @override
@@ -84,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await ref.putFile(file);
       return await ref.getDownloadURL();
     } catch (e) {
-      debugPrint('Upload failed: $e');
+      debugPrint('${tr('upload_failed')} ${e.toString()}');
       return null;
     }
   }
@@ -105,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (uploadedUrl != null) {
           _photoUrl = uploadedUrl;
         } else {
-          debugPrint('Failed to upload image');
+          debugPrint(tr('failed_to_upload_image'));
         }
       }
 
@@ -169,7 +171,13 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Profile'),
+            title: Text(
+              tr('profile'),
+              style: Kstyle.textStyle.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 18.0,
+              ),
+            ),
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
               child: SvgPicture.asset('assets/svg/appBar_icon.svg'),

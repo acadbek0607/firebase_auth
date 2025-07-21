@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/ui/home/page/home_page.dart';
@@ -32,8 +33,8 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                   ),
                   elevation: WidgetStateProperty.all(0.0),
                 ),
-                child: const Text(
-                  'Contracts',
+                child: Text(
+                  tr('contracts'),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -50,8 +51,8 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                   ),
                   elevation: WidgetStateProperty.all(0.0),
                 ),
-                child: const Text(
-                  'Invoices',
+                child: Text(
+                  tr('invoices'),
                   style: TextStyle(color: Colors.white),
                 ),
               ),

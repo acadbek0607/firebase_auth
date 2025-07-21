@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/profile/data/repos/profile_repo_impl.dart';
@@ -45,6 +46,7 @@ import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await EasyLocalization.ensureInitialized();
 
   final firebaseAuth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
@@ -60,12 +62,17 @@ void main() async {
   final profileRepo = ProfileRepoImpl(firestore, firebaseAuth);
 
   runApp(
-    MyApp(
-      authRepo: authRepo,
-      contractRepo: contractRepo,
-      invoiceRepo: invoiceRepo,
-      profileRepo: profileRepo,
-      firebaseAuth: firebaseAuth,
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ru'), Locale('uz')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: MyApp(
+        authRepo: authRepo,
+        contractRepo: contractRepo,
+        invoiceRepo: invoiceRepo,
+        profileRepo: profileRepo,
+        firebaseAuth: firebaseAuth,
+      ),
     ),
   );
 }
@@ -136,6 +143,9 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          locale: context.locale,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
           title: 'iBilling',
           debugShowCheckedModeBanner: false,
           theme: ThemeData.dark(useMaterial3: true).copyWith(

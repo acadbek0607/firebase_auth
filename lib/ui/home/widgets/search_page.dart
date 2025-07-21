@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
           autofocus: true,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: 'Search contracts...',
+            hintText: tr('search'),
             hintStyle: const TextStyle(color: Colors.grey),
             border: InputBorder.none,
           ),
@@ -97,9 +97,9 @@ class _SearchPageState extends State<SearchPage> {
                 }).toList();
 
           if (_query.isNotEmpty && results.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No results found.',
+                tr('no_results_found'),
                 style: TextStyle(color: Colors.grey),
               ),
             );

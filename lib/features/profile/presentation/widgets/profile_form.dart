@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 
@@ -58,13 +59,13 @@ class ProfileForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            _buildTextField('Full Name', fullNameController),
+            _buildTextField(tr('full_name'), fullNameController),
             const SizedBox(height: 12),
-            _buildTextField('Phone', phoneController),
+            _buildTextField(tr('phone'), phoneController),
             const SizedBox(height: 12),
-            _buildTextField('Profession', professionController),
+            _buildTextField(tr('profession'), professionController),
             const SizedBox(height: 12),
-            _buildTextField('Organization', organizationController),
+            _buildTextField(tr('organization'), organizationController),
             const SizedBox(height: 12),
             GestureDetector(
               onTap: pickDateOfBirth,
@@ -72,11 +73,10 @@ class ProfileForm extends StatelessWidget {
                 child: TextFormField(
                   controller: dobController,
                   decoration: Kstyle.textFieldStyle.copyWith(
-                    labelText: 'Date of Birth',
+                    labelText: tr('date_of_birth'),
                   ),
-                  validator: (val) => val == null || val.isEmpty
-                      ? 'Date of Birth is required'
-                      : null,
+                  validator: (val) =>
+                      val == null || val.isEmpty ? tr('date_required') : null,
                 ),
               ),
             ),
@@ -84,13 +84,15 @@ class ProfileForm extends StatelessWidget {
             TextFormField(
               initialValue: email ?? '',
               enabled: false,
-              decoration: Kstyle.textFieldStyle.copyWith(labelText: 'Email'),
+              decoration: Kstyle.textFieldStyle.copyWith(
+                labelText: tr('email'),
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: submitProfile,
               style: Kstyle.buttonStyle,
-              child: const Text('Save Profile'),
+              child: Text(tr('save_profile')),
             ),
           ],
         ),
@@ -103,7 +105,7 @@ class ProfileForm extends StatelessWidget {
       controller: controller,
       decoration: Kstyle.textFieldStyle.copyWith(labelText: label),
       validator: (val) =>
-          val == null || val.isEmpty ? '$label is required' : null,
+          val == null || val.isEmpty ? '$label ${tr('required')}' : null,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,14 @@ class NewPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Что вы хотите создать?',
+              Text(
+                tr('what_create'),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 16),
               _CreateButton(
                 icon: 'assets/svg/contract.svg',
-                text: 'Contract',
+                text: tr('contract'),
                 onPressed: () {
                   selectedPageNotifier.value = 5;
                 },
@@ -36,7 +37,7 @@ class NewPage extends StatelessWidget {
               const SizedBox(height: 12),
               _CreateButton(
                 icon: 'assets/svg/invoice.svg',
-                text: 'Invoice',
+                text: tr('invoice'),
                 onPressed: () {
                   selectedPageNotifier.value = 6;
                 },

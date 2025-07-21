@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 enum StatusType { paid, inProcess, rejectedByPayme, rejectedByIQ }
@@ -6,13 +7,13 @@ extension StatusTypeExtension on StatusType {
   String get label {
     switch (this) {
       case StatusType.paid:
-        return 'Paid';
+        return tr('paid');
       case StatusType.inProcess:
-        return 'In Process';
+        return tr('in_process');
       case StatusType.rejectedByPayme:
-        return 'Rejected by Payme';
+        return tr('rejected_payme');
       case StatusType.rejectedByIQ:
-        return 'Rejected by IQ';
+        return tr('rejected_iq');
     }
   }
 

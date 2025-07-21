@@ -1,4 +1,5 @@
 // contract_detail_page.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -78,8 +79,8 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                 } else if (state.status == BlocStatus.error) {
                   setState(() => isSaved = !isSaved);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to save contract.'),
+                    SnackBar(
+                      content: Text(tr('failed_to_save_contract')),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -127,7 +128,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                         elevation: WidgetStateProperty.all(0.0),
                       ),
                       child: Text(
-                        'Delete contract',
+                        tr('delete_contract'),
                         style: Kstyle.textStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           color: const Color(0xffFF426D),
@@ -148,7 +149,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                         ),
                       ),
                       child: Text(
-                        'Create contract',
+                        tr('create_contract'),
                         style: Kstyle.textStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -160,7 +161,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
               ),
               const SizedBox(height: 24),
               Text(
-                'Other contracts with ${contract.fullName}',
+                '${tr('other_contracts')} ${contract.fullName}',
                 style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),

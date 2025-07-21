@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -91,7 +92,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text.rich(
               TextSpan(
-                text: 'Fish:  ',
+                text: tr('fish'),
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -105,11 +106,11 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: 'Amount:  ',
+                text: tr('amount'),
                 style: const TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
-                    text: '$formattedAmount UZS',
+                    text: '$formattedAmount ${tr('currency')}',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],
@@ -118,7 +119,7 @@ class ContractCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(
-                text: 'Last contract:   ',
+                text: tr('last_contract'),
                 style: TextStyle(color: Colors.white),
                 children: [
                   TextSpan(
@@ -134,7 +135,7 @@ class ContractCard extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                    text: 'Number of contracts:   ',
+                    text: tr('number_of_contracts'),
                     style: TextStyle(color: Colors.white),
                     children: [
                       TextSpan(

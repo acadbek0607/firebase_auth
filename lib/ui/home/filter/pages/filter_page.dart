@@ -1,10 +1,10 @@
 // lib/ui/home/filter/pages/filter_page.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/ui/home/filter/widgets/custom_checkbox_tile.dart';
 
@@ -88,7 +88,16 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Filters"), centerTitle: true),
+      appBar: AppBar(
+        title: Text(
+          tr('filters'),
+          style: Kstyle.textStyle.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -101,14 +110,14 @@ class _FilterPageState extends State<FilterPage> {
                   children: [
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: "Paid",
+                        label: tr('paid'),
                         value: paid,
                         onChanged: (val) => setState(() => paid = val),
                       ),
                     ),
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: "Rejected by IQ",
+                        label: tr('rejected_iq'),
                         value: rejectedByIQ,
                         onChanged: (val) => setState(() => rejectedByIQ = val),
                       ),
@@ -120,14 +129,14 @@ class _FilterPageState extends State<FilterPage> {
                   children: [
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: "In Process",
+                        label: tr('in_process'),
                         value: inProcess,
                         onChanged: (val) => setState(() => inProcess = val),
                       ),
                     ),
                     Flexible(
                       child: CustomCheckboxTile(
-                        label: "Rejected by Payme",
+                        label: tr('rejected_payme'),
                         value: rejectedByPayme,
                         onChanged: (val) =>
                             setState(() => rejectedByPayme = val),
@@ -154,7 +163,7 @@ class _FilterPageState extends State<FilterPage> {
                               Text(
                                 fromDate != null
                                     ? formatter.format(fromDate!)
-                                    : "From",
+                                    : tr('from'),
                                 style: const TextStyle(color: Colors.white),
                               ),
                               SvgPicture.asset('assets/svg/calendar.svg'),
@@ -186,7 +195,7 @@ class _FilterPageState extends State<FilterPage> {
                               Text(
                                 toDate != null
                                     ? formatter.format(toDate!)
-                                    : "To",
+                                    : tr('to'),
                                 style: const TextStyle(color: Colors.white),
                               ),
                               SvgPicture.asset('assets/svg/calendar.svg'),
@@ -213,7 +222,7 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                         ),
                         child: Text(
-                          "Cancel",
+                          tr('cancel'),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF008F7F),
@@ -227,7 +236,7 @@ class _FilterPageState extends State<FilterPage> {
                         onPressed: _applyFilters,
                         style: Kstyle.buttonStyle,
                         child: Text(
-                          "Apply filters",
+                          tr('apply'),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Color(0xFFFDFDFD),

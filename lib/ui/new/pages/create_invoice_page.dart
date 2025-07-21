@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
@@ -24,7 +25,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Invoice'),
+        title: Text(tr('new_invoice')),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
@@ -38,18 +39,18 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             children: [
               SizedBox(height: 20.0),
               Text(
-                'Service name',
+                tr('service_name'),
                 style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
               ),
               SizedBox(height: 6.0),
               TextFormField(
                 controller: _serviceNameController,
                 decoration: Kstyle.textFieldStyle,
-                validator: (value) => value!.isEmpty ? 'Required' : null,
+                validator: (value) => value!.isEmpty ? tr('required') : null,
               ),
               SizedBox(height: 20.0),
               Text(
-                'Cost',
+                tr('cost'),
                 style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
               ),
               SizedBox(height: 6.0),
@@ -57,16 +58,16 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 controller: _costController,
                 decoration: Kstyle.textFieldStyle,
                 keyboardType: TextInputType.number,
-                validator: (value) => value!.isEmpty ? 'Required' : null,
+                validator: (value) => value!.isEmpty ? tr('required') : null,
               ),
               SizedBox(height: 20.0),
               Text(
-                'Status of invoice',
+                tr('status_of_invoice'),
                 style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
               ),
               SizedBox(height: 6.0),
               CustomDropdown(
-                label: 'Status',
+                label: tr('status'),
                 value: _status?.label ?? '',
                 items: StatusType.values.map((s) => s.label).toList(),
                 onChanged: (val) {
@@ -94,7 +95,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   }
                 },
                 style: Kstyle.buttonStyle,
-                child: const Text('Save Invoice'),
+                child: Text(
+                  tr('save_invoice'),
+                  style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.0,
+                  ),
+                ),
               ),
             ],
           ),

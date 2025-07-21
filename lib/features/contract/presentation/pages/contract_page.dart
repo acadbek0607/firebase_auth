@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,7 +37,7 @@ class ContractsPage extends StatelessWidget {
             ),
             SizedBox(height: 12.0),
             Text(
-              "No contracts available",
+              tr('no_contracts'),
               style: Kstyle.textStyle.copyWith(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -79,7 +80,7 @@ class ContractsPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onLoadMore,
                 style: Kstyle.buttonStyle,
-                child: Text('Load more', style: Kstyle.textStyle),
+                child: Text(tr('load_more'), style: Kstyle.textStyle),
               ),
             ),
           );

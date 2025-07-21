@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/filter_utils.dart';
@@ -118,7 +119,7 @@ class _SavedPageState extends State<SavedPage> {
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, profileState) {
             if (profileState.status != BlocStatus.loaded) {
-              return const Center(child: Text('No saved contracts.'));
+              return Center(child: Text(tr('no_saved_contracts')));
             }
 
             final savedIds = profileState.profile!.savedContractIds;
@@ -177,7 +178,7 @@ class _SavedPageState extends State<SavedPage> {
                     ),
                   );
                 } else {
-                  return const Center(child: Text('Failed to load contracts.'));
+                  return Center(child: Text(tr('failed_to_load_contracts')));
                 }
               },
             );

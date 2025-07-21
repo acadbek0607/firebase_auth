@@ -1,4 +1,5 @@
 // delete_contract_dialog.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_auth/core/constants/classes.dart';
@@ -23,8 +24,8 @@ void showDeleteContractDialog(
           return AlertDialog(
             backgroundColor: const Color(0xFF2a2a2d),
             title: Text(
-              'Why do you want to delete this contract?',
-              style: Kstyle.textStyle,
+              tr('delete_title'),
+              style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             content: Container(
@@ -37,7 +38,7 @@ void showDeleteContractDialog(
                 maxLines: 3,
                 onChanged: (val) => setState(() => canDelete = val.isNotEmpty),
                 decoration: Kstyle.textFieldStyle.copyWith(
-                  hintText: 'Enter reason...',
+                  hintText: tr('comment'),
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
@@ -50,8 +51,18 @@ void showDeleteContractDialog(
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                style: Kstyle.buttonStyle,
-                child: const Text('Cancel'),
+                style: Kstyle.buttonStyle.copyWith(
+                  backgroundColor: WidgetStateProperty.all(
+                    Color(0xFFFF426D).withAlpha(38),
+                  ),
+                ),
+                child: Text(
+                  tr('cancel'),
+                  style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFF426D),
+                  ),
+                ),
               ),
               if (canDelete)
                 ElevatedButton(
@@ -68,7 +79,12 @@ void showDeleteContractDialog(
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },
-                  child: const Text('Delete'),
+                  child: Text(
+                    tr('done'),
+                    style: Kstyle.textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
             ],
           );

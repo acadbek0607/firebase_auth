@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
@@ -25,7 +26,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sing In'), centerTitle: true),
+      appBar: AppBar(title: Text(tr('sign_in')), centerTitle: true),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
           return Padding(
@@ -41,7 +42,7 @@ class _SignInPageState extends State<SignInPage> {
                     child: TextField(
                       controller: _emailController,
                       decoration: Kstyle.textFieldStyle.copyWith(
-                        labelText: 'Email',
+                        labelText: tr('email'),
                       ),
                     ),
                   ),
@@ -53,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                           obscureText: _obscure,
                           controller: _passwordController,
                           decoration: Kstyle.textFieldStyle.copyWith(
-                            labelText: 'Password',
+                            labelText: tr('password'),
                           ),
                         ),
                         Positioned(
@@ -84,7 +85,12 @@ class _SignInPageState extends State<SignInPage> {
                           const Size(double.infinity, 48),
                         ),
                       ),
-                      child: Text('Sign In'),
+                      child: Text(
+                        tr('sign_in'),
+                        style: Kstyle.textStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -92,9 +98,14 @@ class _SignInPageState extends State<SignInPage> {
                       trailing: TextButton(
                         onPressed: () =>
                             Navigator.pushReplacementNamed(context, '/signup'),
-                        child: Text("Sign Up"),
+                        child: Text(
+                          tr('sign_up'),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      title: Text("Don't have an account?"),
+                      title: Text(tr('dont_have_account')),
                     ),
                   ),
                   if (state.status == AuthStatus.loading)

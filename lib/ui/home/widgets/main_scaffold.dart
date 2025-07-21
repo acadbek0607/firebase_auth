@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -29,12 +30,12 @@ class _MainScaffoldState extends State<MainScaffold> {
     const CreateInvoicePage(), // 6 (subpage of New)
   ];
 
-  static const List<String> _labels = [
-    "Contracts",
-    "History",
-    "New",
-    "Saved",
-    "Profile",
+  static final List<String> _labels = [
+    tr('contracts'),
+    tr('history'),
+    tr('new'),
+    tr('saved'),
+    tr('profile'),
   ];
 
   static const List<String> _icons = [

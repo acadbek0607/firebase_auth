@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fire_auth/core/constants/classes.dart';
@@ -35,10 +36,9 @@ class LanguageDialog {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          'Choose a language',
-                          style: TextStyle(
-                            color: Colors.white,
+                        Text(
+                          tr('choose_language'),
+                          style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -89,7 +89,7 @@ class LanguageDialog {
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
-                                  'Cancel',
+                                  tr('cancel'),
                                   style: Kstyle.textStyle.copyWith(
                                     color: const Color(0xFF008F7F),
                                     fontFamily: 'Poppins',

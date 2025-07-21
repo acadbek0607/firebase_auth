@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
@@ -7,7 +10,6 @@ import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 
 import '../../../features/contract/domain/usecases/contract_usecases.dart';
 
@@ -83,23 +85,27 @@ class _HistoryPageState extends State<_HistoryPage> {
     if (picked != null) {
       if (isFrom) {
         if (toDate != null && picked.isAfter(toDate!)) {
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("From date must be before To date")),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(tr('from_to'))));
           return;
         }
-        setState(() => fromDate = picked);
+        setState(() {
+          fromDate = picked;
+          currentFilter = currentFilter.copyWith(fromDate: picked);
+        });
         _loadContracts();
       } else {
         if (fromDate != null && picked.isBefore(fromDate!)) {
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("To date must be after From date")),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(tr('to_from'))));
           return;
         }
-        setState(() => toDate = picked);
+        setState(() {
+          toDate = picked;
+          currentFilter = currentFilter.copyWith(toDate: picked);
+        });
         _loadContracts();
       }
     }
@@ -109,7 +115,13 @@ class _HistoryPageState extends State<_HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History'),
+        title: Text(
+          tr('history'),
+          style: Kstyle.textStyle.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+          ),
+        ),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
@@ -176,7 +188,7 @@ class _HistoryPageState extends State<_HistoryPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Date", style: TextStyle(color: Colors.white)),
+                  Text(tr('date'), style: TextStyle(color: Colors.white)),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -196,7 +208,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                 Text(
                                   fromDate != null
                                       ? formatter.format(fromDate!)
-                                      : 'From',
+                                      : tr('from'),
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 SvgPicture.asset('assets/svg/calendar.svg'),
@@ -224,7 +236,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                 Text(
                                   toDate != null
                                       ? formatter.format(toDate!)
-                                      : 'To',
+                                      : tr('to'),
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 SvgPicture.asset('assets/svg/calendar.svg'),
@@ -252,7 +264,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                 ),
                                 const SizedBox(height: 8.0),
                                 Text(
-                                  'No history for this period',
+                                  tr('no_history'),
                                   style: Kstyle.textStyle.copyWith(
                                     color: Color(0xFF323232),
                                     fontFamily: 'Poppins',
@@ -272,7 +284,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                 ],
               );
             }
-            return const Center(child: Text("Failed to load contracts"));
+            return Center(child: Text(tr('failed_to_load_contracts')));
           },
         ),
       ),

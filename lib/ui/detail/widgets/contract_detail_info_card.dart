@@ -1,4 +1,6 @@
 // contract_detail_info_card.dart
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:flutter/material.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -19,13 +21,13 @@ class ContractDetailInfoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _detailText('Fisher’s full name', contract.fullName),
-              _detailText('Status', contract.status.label),
-              _detailText('Amount', '${contract.amount}'),
-              _detailText('Address', contract.organizationAddress),
-              _detailText('ITN/IEC', contract.inn),
+              _detailText(tr('fisher'), contract.fullName),
+              _detailText(tr('status'), contract.status.label),
+              _detailText(tr('amount'), '${contract.amount}'),
+              _detailText(tr('address'), contract.organizationAddress),
+              _detailText(tr('itn'), contract.inn),
               _detailText(
-                'Created at',
+                tr('created_at'),
                 '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
               ),
             ],
@@ -43,15 +45,12 @@ class ContractDetailInfoCard extends StatelessWidget {
           children: [
             TextSpan(
               text: '$title: ',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
             ),
             TextSpan(
               text: value,
-              style: const TextStyle(
-                color: Color(0xFF999999),
+              style: Kstyle.textStyle.copyWith(
+                color: const Color(0xFF999999),
                 fontWeight: FontWeight.w400,
               ),
             ),

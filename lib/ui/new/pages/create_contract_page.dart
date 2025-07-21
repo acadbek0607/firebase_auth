@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
@@ -32,7 +33,13 @@ class _CreateContractPageState extends State<CreateContractPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Contract'),
+        title: Text(
+          tr('new_contract'),
+          style: Kstyle.textStyle.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+          ),
+        ),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
@@ -78,52 +85,49 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       Text('Entity', style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: 'Entity Type',
+                        label: tr('entity_type'),
                         value: _selectedType ?? '',
-                        items: ['personal', 'legal'],
+                        items: [tr('personal'), tr('legal')],
                         onChanged: (val) {
                           if (val != null) setState(() => _selectedType = val);
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      Text('''Fisher's full name''', style: Kstyle.textStyle),
+                      Text(tr('fisher'), style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _fullNameController,
                         decoration: Kstyle.textFieldStyle,
                         validator: (value) =>
-                            value!.isEmpty ? 'Required' : null,
+                            value!.isEmpty ? tr('required') : null,
                       ),
                       const SizedBox(height: 16.0),
-                      Text(
-                        'Address of the organization',
-                        style: Kstyle.textStyle,
-                      ),
+                      Text(tr('address_of'), style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _addressController,
                         decoration: Kstyle.textFieldStyle,
                         validator: (value) =>
-                            value!.isEmpty ? 'Required' : null,
+                            value!.isEmpty ? tr('required') : null,
                         keyboardType: TextInputType.multiline,
                         minLines: 1,
                         maxLines: 2,
                       ),
                       const SizedBox(height: 16.0),
-                      Text('ITN/IEC', style: Kstyle.textStyle),
+                      Text(tr('iec'), style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _innController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
                         validator: (value) =>
-                            value!.isEmpty ? 'Required' : null,
+                            value!.isEmpty ? tr('required') : null,
                       ),
                       const SizedBox(height: 16.0),
-                      Text('Status of the contract', style: Kstyle.textStyle),
+                      Text(tr('status_of_contract'), style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: 'Status',
+                        label: tr('status'),
                         // value: _selectedStatus.toFirestoreString(),
                         value: _selectedStatus?.label ?? '',
                         items: StatusType.values.map((s) => s.label).toList(),
@@ -145,7 +149,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
                         validator: (value) =>
-                            value!.isEmpty ? 'Required' : null,
+                            value!.isEmpty ? tr('required') : null,
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
@@ -169,7 +173,13 @@ class _CreateContractPageState extends State<CreateContractPage> {
                           }
                         },
                         style: Kstyle.buttonStyle,
-                        child: const Text('Save Contract'),
+                        child: Text(
+                          tr('save_contract'),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
+                        ),
                       ),
                     ],
                   ),

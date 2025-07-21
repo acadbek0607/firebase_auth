@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
@@ -63,7 +64,7 @@ class InvoiceCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Service: ${invoice.serviceName}',
+            '${tr('service')} ${invoice.serviceName}',
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(height: 4),
@@ -71,7 +72,7 @@ class InvoiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '''Amount: $formattedAmount so'm''',
+                '''${tr('amount')} $formattedAmount so'm''',
                 style: const TextStyle(color: Colors.white),
               ),
               Text(

@@ -75,7 +75,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 onChanged: (val) {
                   if (val != null) {
                     setState(() {
-                      _status = StatusTypeExtension.fromLabel(val);
+                      _status = StatusTypeExtension.fromLabel(val, context);
                     });
                   }
                 },
@@ -93,7 +93,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                     context.read<InvoiceBloc>().add(
                       CreateInvoiceEvent(invoice),
                     );
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/new');
                   }
                 },
                 style: Kstyle.buttonStyle,

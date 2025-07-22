@@ -67,7 +67,7 @@ class ContractCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset('assets/svg/contract.svg'),
+                    SvgPicture.asset('assets/svg/contract.svg', height: 21.0),
                     SizedBox(width: 8),
                     Text(
                       '№ ${contract.id ?? '—'}',
@@ -105,7 +105,7 @@ class ContractCard extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: contract.fullName,
-                    style: const TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Color(0xFF999999)),
                   ),
                 ],
               ),
@@ -120,7 +120,7 @@ class ContractCard extends StatelessWidget {
                   TextSpan(
                     text:
                         '$formattedAmount ${tr('currency', context: context)}',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(color: Color(0xFF999999)),
                   ),
                 ],
               ),
@@ -133,7 +133,7 @@ class ContractCard extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: '№ $lastContractId',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(color: Color(0xFF999999)),
                   ),
                 ],
               ),
@@ -149,14 +149,14 @@ class ContractCard extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '$totalContracts',
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(color: Color(0xFF999999)),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   formattedDate,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xFF999999)),
                 ),
               ],
             ),

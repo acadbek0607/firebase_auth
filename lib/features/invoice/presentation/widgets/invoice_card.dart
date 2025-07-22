@@ -35,7 +35,7 @@ class InvoiceCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SvgPicture.asset('assets/svg/invoice.svg'),
+                  SvgPicture.asset('assets/svg/invoice.svg', height: 18.0),
                   SizedBox(width: 8.0),
                   Text(
                     '№ ${invoice.id ?? '—'}',
@@ -63,17 +63,34 @@ class InvoiceCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            '${tr('service', context: context)} ${invoice.serviceName}',
-            style: const TextStyle(color: Colors.white),
+          Text.rich(
+            TextSpan(
+              text: '${tr('service', context: context)} ',
+              style: const TextStyle(color: Colors.white),
+              children: [
+                TextSpan(
+                  text: invoice.serviceName,
+                  style: const TextStyle(color: Color(0xFF999999)),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '''${tr('amount', context: context)} $formattedAmount so'm''',
-                style: const TextStyle(color: Colors.white),
+              Text.rich(
+                TextSpan(
+                  text: '${tr('amount', context: context)} ',
+                  style: const TextStyle(color: Colors.white),
+                  children: [
+                    TextSpan(
+                      text:
+                          '$formattedAmount ${tr('currency', context: context)}',
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
               Text(
                 formattedDate,

@@ -37,9 +37,11 @@ extension StatusTypeExtension on StatusType {
     );
   }
 
-  static StatusType fromLabel(String label) {
-    // ignore: unrelated_type_equality_checks
-    return StatusType.values.firstWhere((e) => e.label == label);
+  static StatusType fromLabel(String label, BuildContext context) {
+    return StatusType.values.firstWhere(
+      (e) => e.label(context) == label,
+      orElse: () => StatusType.inProcess,
+    );
   }
 
   String toFirestoreString() {

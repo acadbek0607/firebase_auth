@@ -156,6 +156,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                             setState(() {
                               _selectedStatus = StatusTypeExtension.fromLabel(
                                 val,
+                                context,
                               );
                             });
                           }

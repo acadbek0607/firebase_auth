@@ -125,4 +125,29 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
         .map((doc) => ContractModel.fromJson(doc.data(), doc.id))
         .toList();
   }
+
+  @override
+  Future<ContractQueryResult> getContractsByFullName({
+    required String fullName,
+    DocumentSnapshot? startAfterDoc,
+    int limit = 10,
+  }) async {
+    var query = firestore
+        .collection('contracts')
+        .where('fullName', isEqualTo: fullName)
+        .orderBy('createdAt', descending: false);
+
+    if (startAfterDoc != null) {
+      query = query.startAfterDocument(startAfterDoc);
+    }
+
+    query = query.limit(limit);
+
+    final snap = await query.get();
+    final contracts = snap.docs
+        .map((doc) => ContractModel.fromJson(doc.data(), doc.id))
+        .toList();
+    final lastDoc = snap.docs.isNotEmpty ? snap.docs.last : null;
+    return ContractQueryResult(contracts: contracts, lastDoc: lastDoc);
+  }
 }

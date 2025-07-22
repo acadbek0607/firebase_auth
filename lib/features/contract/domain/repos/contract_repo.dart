@@ -17,4 +17,10 @@ abstract class ContractRepository {
     int limit,
   });
   Future<List<ContractEntity>> getContractsByIds(List<String> ids);
+
+  Future<PaginatedContracts> getContractsByFullName({
+    required String fullName,
+    DocumentSnapshot? startAfterDoc,
+    int limit,
+  });
 }

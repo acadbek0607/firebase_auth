@@ -7,6 +7,7 @@ import 'package:fire_auth/features/profile/domain/usecase/get_profile.dart';
 import 'package:fire_auth/features/profile/domain/usecase/is_saved_contract.dart';
 import 'package:fire_auth/features/profile/domain/usecase/toggle_saved_contract.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:fire_auth/ui/detail/bloc/related_bloc.dart';
 import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
 import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/main_scaffold.dart';
@@ -180,11 +181,17 @@ class MyApp extends StatelessWidget {
                 final allContracts =
                     args['allContracts'] as List<ContractEntity>;
                 final fromDetail = args['fromDetail'] as bool? ?? false;
+                final repo = context.read<ContractRepository>();
                 return MaterialPageRoute(
-                  builder: (context) => ContractDetailPage(
-                    contract: contract,
-                    allContracts: allContracts,
-                    openFromDetail: fromDetail,
+                  builder: (context) => BlocProvider(
+                    create: (_) => RelatedBloc(
+                      getContractsByFullName: GetContractsByFullName(repo),
+                    ),
+                    child: ContractDetailPage(
+                      contract: contract,
+                      allContracts: allContracts,
+                      openFromDetail: fromDetail,
+                    ),
                   ),
                 );
               case '/filter':

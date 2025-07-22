@@ -21,4 +21,10 @@ abstract class ContractRemoteDataSource {
   });
 
   Future<List<ContractModel>> getContractsByIds(List<String> contractIds);
+
+  Future<ContractQueryResult> getContractsByFullName({
+    required String fullName,
+    DocumentSnapshot? startAfterDoc,
+    int limit,
+  });
 }

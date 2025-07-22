@@ -4,10 +4,11 @@ import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
-import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
+import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
+import 'package:fire_auth/ui/detail/bloc/related_bloc.dart';
 import 'package:fire_auth/ui/detail/widgets/contract_detail_info_card.dart';
 import 'package:fire_auth/ui/detail/widgets/delete_contract_dialog.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,9 @@ class _ContractDetailPageState extends State<ContractDetailPage>
     if (widget.contract.id != null) {
       context.read<ProfileBloc>().add(CheckSavedStatus(widget.contract.id!));
     }
+    context.read<RelatedBloc>().add(
+      LoadRelatedContracts(fullName: widget.contract.fullName),
+    );
   }
 
   Future<bool> _onPop() async {
@@ -55,9 +59,6 @@ class _ContractDetailPageState extends State<ContractDetailPage>
   @override
   Widget build(BuildContext context) {
     final contract = widget.contract;
-    final relatedContracts = widget.allContracts
-        .where((c) => c.fullName == contract.fullName && c.id != contract.id)
-        .toList();
 
     // ignore: deprecated_member_use
     return WillPopScope(
@@ -174,21 +175,21 @@ class _ContractDetailPageState extends State<ContractDetailPage>
               ),
               const SizedBox(height: 8),
               Expanded(
-                child: ListView.builder(
-                  itemCount: relatedContracts.length,
-                  itemBuilder: (_, i) {
-                    return ContractCard(
-                      contract: relatedContracts[i],
-                      allContracts: widget.allContracts,
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/contract_detail',
-                          arguments: {
-                            'contract': relatedContracts[i],
-                            'allContracts': widget.allContracts,
-                            'fromDetail': true,
-                          },
+                child: BlocBuilder<RelatedBloc, RelatedState>(
+                  builder: (context, state) {
+                    final others = state.relatedContracts
+                        .where((c) => c.id != contract.id)
+                        .toList();
+                    return ContractsPage(
+                      contracts: others,
+                      canLoadMore: state.canLoadMore,
+                      isLoadingMore: state.isLoadingMore,
+                      onLoadMore: () {
+                        context.read<RelatedBloc>().add(
+                          LoadRelatedContracts(
+                            fullName: contract.fullName,
+                            startAfterDoc: state.lastDocSnap,
+                          ),
                         );
                       },
                     );

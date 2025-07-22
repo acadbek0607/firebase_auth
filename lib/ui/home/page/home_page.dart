@@ -28,6 +28,21 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadContracts();
+    selectedViewNotifier.addListener(_onViewTypeChanged);
+  }
+
+  @override
+  void dispose() {
+    selectedViewNotifier.removeListener(_onViewTypeChanged);
+    super.dispose();
+  }
+
+  void _onViewTypeChanged() {
+    if (selectedViewNotifier.value == HomeViewType.contract) {
+      _loadContracts();
+    } else {
+      _loadInvoices();
+    }
   }
 
   void _loadContracts({bool nextPage = false}) {
@@ -67,11 +82,8 @@ class _HomePageState extends State<HomePage> {
       _selectedDay = day;
       _currentFilter = Filters.empty;
     });
-    if (selectedViewNotifier.value == HomeViewType.contract) {
-      _loadContracts();
-    } else {
-      _loadInvoices();
-    }
+    _loadContracts();
+    _loadInvoices();
   }
 
   void _onFilterApplied(Filters filter) {
@@ -85,11 +97,9 @@ class _HomePageState extends State<HomePage> {
         _selectedDay = null;
       }
     });
-    if (selectedViewNotifier.value == HomeViewType.contract) {
-      _loadContracts();
-    } else {
-      _loadInvoices();
-    }
+    _loadContracts();
+
+    _loadInvoices();
   }
 
   void _onLoadMore() {

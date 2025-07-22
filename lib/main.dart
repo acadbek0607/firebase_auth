@@ -127,7 +127,7 @@ class MyApp extends StatelessWidget {
               updateInvoice: UpdateInvoice(invoiceRepo),
               deleteInvoice: DeleteInvoice(invoiceRepo),
               getInvoices: GetInvoices(invoiceRepo),
-            )..add(LoadInvoices()),
+            )..add(LoadInvoices(day: DateTime.now())),
           ),
           BlocProvider<ProfileBloc>(
             create: (_) => ProfileBloc(

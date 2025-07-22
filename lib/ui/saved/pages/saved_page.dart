@@ -177,6 +177,7 @@ class _SavedPageState extends State<SavedPage> {
                       canLoadMore: state.canLoadMore,
                       isLoadingMore: state.isLoadingMore,
                       onLoadMore: () => _loadMore(savedIds),
+                      openFromDetail: true,
                     ),
                   );
                 } else {

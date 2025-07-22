@@ -12,6 +12,7 @@ class ContractsPage extends StatelessWidget {
   final bool canLoadMore;
   final bool isLoadingMore;
   final VoidCallback? onLoadMore;
+  final bool openFromDetail;
 
   const ContractsPage({
     super.key,
@@ -19,6 +20,7 @@ class ContractsPage extends StatelessWidget {
     this.canLoadMore = false,
     this.isLoadingMore = false,
     this.onLoadMore,
+    this.openFromDetail = false,
   });
 
   @override
@@ -53,7 +55,11 @@ class ContractsPage extends StatelessWidget {
       itemBuilder: (context, index) {
         if (index < contracts.length) {
           final contract = contracts[index];
-          return ContractCard(contract: contract, allContracts: contracts);
+          return ContractCard(
+            contract: contract,
+            allContracts: contracts,
+            openFromDetail: openFromDetail,
+          );
         } else {
           if (isLoadingMore) {
             return Padding(

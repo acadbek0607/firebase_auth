@@ -11,6 +11,7 @@ import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart'
 import 'package:fire_auth/ui/detail/bloc/related_bloc.dart';
 import 'package:fire_auth/ui/detail/widgets/contract_detail_info_card.dart';
 import 'package:fire_auth/ui/detail/widgets/delete_contract_dialog.dart';
+import 'package:fire_auth/ui/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,6 +52,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
       Navigator.pop(context);
     } else {
       selectedPageNotifier.value = 0;
+      selectedViewNotifier.value = HomeViewType.contract;
       Navigator.pushReplacementNamed(context, '/main');
     }
     return false;

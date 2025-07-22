@@ -83,8 +83,12 @@ class ContractBloc extends Bloc<ContractEvent, ContractState> {
     Emitter<ContractState> emit,
   ) async {
     try {
-      await createContract(event.contract);
-      add(LoadContracts());
+      final id = await createContract(event.contract);
+      final newContract = event.contract.copyWith(id: id);
+      final updated = List<ContractEntity>.from(state.contracts)
+        ..add(newContract);
+      _allContracts.add(newContract);
+      emit(state.copyWith(status: BlocStatus.loaded, contracts: updated));
     } catch (e) {
       emit(
         state.copyWith(status: BlocStatus.error, errorMessage: e.toString()),

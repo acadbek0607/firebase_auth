@@ -6,6 +6,6 @@ class CreateContract {
 
   CreateContract(this.repository);
 
-  Future<void> call(ContractEntity contract) =>
+  Future<String> call(ContractEntity contract) =>
       repository.createContract(contract);
 }

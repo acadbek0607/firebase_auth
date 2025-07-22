@@ -5,7 +5,7 @@ import 'package:fire_auth/features/contract/data/models/contract_query_result.da
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 
 abstract class ContractRemoteDataSource {
-  Future<void> createContract(ContractEntity contract);
+  Future<String> createContract(ContractEntity contract);
   Future<void> updateContract(
     ContractEntity contract,
     Map<String, dynamic> json,

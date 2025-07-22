@@ -11,10 +11,10 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
   ContractRemoteDataSourceImpl(this.firestore);
 
   @override
-  Future<void> createContract(ContractEntity contract) async {
+  Future<String> createContract(ContractEntity contract) async {
     final counterRef = firestore.collection('meta').doc('counters');
 
-    await firestore.runTransaction((transaction) async {
+    return await firestore.runTransaction((transaction) async {
       final counterSnap = await transaction.get(counterRef);
 
       int currentId = 0;
@@ -34,6 +34,8 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
 
       final docRef = firestore.collection('contracts').doc(newId.toString());
       transaction.set(docRef, model.toJson());
+
+      return newId.toString();
     });
   }
 

@@ -5,7 +5,7 @@ import 'package:fire_auth/features/contract/domain/entities/paginated_contracts.
 import '../entities/contract_entity.dart';
 
 abstract class ContractRepository {
-  Future<void> createContract(ContractEntity contract);
+  Future<String> createContract(ContractEntity contract);
   Future<void> updateContract(ContractEntity contract);
   Future<void> deleteContract(String contractId);
   Future<PaginatedContracts> getContracts({

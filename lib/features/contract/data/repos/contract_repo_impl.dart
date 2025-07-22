@@ -12,9 +12,9 @@ class ContractRepositoryImpl implements ContractRepository {
   ContractRepositoryImpl(this._dataSource);
 
   @override
-  Future<void> createContract(ContractEntity contract) async {
+  Future<String> createContract(ContractEntity contract) async {
     final model = ContractModel.fromEntity(contract);
-    await _dataSource.createContract(model);
+    return await _dataSource.createContract(model);
   }
 
   @override

@@ -12,8 +12,40 @@ class LoadInvoices extends InvoiceEvent {
   final List<StatusType>? statuses;
   final DateTime? fromDate;
   final DateTime? toDate;
+  final DocumentSnapshot? startAfterDoc;
+  final int limit;
 
-  const LoadInvoices({this.day, this.statuses, this.fromDate, this.toDate});
+  const LoadInvoices({
+    this.day,
+    this.statuses,
+    this.fromDate,
+    this.toDate,
+    this.startAfterDoc,
+    this.limit = 10,
+  });
+
+  @override
+  List<Object?> get props => [
+    day,
+    statuses,
+    fromDate,
+    toDate,
+    startAfterDoc,
+    limit,
+  ];
+}
+
+class FilterInvoicesEvent extends InvoiceEvent {
+  final StatusType? status;
+  final DateTime? from;
+  final DateTime? to;
+
+  const FilterInvoicesEvent({this.status, this.from, this.to});
+}
+
+class SetIsLoadingMore extends InvoiceEvent {
+  final bool isLoadingMore;
+  const SetIsLoadingMore(this.isLoadingMore);
 }
 
 class CreateInvoiceEvent extends InvoiceEvent {

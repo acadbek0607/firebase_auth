@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _loadInvoices() {
+  void _loadInvoices({bool nextPage = false}) {
     final bloc = context.read<InvoiceBloc>();
     bloc.add(
       LoadInvoices(
@@ -56,6 +56,8 @@ class _HomePageState extends State<HomePage> {
             : null,
         fromDate: _selectedDay == null ? _currentFilter.fromDate : null,
         toDate: _selectedDay == null ? _currentFilter.toDate : null,
+        startAfterDoc: nextPage ? bloc.state.lastDocSnap : null,
+        limit: 10,
       ),
     );
   }
@@ -91,7 +93,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onLoadMore() {
-    _loadContracts(nextPage: true);
+    if (selectedViewNotifier.value == HomeViewType.contract) {
+      _loadContracts(nextPage: true);
+    } else {
+      _loadInvoices(nextPage: true);
+    }
   }
 
   Future<void> openReusableFilterPage({
@@ -178,7 +184,16 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         )
-                      : InvoicesPage(),
+                      : BlocBuilder<InvoiceBloc, InvoiceState>(
+                          builder: (context, state) {
+                            return InvoicesPage(
+                              invoices: state.invoices,
+                              canLoadMore: state.canLoadMore,
+                              isLoadingMore: state.isLoadingMore,
+                              onLoadMore: _onLoadMore,
+                            );
+                          },
+                        ),
                 ),
               ),
             ],

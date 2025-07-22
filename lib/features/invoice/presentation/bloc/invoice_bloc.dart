@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,8 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
   final DeleteInvoice deleteInvoice;
   final GetInvoices getInvoices;
 
+  final List<InvoiceEntity> _allInvoices = [];
+
   InvoiceBloc({
     required this.createInvoice,
     required this.updateInvoice,
@@ -23,52 +26,53 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     on<CreateInvoiceEvent>(_onCreateInvoice);
     on<UpdateInvoiceEvent>(_onUpdateInvoice);
     on<DeleteInvoiceEvent>(_onDeleteInvoice);
+    on<FilterInvoicesEvent>(_onFilterInvoices);
+    on<SetIsLoadingMore>((event, emit) {
+      emit(state.copyWith(isLoadingMore: event.isLoadingMore));
+    });
   }
 
   Future<void> _onLoadInvoices(
     LoadInvoices event,
     Emitter<InvoiceState> emit,
   ) async {
-    emit(state.copyWith(status: InvoiceStatus.loading, errorMessage: null));
+    if (event.startAfterDoc != null) {
+      emit(state.copyWith(isLoadingMore: true));
+    } else {
+      emit(state.copyWith(status: InvoiceStatus.loading, errorMessage: null));
+      _allInvoices.clear();
+    }
     try {
-      final invoices = await getInvoices();
-      var filtered = invoices;
+      final res = await getInvoices(
+        day: event.day,
+        statuses: event.statuses,
+        fromDate: event.fromDate,
+        toDate: event.toDate,
+        startAfterDoc: event.startAfterDoc,
+        limit: event.limit,
+      );
 
-      if (event.statuses != null && event.statuses!.isNotEmpty) {
-        filtered = filtered
-            .where((inv) => event.statuses!.contains(inv.status))
-            .toList();
-      }
+      final invoices = res.invoices;
+      final lastDoc = res.lastDoc;
+      final canLoadMore = invoices.length == event.limit;
 
-      if (event.day != null) {
-        final start = DateTime(
-          event.day!.year,
-          event.day!.month,
-          event.day!.day,
-        );
-        final end = start.add(const Duration(days: 1));
-        filtered = filtered
-            .where(
-              (inv) =>
-                  !inv.createdAt.isBefore(start) && inv.createdAt.isBefore(end),
-            )
-            .toList();
-      } else {
-        if (event.fromDate != null) {
-          filtered = filtered
-              .where((inv) => !inv.createdAt.isBefore(event.fromDate!))
-              .toList();
-        }
-        if (event.toDate != null) {
-          filtered = filtered
-              .where((inv) => !inv.createdAt.isAfter(event.toDate!))
-              .toList();
-        }
-      }
+      _allInvoices.addAll(invoices);
 
-      emit(state.copyWith(status: InvoiceStatus.loaded, invoices: filtered));
+      emit(
+        state.copyWith(
+          status: InvoiceStatus.loaded,
+          invoices: event.startAfterDoc != null
+              ? [...state.invoices, ...invoices]
+              : invoices,
+          isLoadingMore: false,
+          canLoadMore: canLoadMore,
+          lastDocSnap: lastDoc,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(errorMessage: e.toString()));
+      emit(
+        state.copyWith(status: InvoiceStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -106,5 +110,30 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     } catch (e) {
       emit(state.copyWith(errorMessage: e.toString()));
     }
+  }
+
+  Future<void> _onFilterInvoices(
+    FilterInvoicesEvent event,
+    Emitter<InvoiceState> emit,
+  ) async {
+    List<InvoiceEntity> filtered = _allInvoices;
+
+    if (event.status != null) {
+      filtered = filtered.where((inv) => inv.status == event.status).toList();
+    }
+
+    if (event.from != null) {
+      filtered = filtered
+          .where((inv) => inv.createdAt.isAfter(event.from!))
+          .toList();
+    }
+
+    if (event.to != null) {
+      filtered = filtered
+          .where((inv) => inv.createdAt.isBefore(event.to!))
+          .toList();
+    }
+
+    emit(state.copyWith(status: InvoiceStatus.loaded, invoices: filtered));
   }
 }

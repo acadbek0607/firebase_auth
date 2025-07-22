@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/invoice/data/models/invoice_model.dart';
+import 'package:fire_auth/features/invoice/data/models/invoice_query_result.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 import 'invoice_remote_data_source.dart';
 
@@ -50,10 +52,67 @@ class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
   }
 
   @override
-  Future<List<InvoiceModel>> getInvoices() async {
-    final snapshot = await firestore.collection('invoices').get();
-    return snapshot.docs
+  Future<InvoiceQueryResult> getInvoices({
+    DateTime? day,
+    List<StatusType>? statuses,
+    DateTime? fromDate,
+    DateTime? toDate,
+    DocumentSnapshot? startAfterDoc,
+    int limit = 10,
+  }) async {
+    var query = firestore
+        .collection('invoices')
+        .orderBy('created_at', descending: false);
+
+    if (day != null) {
+      final start = DateTime(day.year, day.month, day.day);
+      final end = start.add(const Duration(days: 1));
+      query = query
+          .where(
+            'created_at',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(start),
+          )
+          .where('created_at', isLessThan: Timestamp.fromDate(end));
+    }
+
+    if (statuses != null && statuses.isNotEmpty) {
+      if (statuses.length == 1) {
+        query = query.where(
+          'status',
+          isEqualTo: statuses.first.toFirestoreString(),
+        );
+      } else if (statuses.length < 10) {
+        query = query.where(
+          'status',
+          whereIn: statuses.map((s) => s.toFirestoreString()).toList(),
+        );
+      }
+    }
+
+    if (fromDate != null) {
+      query = query.where(
+        'created_at',
+        isGreaterThanOrEqualTo: Timestamp.fromDate(fromDate),
+      );
+    }
+    if (toDate != null) {
+      query = query.where(
+        'created_at',
+        isLessThanOrEqualTo: Timestamp.fromDate(toDate),
+      );
+    }
+
+    if (startAfterDoc != null) {
+      query = query.startAfterDocument(startAfterDoc);
+    }
+
+    query = query.limit(limit);
+
+    final snap = await query.get();
+    final invoices = snap.docs
         .map((doc) => InvoiceModel.fromJson(doc.data(), doc.id))
         .toList();
+    final lastDoc = snap.docs.isNotEmpty ? snap.docs.last : null;
+    return InvoiceQueryResult(invoices: invoices, lastDoc: lastDoc);
   }
 }

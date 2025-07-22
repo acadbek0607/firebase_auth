@@ -62,55 +62,52 @@ void showDeleteContractDialog(
             ),
             actions: [
               if (canDelete) ...{
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: Kstyle.buttonStyle.copyWith(
-                            backgroundColor: WidgetStateProperty.all(
-                              Color(0xFFFF426D).withAlpha(38),
-                            ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: Kstyle.buttonStyle.copyWith(
+                          backgroundColor: WidgetStateProperty.all(
+                            Color(0xFFFF426D).withAlpha(38),
                           ),
-                          child: Text(
-                            tr('cancel', context: context),
-                            style: Kstyle.textStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFF426D),
-                            ),
+                        ),
+                        child: Text(
+                          tr('cancel', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFF426D),
                           ),
                         ),
                       ),
-                      SizedBox(width: 12.0),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: Kstyle.buttonStyle.copyWith(
-                            backgroundColor: WidgetStateProperty.all(
-                              Color(0xFFFF426D),
-                            ),
+                    ),
+                    SizedBox(width: 12.0),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: Kstyle.buttonStyle.copyWith(
+                          backgroundColor: WidgetStateProperty.all(
+                            Color(0xFFFF426D),
                           ),
-                          onPressed: () {
-                            context.read<ProfileBloc>().add(
-                              ToggleSavedContractEvent(contract.id!),
-                            );
-                            context.read<ContractBloc>().add(
-                              DeleteContractEvent(contractId),
-                            );
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            tr('done', context: context),
-                            style: Kstyle.textStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        onPressed: () {
+                          context.read<ProfileBloc>().add(
+                            ToggleSavedContractEvent(contract.id!),
+                          );
+                          context.read<ContractBloc>().add(
+                            DeleteContractEvent(contractId),
+                          );
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          tr('done', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               },
             ],

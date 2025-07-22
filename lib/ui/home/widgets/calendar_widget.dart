@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 
 class CalendarWidget extends StatefulWidget {
@@ -69,6 +69,31 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     final weekDays = _getVisibleWeekDays();
 
+    final dayLabels = [
+      tr('day_monday', context: context),
+      tr('day_tuesday', context: context),
+      tr('day_wednesday', context: context),
+      tr('day_thursday', context: context),
+      tr('day_friday', context: context),
+      tr('day_saturday', context: context),
+      tr('day_sunday', context: context),
+    ];
+    final monthLabels = [
+      '',
+      tr('month_january', context: context),
+      tr('month_february', context: context),
+      tr('month_march', context: context),
+      tr('month_april', context: context),
+      tr('month_may', context: context),
+      tr('month_june', context: context),
+      tr('month_july', context: context),
+      tr('month_august', context: context),
+      tr('month_september', context: context),
+      tr('month_october', context: context),
+      tr('month_november', context: context),
+      tr('month_december', context: context),
+    ];
+
     final weekRow = Row(
       key: ValueKey(_focusedWeekStart.toIso8601String()),
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -91,7 +116,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             child: Column(
               children: [
                 Text(
-                  DateFormat.E().format(day),
+                  dayLabels[day.weekday - 1],
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
                     color: isSelected ? Colors.white : const Color(0xFFdadada),
@@ -126,7 +151,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                DateFormat.yMMM().format(_focusedWeekStart),
+                '${monthLabels[_focusedWeekStart.month]}, ${_focusedWeekStart.year}',
                 style: Kstyle.textStyle.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,

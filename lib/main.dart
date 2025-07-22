@@ -181,11 +181,12 @@ class MyApp extends StatelessWidget {
                 final allContracts =
                     args['allContracts'] as List<ContractEntity>;
                 final fromDetail = args['fromDetail'] as bool? ?? false;
-                final repo = context.read<ContractRepository>();
                 return MaterialPageRoute(
                   builder: (context) => BlocProvider(
                     create: (_) => RelatedBloc(
-                      getContractsByFullName: GetContractsByFullName(repo),
+                      getContractsByFullName: GetContractsByFullName(
+                        context.read<ContractRepository>(),
+                      ),
                     ),
                     child: ContractDetailPage(
                       contract: contract,

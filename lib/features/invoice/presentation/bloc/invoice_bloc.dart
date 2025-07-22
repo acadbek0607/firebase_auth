@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_auth/core/utils/status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/invoice_entity.dart';
 import '../../domain/usecases/invoice_usecases.dart';
@@ -31,7 +32,41 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     emit(state.copyWith(status: InvoiceStatus.loading, errorMessage: null));
     try {
       final invoices = await getInvoices();
-      emit(state.copyWith(status: InvoiceStatus.loaded, invoices: invoices));
+      var filtered = invoices;
+
+      if (event.statuses != null && event.statuses!.isNotEmpty) {
+        filtered = filtered
+            .where((inv) => event.statuses!.contains(inv.status))
+            .toList();
+      }
+
+      if (event.day != null) {
+        final start = DateTime(
+          event.day!.year,
+          event.day!.month,
+          event.day!.day,
+        );
+        final end = start.add(const Duration(days: 1));
+        filtered = filtered
+            .where(
+              (inv) =>
+                  !inv.createdAt.isBefore(start) && inv.createdAt.isBefore(end),
+            )
+            .toList();
+      } else {
+        if (event.fromDate != null) {
+          filtered = filtered
+              .where((inv) => !inv.createdAt.isBefore(event.fromDate!))
+              .toList();
+        }
+        if (event.toDate != null) {
+          filtered = filtered
+              .where((inv) => !inv.createdAt.isAfter(event.toDate!))
+              .toList();
+        }
+      }
+
+      emit(state.copyWith(status: InvoiceStatus.loaded, invoices: filtered));
     } catch (e) {
       emit(state.copyWith(errorMessage: e.toString()));
     }

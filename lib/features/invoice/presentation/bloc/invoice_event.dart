@@ -7,7 +7,14 @@ abstract class InvoiceEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadInvoices extends InvoiceEvent {}
+class LoadInvoices extends InvoiceEvent {
+  final DateTime? day;
+  final List<StatusType>? statuses;
+  final DateTime? fromDate;
+  final DateTime? toDate;
+
+  const LoadInvoices({this.day, this.statuses, this.fromDate, this.toDate});
+}
 
 class CreateInvoiceEvent extends InvoiceEvent {
   final InvoiceEntity invoice;

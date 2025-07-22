@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
+import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
 import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
@@ -45,12 +46,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _loadInvoices() {
+    final bloc = context.read<InvoiceBloc>();
+    bloc.add(
+      LoadInvoices(
+        day: _selectedDay,
+        statuses: _currentFilter.statuses.isNotEmpty
+            ? _currentFilter.statuses
+            : null,
+        fromDate: _selectedDay == null ? _currentFilter.fromDate : null,
+        toDate: _selectedDay == null ? _currentFilter.toDate : null,
+      ),
+    );
+  }
+
   void _onCalendarDaySelected(DateTime day) {
     setState(() {
       _selectedDay = day;
       _currentFilter = Filters.empty;
     });
-    _loadContracts();
+    if (selectedViewNotifier.value == HomeViewType.contract) {
+      _loadContracts();
+    } else {
+      _loadInvoices();
+    }
   }
 
   void _onFilterApplied(Filters filter) {
@@ -64,7 +83,11 @@ class _HomePageState extends State<HomePage> {
         _selectedDay = null;
       }
     });
-    _loadContracts();
+    if (selectedViewNotifier.value == HomeViewType.contract) {
+      _loadContracts();
+    } else {
+      _loadInvoices();
+    }
   }
 
   void _onLoadMore() {

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
+import 'package:fire_auth/features/auth/presentation/pages/privacy_policy_page.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/profile/data/repos/profile_repo_impl.dart';
 import 'package:fire_auth/features/profile/domain/usecase/create_or_update_profile.dart';
@@ -172,6 +173,7 @@ class MyApp extends StatelessWidget {
             '/saved': (context) => const MainScaffold(),
             '/profile': (context) => const MainScaffold(),
             '/search': (context) => const SearchPage(),
+            '/privacy': (context) => const PrivacyPolicyPage(),
           },
           onGenerateRoute: (settings) {
             switch (settings.name) {

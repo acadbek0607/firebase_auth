@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -16,6 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscure = true;
+  bool _accepted = false;
 
   void _onSignUpPressed() {
     final email = _emailController.text.trim();
@@ -79,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Spacer(),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _onSignUpPressed,
+                      onPressed: _accepted ? _onSignUpPressed : null,
                       style: Kstyle.buttonStyle.copyWith(
                         minimumSize: WidgetStateProperty.all(
                           const Size(double.infinity, 48),
@@ -91,6 +94,38 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: _accepted,
+                          onChanged: (val) =>
+                              setState(() => _accepted = val ?? false),
+                        ),
+                        Expanded(
+                          child: Wrap(
+                            children: [
+                              Text(
+                                tr('accept_privacy_policy', context: context) +
+                                    ' ',
+                              ),
+                              GestureDetector(
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/privacy'),
+                                child: Text(
+                                  tr('privacy_policy', context: context),
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(

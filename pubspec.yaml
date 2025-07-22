@@ -46,6 +46,7 @@ flutter:
     - assets/fonts/
     - assets/flags/
     - assets/translations/
+    - assets/privacy/
 
   fonts:
     - family: Ubuntu

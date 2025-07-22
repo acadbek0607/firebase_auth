@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/ui/home/page/home_page.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   final _serviceNameController = TextEditingController();
   final _costController = TextEditingController();
   StatusType? _status;
+  bool _isCreating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,83 +34,119 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
+      body: BlocConsumer<InvoiceBloc, InvoiceState>(
+        listener: (context, state) {
+          if (_isCreating && state.status == InvoiceStatus.loaded) {
+            selectedViewNotifier.value = HomeViewType.invoice;
+            selectedPageNotifier.value = 0;
+            Navigator.pushReplacementNamed(context, '/home');
+            _isCreating = false;
+          } else if (_isCreating && state.status == InvoiceStatus.error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage.toString())),
+            );
+            _isCreating = false;
+          }
+        },
+        builder: (context, state) {
+          return Stack(
             children: [
-              SizedBox(height: 20.0),
-              Text(
-                tr('service_name', context: context),
-                style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
-              ),
-              SizedBox(height: 6.0),
-              TextFormField(
-                controller: _serviceNameController,
-                decoration: Kstyle.textFieldStyle,
-                validator: (value) =>
-                    value!.isEmpty ? tr('required', context: context) : null,
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                tr('cost', context: context),
-                style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
-              ),
-              SizedBox(height: 6.0),
-              TextFormField(
-                controller: _costController,
-                decoration: Kstyle.textFieldStyle,
-                keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value!.isEmpty ? tr('required', context: context) : null,
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                tr('status_of_invoice', context: context),
-                style: Kstyle.textStyle.copyWith(color: Color(0xFFE7E7E7)),
-              ),
-              SizedBox(height: 6.0),
-              CustomDropdown(
-                label: tr('status', context: context),
-                value: _status?.label(context) ?? '',
-                items: StatusType.values.map((s) => s.label(context)).toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() {
-                      _status = StatusTypeExtension.fromLabel(val, context);
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final invoice = InvoiceEntity(
-                      serviceName: _serviceNameController.text,
-                      cost: double.parse(_costController.text),
-                      status: _status!,
-                      createdAt: DateTime.now(),
-                    );
-                    context.read<InvoiceBloc>().add(
-                      CreateInvoiceEvent(invoice),
-                    );
-                    Navigator.pushNamed(context, '/new');
-                  }
-                },
-                style: Kstyle.buttonStyle,
-                child: Text(
-                  tr('save_invoice', context: context),
-                  style: Kstyle.textStyle.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.0,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 20.0),
+                      Text(
+                        tr('service_name', context: context),
+                        style: Kstyle.textStyle.copyWith(
+                          color: Color(0xFFE7E7E7),
+                        ),
+                      ),
+                      SizedBox(height: 6.0),
+                      TextFormField(
+                        controller: _serviceNameController,
+                        decoration: Kstyle.textFieldStyle,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
+                      ),
+                      SizedBox(height: 20.0),
+                      Text(
+                        tr('cost', context: context),
+                        style: Kstyle.textStyle.copyWith(
+                          color: Color(0xFFE7E7E7),
+                        ),
+                      ),
+                      SizedBox(height: 6.0),
+                      TextFormField(
+                        controller: _costController,
+                        decoration: Kstyle.textFieldStyle,
+                        keyboardType: TextInputType.number,
+                        validator: (value) => value!.isEmpty
+                            ? tr('required', context: context)
+                            : null,
+                      ),
+                      SizedBox(height: 20.0),
+                      Text(
+                        tr('status_of_invoice', context: context),
+                        style: Kstyle.textStyle.copyWith(
+                          color: Color(0xFFE7E7E7),
+                        ),
+                      ),
+                      SizedBox(height: 6.0),
+                      CustomDropdown(
+                        label: tr('status', context: context),
+                        value: _status?.label(context) ?? '',
+                        items: StatusType.values
+                            .map((s) => s.label(context))
+                            .toList(),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setState(() {
+                              _status = StatusTypeExtension.fromLabel(
+                                val,
+                                context,
+                              );
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            final invoice = InvoiceEntity(
+                              serviceName: _serviceNameController.text,
+                              cost: double.parse(_costController.text),
+                              status: _status!,
+                              createdAt: DateTime.now(),
+                            );
+                            _isCreating = true;
+                            context.read<InvoiceBloc>().add(
+                              CreateInvoiceEvent(invoice),
+                            );
+                          }
+                        },
+                        style: Kstyle.buttonStyle,
+                        child: Text(
+                          tr('save_invoice', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
+              if (_isCreating && state.status == InvoiceStatus.loading)
+                const Center(child: CircularProgressIndicator.adaptive()),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }

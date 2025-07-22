@@ -70,7 +70,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               SizedBox(height: 6.0),
               CustomDropdown(
                 label: tr('status', context: context),
-                value: _status?.label as String? ?? '',
+                value: _status?.label(context) ?? '',
                 items: StatusType.values.map((s) => s.label(context)).toList(),
                 onChanged: (val) {
                   if (val != null) {

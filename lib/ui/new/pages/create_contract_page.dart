@@ -147,7 +147,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       CustomDropdown(
                         label: tr('status', context: context),
                         // value: _selectedStatus.toFirestoreString(),
-                        value: _selectedStatus?.label as String? ?? '',
+                        value: _selectedStatus?.label(context) ?? '',
                         items: StatusType.values
                             .map((s) => s.label(context))
                             .toList(),

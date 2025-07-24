@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -9,7 +11,9 @@ import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart
 import 'package:fire_auth/features/contract/presentation/widgets/contract_card.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final List<ContractEntity>? allContracts;
+
+  const SearchPage({super.key, this.allContracts});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -24,8 +28,11 @@ class _SearchPageState extends State<SearchPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    contracts = (args?['allContracts'] as List?)?.cast<ContractEntity>() ?? [];
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    contracts =
+        widget.allContracts ??
+        (args?['allContracts'] as List?)?.cast<ContractEntity>() ??
+        <ContractEntity>[];
   }
 
   @override
@@ -44,7 +51,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: Colors.transparent.withAlpha(210),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1A1A1A),
         title: TextField(
@@ -120,4 +127,30 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+}
+
+Future<Future<Object?>> showSearchPageDialog(
+  BuildContext context, {
+  List<ContractEntity>? contracts,
+}) async {
+  return showGeneralDialog(
+    barrierColor: Colors.transparent,
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'SearchPageDialog',
+    transitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (_, __, ___) {
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          SearchPage(allContracts: contracts),
+        ],
+      );
+    },
+  );
 }

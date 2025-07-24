@@ -51,10 +51,36 @@ class _MainScaffoldState extends State<MainScaffold> {
   void _onTabTapped(int index) {
     // If user is in create_contract/create_invoice and taps "New" again, go back to NewPage (index 2)
     if (index == 2) {
-      showNewPageDialog(context);
+      if (_selectedIndex != 0) {
+        selectedPageNotifier.value = 0;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) showNewPageDialog(context);
+        });
+      } else {
+        showNewPageDialog(context);
+      }
       return;
     }
-    selectedPageNotifier.value = index;
+    if (widget.child != null) {
+      selectedPageNotifier.value = index;
+      switch (index) {
+        case 0:
+          Navigator.pushReplacementNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.pushReplacementNamed(context, '/history');
+          break;
+        case 2:
+          break;
+        case 3:
+          Navigator.pushReplacementNamed(context, '/saved');
+          break;
+        default:
+          Navigator.pushReplacementNamed(context, '/home');
+      }
+    } else {
+      selectedPageNotifier.value = index;
+    }
   }
 
   @override

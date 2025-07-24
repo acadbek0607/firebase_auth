@@ -58,7 +58,7 @@ class NewPage extends StatelessWidget {
 Future<Future<Object?>> showNewPageDialog(BuildContext context) async {
   final topOffset = MediaQuery.of(context).padding.top + kToolbarHeight;
   return showGeneralDialog(
-    barrierColor: Colors.transparent,
+    barrierColor: Colors.transparent.withAlpha(210),
     context: context,
     barrierDismissible: true,
     barrierLabel: 'NewPageDialog',
@@ -71,7 +71,7 @@ Future<Future<Object?>> showNewPageDialog(BuildContext context) async {
             Positioned.fill(
               top: topOffset,
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                 child: Container(color: Colors.transparent),
               ),
             ),

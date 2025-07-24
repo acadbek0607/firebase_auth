@@ -6,6 +6,7 @@ import 'package:fire_auth/features/contract/presentation/pages/contract_page.dar
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
+import 'package:fire_auth/ui/home/widgets/search_page.dart';
 import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
@@ -164,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 4.0),
               IconButton(
                 icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
-                onPressed: () => Navigator.pushNamed(context, '/search'),
+                onPressed: () => showSearchPageDialog(context),
               ),
               const SizedBox(width: 16.0),
             ],

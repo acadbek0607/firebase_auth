@@ -6,6 +6,7 @@ import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
+import 'package:fire_auth/ui/home/widgets/search_page.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -162,14 +163,7 @@ class _HistoryPageState extends State<_HistoryPage> {
             onPressed: () {
               final state = context.read<ContractBloc>().state;
               if (state.status == BlocStatus.loaded) {
-                Navigator.pushNamed(
-                  context,
-                  '/search',
-                  arguments: {
-                    'allContracts': state.contracts,
-                    'currentFilter': currentFilter,
-                  },
-                );
+                showSearchPageDialog(context, contracts: state.contracts);
               }
             },
           ),

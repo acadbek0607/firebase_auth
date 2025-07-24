@@ -6,6 +6,7 @@ import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
+import 'package:fire_auth/ui/home/widgets/search_page.dart';
 import 'package:fire_auth/ui/saved/bloc/saved_bloc.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
@@ -100,14 +101,7 @@ class _SavedPageState extends State<SavedPage> {
                   if (state.status == BlocStatus.loaded) {
                     final savedContracts = state.contracts;
 
-                    Navigator.pushNamed(
-                      context,
-                      '/search',
-                      arguments: {
-                        'allContracts': savedContracts,
-                        'originIndex': 4,
-                      },
-                    );
+                    showSearchPageDialog(context, contracts: savedContracts);
                   }
                 },
               ),

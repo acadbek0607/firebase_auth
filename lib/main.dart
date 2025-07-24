@@ -217,11 +217,16 @@ class MyApp extends StatelessWidget {
                 }
 
                 return MaterialPageRoute(
-                  builder: (_) => FilterPage(
-                    contracts: contracts,
-                    initialFilter: filter,
-                    originIndex: originIndex,
-                  ),
+                  builder: (_) {
+                    selectedPageNotifier.value = originIndex;
+                    return MainScaffold(
+                      child: FilterPage(
+                        contracts: contracts,
+                        initialFilter: filter,
+                        originIndex: originIndex,
+                      ),
+                    );
+                  },
                 );
             }
             return null;

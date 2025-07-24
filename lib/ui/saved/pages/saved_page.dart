@@ -46,7 +46,14 @@ class _SavedPageState extends State<SavedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved'),
+        title: Text(
+          tr('saved'),
+          style: Kstyle.textStyle.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+          ),
+        ),
+        centerTitle: false,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),

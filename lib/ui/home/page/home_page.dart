@@ -145,6 +145,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('contracts', context: context)),
+        centerTitle: false,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
@@ -153,15 +154,15 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               IconButton(
-                icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
-                onPressed: () => Navigator.pushNamed(context, '/search'),
+                icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
+                onPressed: _openFilterPage,
               ),
               const SizedBox(width: 4.0),
               SvgPicture.asset('assets/svg/divider.svg'),
               const SizedBox(width: 4.0),
               IconButton(
-                icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
-                onPressed: _openFilterPage,
+                icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
+                onPressed: () => Navigator.pushNamed(context, '/search'),
               ),
               const SizedBox(width: 16.0),
             ],

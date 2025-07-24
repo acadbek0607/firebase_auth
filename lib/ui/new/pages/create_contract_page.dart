@@ -44,6 +44,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
             fontSize: 18.0,
           ),
         ),
+        centerTitle: false,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),

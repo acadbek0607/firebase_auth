@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CalendarWidget extends StatefulWidget {
   final DateTime? initialDate;
@@ -144,7 +145,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      color: const Color(0xFF2C2C2E),
+      color: const Color(0xFF1E1E20),
       child: Column(
         children: [
           Row(
@@ -162,19 +163,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 children: [
                   IconButton(
                     onPressed: _goToPreviousWeek,
-                    icon: const Icon(Icons.chevron_left_rounded),
-                    color: const Color(0xFFdadada),
+                    icon: SvgPicture.asset('assets/svg/left.svg', height: 32.0),
+                    color: const Color(0xFFD1D1D1),
                   ),
                   IconButton(
                     onPressed: _goToNextWeek,
-                    icon: const Icon(Icons.chevron_right_rounded),
-                    color: const Color(0xFFdadada),
+                    icon: SvgPicture.asset(
+                      'assets/svg/right.svg',
+                      height: 32.0,
+                    ),
+                    color: const Color(0xFFD1D1D1),
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 20.0),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             transitionBuilder: (child, animation) =>

@@ -89,6 +89,7 @@ class _FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF141416),
         title: Text(
           tr('filters', context: context),
           style: Kstyle.textStyle.copyWith(

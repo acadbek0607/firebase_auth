@@ -29,6 +29,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('new_invoice', context: context)),
+        centerTitle: false,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),

@@ -17,7 +17,7 @@ class NewPage extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: const Color(0xFF2A2A2D),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -74,9 +74,9 @@ class _CreateButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF4E4E4E),
+        backgroundColor: const Color(0xFF4E4E4E).withAlpha(102),
         minimumSize: const Size(double.infinity, 48),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         elevation: 0,
         alignment: Alignment.centerLeft,
       ),

@@ -120,21 +120,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   dayLabels[day.weekday - 1],
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : const Color(0xFFdadada),
+                    color: isSelected ? Colors.white : Color(0xFF999999),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${day.day}',
                   style: Kstyle.textStyle.copyWith(
-                    color: isSelected ? Colors.white : const Color(0xFFdadada),
+                    color: isSelected ? Colors.white : Color(0xFF999999),
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 4),
                   height: 1,
                   width: 20,
-                  color: isSelected ? Colors.white : const Color(0xFFdadada),
+                  color: isSelected ? Colors.white : Color(0xFF999999),
                 ),
               ],
             ),

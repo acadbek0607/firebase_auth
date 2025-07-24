@@ -97,7 +97,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     final weekRow = Row(
       key: ValueKey(_focusedWeekStart.toIso8601String()),
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: weekDays.map((day) {
         final isSelected =
             _selectedDay != null && _isSameDay(day, _selectedDay!);
@@ -105,13 +105,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           onTap: () => _selectDay(day),
           child: Container(
             padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 10.0,
+              vertical: 14.0,
+              horizontal: 12.0,
             ),
             decoration: isSelected
                 ? BoxDecoration(
                     color: Colors.teal,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(6),
                   )
                 : null,
             child: Column(
@@ -151,12 +151,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${monthLabels[_focusedWeekStart.month]}, ${_focusedWeekStart.year}',
-                style: Kstyle.textStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text(
+                  '${monthLabels[_focusedWeekStart.month]}, ${_focusedWeekStart.year}',
+                  style: Kstyle.textStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Row(

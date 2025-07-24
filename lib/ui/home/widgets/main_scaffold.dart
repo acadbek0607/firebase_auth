@@ -23,7 +23,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   final List<Widget> _pages = [
     const HomePage(), // 0
     HistoryPage(), // 1
-    const NewPage(), // 2
+    const SizedBox.shrink(), // 2
     const SavedPage(), // 3
     const ProfilePage(), // 4
     const CreateContractPage(), // 5 (subpage of New)
@@ -50,11 +50,11 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onTabTapped(int index) {
     // If user is in create_contract/create_invoice and taps "New" again, go back to NewPage (index 2)
-    if (_selectedIndex > 4 && index == 2) {
-      selectedPageNotifier.value = 2;
-    } else {
-      selectedPageNotifier.value = index;
+    if (index == 2) {
+      showNewPageDialog(context);
+      return;
     }
+    selectedPageNotifier.value = index;
   }
 
   @override

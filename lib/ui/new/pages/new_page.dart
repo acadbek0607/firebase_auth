@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -10,8 +12,9 @@ class NewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // selectedPageNotifier.value = 2;
-    return Scaffold(
-      body: Center(
+    return Material(
+      color: Colors.transparent,
+      child: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           padding: const EdgeInsets.all(20),
@@ -31,6 +34,7 @@ class NewPage extends StatelessWidget {
                 icon: 'assets/svg/contract.svg',
                 text: tr('contract', context: context),
                 onPressed: () {
+                  Navigator.of(context).pop();
                   selectedPageNotifier.value = 5;
                 },
               ),
@@ -39,6 +43,7 @@ class NewPage extends StatelessWidget {
                 icon: 'assets/svg/invoice.svg',
                 text: tr('invoice', context: context),
                 onPressed: () {
+                  Navigator.of(context).pop();
                   selectedPageNotifier.value = 6;
                 },
               ),
@@ -48,6 +53,34 @@ class NewPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<Future<Object?>> showNewPageDialog(BuildContext context) async {
+  final topOffset = MediaQuery.of(context).padding.top + kToolbarHeight;
+  return showGeneralDialog(
+    barrierColor: Colors.transparent,
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'NewPageDialog',
+    transitionDuration: const Duration(milliseconds: 250),
+    pageBuilder: (_, __, ___) {
+      return GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              top: topOffset,
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+            const Center(child: NewPage()),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 class _CreateButton extends StatelessWidget {

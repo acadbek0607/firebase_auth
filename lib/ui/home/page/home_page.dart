@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
+import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
-import 'package:fire_auth/ui/home/filter/pages/filter_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
 import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
@@ -115,12 +115,14 @@ class _HomePageState extends State<HomePage> {
     required Filters currentFilter,
     required void Function(Filters) onFilterApplied,
   }) async {
-    final result = await Navigator.push(
+    final result = await Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) =>
-            FilterPage(contracts: [], initialFilter: currentFilter),
-      ),
+      '/filter',
+      arguments: {
+        'allContracts': <ContractEntity>[],
+        'currentFilter': currentFilter,
+        'originIndex': 0,
+      },
     );
     // If cancel or empty, always reset to Filters.empty
     if (result == null || (result is Filters && result == Filters.empty)) {

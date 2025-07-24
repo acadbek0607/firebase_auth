@@ -23,7 +23,14 @@ class SavedBloc extends Bloc<SavedContractsEvent, SavedContractsState> {
     final chunk = ids.skip(startIndex).take(event.limit).toList();
 
     if (chunk.isEmpty) {
-      emit(state.copyWith(canLoadMore: false, isLoadingMore: false));
+      emit(
+        state.copyWith(
+          status: BlocStatus.loaded,
+          contracts: event.loadMore ? state.contracts : [],
+          canLoadMore: false,
+          isLoadingMore: false,
+        ),
+      );
       return;
     }
 

@@ -68,10 +68,13 @@ Future<Future<Object?>> showNewPageDialog(BuildContext context) async {
         onTap: () => Navigator.of(context).pop(),
         child: Stack(
           children: [
-            Positioned.fill(
+            Positioned(
               top: topOffset,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+                filter: ImageFilter.blur(sigmaX: 1.7, sigmaY: 1.7),
                 child: Container(color: Colors.transparent),
               ),
             ),

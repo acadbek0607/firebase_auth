@@ -75,7 +75,7 @@ class _SavedPageState extends State<SavedPage> {
                       arguments: {
                         'allContracts': savedContracts,
                         'currentFilter': currentFilter,
-                        'originIndex': 2,
+                        'originIndex': 3,
                       },
                     );
 

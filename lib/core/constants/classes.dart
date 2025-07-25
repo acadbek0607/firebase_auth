@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class KDataFormat {
+class KFormat {
   static DateFormat dateFormat = DateFormat('dd.MM.yyyy');
   static NumberFormat amountFormat = NumberFormat('#,##0', 'en_US');
+  static String formatPhone(String phone) {
+    // Remove non-digit characters
+    final digits = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (digits.length != 12 || !digits.startsWith('998')) return phone;
+
+    final country = digits.substring(0, 3); // 998
+    final operator = digits.substring(3, 5); // 97
+    final part1 = digits.substring(5, 8); // 721
+    final part2 = digits.substring(8, 10); // 06
+    final part3 = digits.substring(10, 12); // 88
+
+    return '+$country $operator $part1 $part2 $part3';
+  }
 }
 
 class Kstyle {

@@ -28,11 +28,11 @@ class LanguageDialog {
                 return Dialog(
                   backgroundColor: const Color(0xFF2A2A2D),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  insetPadding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(28, 16, 16, 16),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -144,9 +144,9 @@ class LanguageDialog {
 
     return ListTile(
       dense: true,
-      horizontalTitleGap: 12,
+      horizontalTitleGap: 0,
       contentPadding: EdgeInsets.zero,
-      leading: SvgPicture.asset(flagAsset, width: 44, height: 44),
+      leading: SvgPicture.asset(flagAsset),
       title: Text(
         label,
         style: const TextStyle(color: Colors.white, fontSize: 14),

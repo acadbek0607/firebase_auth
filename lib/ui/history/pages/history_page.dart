@@ -45,7 +45,7 @@ class _HistoryPageState extends State<_HistoryPage> {
   DateTime? fromDate;
   DateTime? toDate;
 
-  final DateFormat formatter = KDataFormat.dateFormat;
+  final DateFormat formatter = KFormat.dateFormat;
 
   @override
   void initState() {

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -74,13 +75,16 @@ class ProfileCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _infoRow(tr('phone', context: context), phone),
-                  _infoRow(tr('email', context: context), email),
                   if (dateOfBirth != null)
                     _infoRow(
                       tr('date_of_birth', context: context),
                       dateOfBirth!,
                     ),
+                  _infoRow(
+                    tr('phone', context: context),
+                    KFormat.formatPhone(phone),
+                  ),
+                  _infoRow(tr('email', context: context), email),
                 ],
               ),
             ),
@@ -117,10 +121,10 @@ class ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            '$title: ',
+            '$title:  ',
             style: const TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
             ),
           ),
           Text(value, style: const TextStyle(color: Colors.grey)),

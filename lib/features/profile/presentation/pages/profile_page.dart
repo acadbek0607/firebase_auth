@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _selectedDate = pickedDate;
         _dobController.text =
-            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+            "${pickedDate.day.toString().padLeft(2, '0')}.${pickedDate.month.toString().padLeft(2, '0')}.${pickedDate.year}";
       });
     }
   }
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
         email: authUser.email ?? '',
         photoUrl: _photoUrl,
         dateOfBirth: _selectedDate != null
-            ? "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}"
+            ? "${_selectedDate!.day.toString().padLeft(2, '0')}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.year}"
             : null,
       );
 
@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
               : null;
           if (_selectedDate != null) {
             _dobController.text =
-                "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
+                "${_selectedDate!.day.toString().padLeft(2, '0')}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.year}";
           }
           _isProfileSaved = true;
         }

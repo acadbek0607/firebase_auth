@@ -17,8 +17,8 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedAmount = KDataFormat.amountFormat.format(invoice.cost);
-    final formattedDate = KDataFormat.dateFormat.format(invoice.createdAt);
+    final formattedAmount = KFormat.amountFormat.format(invoice.cost);
+    final formattedDate = KFormat.dateFormat.format(invoice.createdAt);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       padding: const EdgeInsets.all(16.0),

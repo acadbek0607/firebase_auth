@@ -21,8 +21,8 @@ class ContractCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedAmount = KDataFormat.amountFormat.format(contract.amount);
-    final formattedDate = KDataFormat.dateFormat.format(contract.createdAt);
+    final formattedAmount = KFormat.amountFormat.format(contract.amount);
+    final formattedDate = KFormat.dateFormat.format(contract.createdAt);
 
     // Filter contracts belonging to the same fullName
     final relatedContracts = allContracts

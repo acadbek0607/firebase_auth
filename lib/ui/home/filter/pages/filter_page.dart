@@ -105,8 +105,18 @@ class _FilterPageState extends State<FilterPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 24),
+                const SizedBox(height: 28.0),
+                Text(
+                  tr('status', context: context),
+                  style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0,
+                    color: Color(0xFF999999),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
                 Row(
                   children: [
                     Flexible(
@@ -145,7 +155,16 @@ class _FilterPageState extends State<FilterPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32.0),
+                Text(
+                  tr('date', context: context),
+                  style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0,
+                    color: Color(0xFF999999),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
                 Row(
                   children: [
                     SizedBox(

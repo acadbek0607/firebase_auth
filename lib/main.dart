@@ -184,10 +184,6 @@ class MyApp extends StatelessWidget {
                     args['allContracts'] as List<ContractEntity>;
                 final fromDetail = args['fromDetail'] as bool? ?? false;
                 return MaterialPageRoute(
-                  /*builder: (context) => BlocProvider(
-                    create: (_) => RelatedBloc(
-                      getContractsByFullName: GetContractsByFullName(
-                        context.read<ContractRepository>(),*/
                   builder: (context) {
                     selectedPageNotifier.value = 0;
                     return BlocProvider(
@@ -196,13 +192,6 @@ class MyApp extends StatelessWidget {
                           context.read<ContractRepository>(),
                         ),
                       ),
-                      /*),
-                    child: ContractDetailPage(
-                      contract: contract,
-                      allContracts: allContracts,
-                      openFromDetail: fromDetail,
-                    ),
-                  ),*/
                       child: MainScaffold(
                         child: ContractDetailPage(
                           contract: contract,

@@ -48,13 +48,16 @@ class _ContractDetailPageState extends State<ContractDetailPage>
   }
 
   Future<bool> _onPop() async {
-    if (widget.openFromDetail) {
+    /*if (widget.openFromDetail) {
       Navigator.pop(context);
     } else {
       selectedPageNotifier.value = 0;
       selectedViewNotifier.value = HomeViewType.contract;
       Navigator.pushReplacementNamed(context, '/main');
-    }
+    }*/
+    selectedPageNotifier.value = 0;
+    selectedViewNotifier.value = HomeViewType.contract;
+    Navigator.pop(context);
     return false;
   }
 

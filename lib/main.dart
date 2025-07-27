@@ -184,18 +184,34 @@ class MyApp extends StatelessWidget {
                     args['allContracts'] as List<ContractEntity>;
                 final fromDetail = args['fromDetail'] as bool? ?? false;
                 return MaterialPageRoute(
-                  builder: (context) => BlocProvider(
+                  /*builder: (context) => BlocProvider(
                     create: (_) => RelatedBloc(
                       getContractsByFullName: GetContractsByFullName(
-                        context.read<ContractRepository>(),
+                        context.read<ContractRepository>(),*/
+                  builder: (context) {
+                    selectedPageNotifier.value = 0;
+                    return BlocProvider(
+                      create: (_) => RelatedBloc(
+                        getContractsByFullName: GetContractsByFullName(
+                          context.read<ContractRepository>(),
+                        ),
                       ),
-                    ),
+                      /*),
                     child: ContractDetailPage(
                       contract: contract,
                       allContracts: allContracts,
                       openFromDetail: fromDetail,
                     ),
-                  ),
+                  ),*/
+                      child: MainScaffold(
+                        child: ContractDetailPage(
+                          contract: contract,
+                          allContracts: allContracts,
+                          openFromDetail: fromDetail,
+                        ),
+                      ),
+                    );
+                  },
                 );
               case '/filter':
                 final args = settings.arguments as Map<String, dynamic>? ?? {};

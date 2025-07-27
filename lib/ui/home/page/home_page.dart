@@ -210,36 +210,46 @@ class _HomePageState extends State<HomePage>
             initialDate: _selectedDay,
             onDaySelected: _onCalendarDaySelected,
           ),
-          const SizedBox(height: 32),
-          const ToggleButtonsWidget(),
-          const SizedBox(height: 20.0),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  BlocBuilder<ContractBloc, ContractState>(
-                    builder: (context, state) {
-                      return ContractsPage(
-                        contracts: state.contracts,
-                        canLoadMore: state.canLoadMore,
-                        isLoadingMore: state.isLoadingMore,
-                        onLoadMore: _onLoadMore,
-                      );
-                    },
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 32),
+                      const ToggleButtonsWidget(),
+                      const SizedBox(height: 20.0),
+                    ],
                   ),
-                  BlocBuilder<InvoiceBloc, InvoiceState>(
-                    builder: (context, state) {
-                      return InvoicesPage(
-                        invoices: state.invoices,
-                        canLoadMore: state.canLoadMore,
-                        isLoadingMore: state.isLoadingMore,
-                        onLoadMore: _onLoadMore,
-                      );
-                    },
-                  ),
-                ],
+                ),
+              ],
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    BlocBuilder<ContractBloc, ContractState>(
+                      builder: (context, state) {
+                        return ContractsPage(
+                          contracts: state.contracts,
+                          canLoadMore: state.canLoadMore,
+                          isLoadingMore: state.isLoadingMore,
+                          onLoadMore: _onLoadMore,
+                        );
+                      },
+                    ),
+                    BlocBuilder<InvoiceBloc, InvoiceState>(
+                      builder: (context, state) {
+                        return InvoicesPage(
+                          invoices: state.invoices,
+                          canLoadMore: state.canLoadMore,
+                          isLoadingMore: state.isLoadingMore,
+                          onLoadMore: _onLoadMore,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

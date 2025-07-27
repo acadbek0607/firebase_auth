@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
 import 'package:fire_auth/ui/home/widgets/search_page.dart';
-import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,28 +21,52 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
   DateTime? _selectedDay = DateTime.now();
   Filters _currentFilter = Filters.empty;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: selectedViewNotifier.value == HomeViewType.contract ? 0 : 1,
+    );
+    _tabController.addListener(_handleTabSelection);
     _loadContracts();
     selectedViewNotifier.addListener(_onViewTypeChanged);
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabSelection);
+    _tabController.dispose();
     selectedViewNotifier.removeListener(_onViewTypeChanged);
     super.dispose();
   }
 
   void _onViewTypeChanged() {
+    final index = selectedViewNotifier.value == HomeViewType.contract ? 0 : 1;
+    if (_tabController.index != index) {
+      _tabController.animateTo(index);
+    }
     if (selectedViewNotifier.value == HomeViewType.contract) {
       _loadContracts();
     } else {
       _loadInvoices();
+    }
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) return;
+    final newType = _tabController.index == 0
+        ? HomeViewType.contract
+        : HomeViewType.invoice;
+    if (selectedViewNotifier.value != newType) {
+      selectedViewNotifier.value = newType;
     }
   }
 
@@ -147,10 +171,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr('contracts', context: context)),
+        title: Text(
+          tr('contracts', context: context),
+          style: Kstyle.textStyle.copyWith(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         centerTitle: false,
         leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
         actions: [
@@ -172,47 +202,52 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ValueListenableBuilder<HomeViewType>(
-        valueListenable: selectedViewNotifier,
-        builder: (context, viewType, _) {
-          return Column(
-            children: [
-              CalendarWidget(
-                initialDate: _selectedDay,
-                onDaySelected: _onCalendarDaySelected,
-              ),
-              const SizedBox(height: 32),
-              const ToggleButtonsWidget(),
-              const SizedBox(height: 20.0),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: viewType == HomeViewType.contract
-                      ? BlocBuilder<ContractBloc, ContractState>(
-                          builder: (context, state) {
-                            return ContractsPage(
-                              contracts: state.contracts,
-                              canLoadMore: state.canLoadMore,
-                              isLoadingMore: state.isLoadingMore,
-                              onLoadMore: _onLoadMore,
-                            );
-                          },
-                        )
-                      : BlocBuilder<InvoiceBloc, InvoiceState>(
-                          builder: (context, state) {
-                            return InvoicesPage(
-                              invoices: state.invoices,
-                              canLoadMore: state.canLoadMore,
-                              isLoadingMore: state.isLoadingMore,
-                              onLoadMore: _onLoadMore,
-                            );
-                          },
-                        ),
-                ),
-              ),
+      body: Column(
+        children: [
+          CalendarWidget(
+            initialDate: _selectedDay,
+            onDaySelected: _onCalendarDaySelected,
+          ),
+          const SizedBox(height: 32),
+          TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: tr('contracts', context: context)),
+              Tab(text: tr('invoices', context: context)),
             ],
-          );
-        },
+          ),
+          const SizedBox(height: 20.0),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  BlocBuilder<ContractBloc, ContractState>(
+                    builder: (context, state) {
+                      return ContractsPage(
+                        contracts: state.contracts,
+                        canLoadMore: state.canLoadMore,
+                        isLoadingMore: state.isLoadingMore,
+                        onLoadMore: _onLoadMore,
+                      );
+                    },
+                  ),
+                  BlocBuilder<InvoiceBloc, InvoiceState>(
+                    builder: (context, state) {
+                      return InvoicesPage(
+                        invoices: state.invoices,
+                        canLoadMore: state.canLoadMore,
+                        isLoadingMore: state.isLoadingMore,
+                        onLoadMore: _onLoadMore,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

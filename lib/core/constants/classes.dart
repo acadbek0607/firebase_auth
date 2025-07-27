@@ -33,6 +33,7 @@ class Kstyle {
   );
 
   static TextStyle textStyle = TextStyle(
+    fontFamily: 'Ubuntu',
     color: Color(0xFFE7E7E7),
     fontSize: 14.0,
     fontWeight: FontWeight.w400,

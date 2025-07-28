@@ -19,14 +19,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.signOut,
     required this.getCurrentUser,
   }) : super(AuthState.initial()) {
-    on<SignInResquested>(_onSignInRequested);
+    on<SignInRequested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<SignOutRequested>(_onSignOutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
   }
 
   Future<void> _onSignInRequested(
-    SignInResquested event,
+    SignInRequested event,
     Emitter<AuthState> emit,
   ) async {
     emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));

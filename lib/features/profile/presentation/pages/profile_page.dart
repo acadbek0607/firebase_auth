@@ -98,46 +98,57 @@ class _ProfilePageState extends State<ProfilePage> {
         ? state.user
         : null;
 
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              tr('profile', context: context),
-              style: Kstyle.textStyle.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 18.0,
-              ),
-            ),
-            centerTitle: false,
-            leading: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
-              child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () {
-                  context.read<AuthBloc>().add(SignOutRequested());
-                  Navigator.pushReplacementNamed(context, '/signin');
-                },
-              ),
-            ],
-          ),
-          body: state.status == BlocStatus.loading
-              ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ProfileCard(
-                    email: authUser?.email ?? '',
-                    onLanguageTap: _showLanguageDialog,
-                    selectedLanguage: _selectedLanguage,
-                    selectedFlag: _selectedFlagPath,
-                  ),
-                ),
-        );
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (p, c) =>
+          p.status != AuthStatus.authenticated &&
+          c.status == AuthStatus.authenticated,
+      listener: (context, state) {
+        final user = state.user;
+        if (user != null) {
+          context.read<ProfileBloc>().add(LoadProfile(uid: user.uid));
+        }
       },
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                tr('profile', context: context),
+                style: Kstyle.textStyle.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.0,
+                ),
+              ),
+              centerTitle: false,
+              leading: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+                child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                    context.read<AuthBloc>().add(SignOutRequested());
+                    Navigator.pushReplacementNamed(context, '/signin');
+                  },
+                ),
+              ],
+            ),
+            body: state.status == BlocStatus.loading
+                ? const Center(child: CircularProgressIndicator())
+                : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ProfileCard(
+                      email: authUser?.email ?? '',
+                      onLanguageTap: _showLanguageDialog,
+                      selectedLanguage: _selectedLanguage,
+                      selectedFlag: _selectedFlagPath,
+                    ),
+                  ),
+          );
+        },
+      ),
     );
   }
 }

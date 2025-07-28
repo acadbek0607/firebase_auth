@@ -20,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   void _onSignInPressed() {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    context.read<AuthBloc>().add(SignInResquested(email, password));
+    context.read<AuthBloc>().add(SignInRequested(email, password));
   }
 
   @override

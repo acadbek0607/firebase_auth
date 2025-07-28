@@ -2,7 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
+import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
+import 'package:fire_auth/features/contract/domain/usecases/get_contracts_count_by_fullname.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ContractCard extends StatelessWidget {
@@ -35,7 +38,9 @@ class ContractCard extends StatelessWidget {
         ? relatedContracts.first.id ?? '—'
         : '—';
 
-    final totalContracts = relatedContracts.length + 1;
+    final countFuture = GetContractsCountByFullName(
+      context.read<ContractRepository>(),
+    )(contract.fullName);
 
     return GestureDetector(
       onTap:
@@ -144,19 +149,25 @@ class ContractCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: tr('number_of_contracts', context: context),
-                    style: Kstyle.textStyle.copyWith(color: Colors.white),
-                    children: [
+                FutureBuilder<int>(
+                  future: countFuture,
+                  builder: (context, snapshot) {
+                    final total = snapshot.data ?? relatedContracts.length + 1;
+                    return Text.rich(
                       TextSpan(
-                        text: '$totalContracts',
-                        style: Kstyle.textStyle.copyWith(
-                          color: Color(0xFF999999),
-                        ),
+                        text: tr('number_of_contracts', context: context),
+                        style: Kstyle.textStyle.copyWith(color: Colors.white),
+                        children: [
+                          TextSpan(
+                            text: '$total',
+                            style: Kstyle.textStyle.copyWith(
+                              color: const Color(0xFF999999),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 Text(
                   formattedDate,

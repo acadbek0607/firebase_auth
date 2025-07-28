@@ -152,4 +152,14 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
     final lastDoc = snap.docs.isNotEmpty ? snap.docs.last : null;
     return ContractQueryResult(contracts: contracts, lastDoc: lastDoc);
   }
+
+  @override
+  Future<int> countContractsByFullName(String fullName) async {
+    final snap = await firestore
+        .collection('contracts')
+        .where('fullName', isEqualTo: fullName)
+        .count()
+        .get();
+    return snap.count ?? 0;
+  }
 }

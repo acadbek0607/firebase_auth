@@ -23,4 +23,6 @@ abstract class ContractRepository {
     DocumentSnapshot? startAfterDoc,
     int limit,
   });
+
+  Future<int> countContractsByFullName(String fullName);
 }

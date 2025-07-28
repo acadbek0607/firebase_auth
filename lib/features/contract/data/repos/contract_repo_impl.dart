@@ -70,4 +70,9 @@ class ContractRepositoryImpl implements ContractRepository {
     final entities = res.contracts.map((m) => m.toEntity()).toList();
     return PaginatedContracts(contracts: entities, lastDoc: res.lastDoc);
   }
+
+  @override
+  Future<int> countContractsByFullName(String fullName) {
+    return _dataSource.countContractsByFullName(fullName);
+  }
 }

@@ -4,3 +4,4 @@ export 'delete_contract.dart';
 export 'update_contract.dart';
 export 'get_contracts_by_ids.dart';
 export 'get_contracts_by_fullname.dart';
+export 'get_contracts_count_by_fullname.dart';

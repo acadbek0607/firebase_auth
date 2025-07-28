@@ -27,4 +27,6 @@ abstract class ContractRemoteDataSource {
     DocumentSnapshot? startAfterDoc,
     int limit,
   });
+
+  Future<int> countContractsByFullName(String fullName);
 }

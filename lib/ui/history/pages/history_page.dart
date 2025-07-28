@@ -123,9 +123,10 @@ class _HistoryPageState extends State<_HistoryPage> {
             fontSize: 18.0,
           ),
         ),
+        titleSpacing: 4.0,
         centerTitle: false,
         leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
         actions: [

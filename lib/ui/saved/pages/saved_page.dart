@@ -122,7 +122,28 @@ class _SavedPageState extends State<SavedPage> {
           builder: (context, profileState) {
             if (profileState.status != BlocStatus.loaded) {
               return Center(
-                child: Text(tr('no_saved_contracts', context: context)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/svg/bookmark.svg',
+                      height: 88.0,
+                      colorFilter: ColorFilter.mode(
+                        Color(0xFF999999).withAlpha(102),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      tr('no_saved_contracts', context: context),
+                      style: Kstyle.textStyle.copyWith(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF999999).withAlpha(102),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
 

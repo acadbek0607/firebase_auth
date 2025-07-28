@@ -35,7 +35,7 @@ class ContractCard extends StatelessWidget {
         ? relatedContracts.first.id ?? '—'
         : '—';
 
-    final totalContracts = relatedContracts.length;
+    final totalContracts = relatedContracts.length + 1;
 
     return GestureDetector(
       onTap:
@@ -71,7 +71,7 @@ class ContractCard extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                       '№ ${contract.id ?? '—'}',
-                      style: const TextStyle(
+                      style: Kstyle.textStyle.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -101,11 +101,13 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('fish', context: context),
-                style: const TextStyle(color: Colors.white),
+                style: Kstyle.textStyle.copyWith(color: Colors.white),
                 children: [
                   TextSpan(
                     text: contract.fullName,
-                    style: const TextStyle(color: Color(0xFF999999)),
+                    style: Kstyle.textStyle.copyWith(
+                      color: const Color(0xFF999999),
+                    ),
                   ),
                 ],
               ),
@@ -115,12 +117,12 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('amount', context: context),
-                style: const TextStyle(color: Colors.white),
+                style: Kstyle.textStyle.copyWith(color: Colors.white),
                 children: [
                   TextSpan(
                     text:
                         '$formattedAmount ${tr('currency', context: context)}',
-                    style: TextStyle(color: Color(0xFF999999)),
+                    style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
                   ),
                 ],
               ),
@@ -129,11 +131,11 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('last_contract', context: context),
-                style: TextStyle(color: Colors.white),
+                style: Kstyle.textStyle.copyWith(color: Colors.white),
                 children: [
                   TextSpan(
                     text: '№ $lastContractId',
-                    style: TextStyle(color: Color(0xFF999999)),
+                    style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
                   ),
                 ],
               ),
@@ -145,18 +147,20 @@ class ContractCard extends StatelessWidget {
                 Text.rich(
                   TextSpan(
                     text: tr('number_of_contracts', context: context),
-                    style: TextStyle(color: Colors.white),
+                    style: Kstyle.textStyle.copyWith(color: Colors.white),
                     children: [
                       TextSpan(
                         text: '$totalContracts',
-                        style: TextStyle(color: Color(0xFF999999)),
+                        style: Kstyle.textStyle.copyWith(
+                          color: Color(0xFF999999),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   formattedDate,
-                  style: const TextStyle(color: Color(0xFF999999)),
+                  style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
                 ),
               ],
             ),

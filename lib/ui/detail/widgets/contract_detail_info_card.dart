@@ -12,6 +12,7 @@ class ContractDetailInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedAmount = KFormat.amountFormat.format(contract.amount);
     return SizedBox(
       width: double.infinity,
       child: Card(
@@ -21,20 +22,26 @@ class ContractDetailInfoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _detailText(tr('fisher', context: context), contract.fullName),
+              _detailText(
+                tr('fisher', context: context),
+                ' ${contract.fullName}',
+              ),
               _detailText(
                 tr('status', context: context),
-                contract.status.label(context),
+                ' ${contract.status.label(context)}',
               ),
-              _detailText(tr('amount', context: context), '${contract.amount}'),
+              _detailText(
+                tr('amount', context: context),
+                '$formattedAmount ${tr('currency', context: context)}',
+              ),
               _detailText(
                 tr('address', context: context),
-                contract.organizationAddress,
+                ' ${contract.organizationAddress}',
               ),
-              _detailText(tr('itn', context: context), contract.inn),
+              _detailText(tr('itn', context: context), ' ${contract.inn}'),
               _detailText(
                 tr('created_at', context: context),
-                '${contract.createdAt.day}/${contract.createdAt.month}/${contract.createdAt.year}',
+                ' ${contract.createdAt.day}.${contract.createdAt.month}.${contract.createdAt.year}',
               ),
             ],
           ),
@@ -50,7 +57,7 @@ class ContractDetailInfoCard extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: '$title: ',
+              text: '$title ',
               style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
             ),
             TextSpan(

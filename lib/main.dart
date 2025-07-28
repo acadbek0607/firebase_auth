@@ -162,11 +162,15 @@ class MyApp extends StatelessWidget {
             '/home': (context) => const MainScaffold(),
             '/new': (context) => const MainScaffold(),
             '/create_contract': (context) {
-              selectedPageNotifier.value = 5;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                selectedPageNotifier.value = 5;
+              });
               return const MainScaffold();
             },
             '/create_invoice': (context) {
-              selectedPageNotifier.value = 6;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                selectedPageNotifier.value = 6;
+              });
               return const MainScaffold();
             },
             '/history': (context) => const MainScaffold(),
@@ -185,7 +189,9 @@ class MyApp extends StatelessWidget {
                 final fromDetail = args['fromDetail'] as bool? ?? false;
                 return MaterialPageRoute(
                   builder: (context) {
-                    selectedPageNotifier.value = 0;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      selectedPageNotifier.value = 0;
+                    });
                     return BlocProvider(
                       create: (_) => RelatedBloc(
                         getContractsByFullName: GetContractsByFullName(
@@ -223,7 +229,9 @@ class MyApp extends StatelessWidget {
 
                 return MaterialPageRoute(
                   builder: (_) {
-                    selectedPageNotifier.value = originIndex;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      selectedPageNotifier.value = originIndex;
+                    });
                     return MainScaffold(
                       child: FilterPage(
                         contracts: contracts,

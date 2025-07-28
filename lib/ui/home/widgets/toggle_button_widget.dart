@@ -18,7 +18,7 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
       valueListenable: selectedViewNotifier,
       builder: (context, viewType, _) {
         return Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
               ElevatedButton(

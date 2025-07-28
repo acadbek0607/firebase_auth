@@ -11,7 +11,6 @@ class ProfileCard extends StatelessWidget {
   final String organization;
   final String? photoUrl;
   final String? dateOfBirth;
-  final VoidCallback onEdit;
   final VoidCallback onLanguageTap;
   final String selectedLanguage;
   final String selectedFlag;
@@ -25,7 +24,6 @@ class ProfileCard extends StatelessWidget {
     required this.organization,
     this.photoUrl,
     this.dateOfBirth,
-    required this.onEdit,
     required this.onLanguageTap,
     required this.selectedLanguage,
     required this.selectedFlag,
@@ -33,85 +31,79 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onEdit,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            color: const Color(0xFF2C2C2E),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Color(0xFF2C2C2E),
-                        backgroundImage: photoUrl != null
-                            ? NetworkImage(photoUrl!)
-                            : const AssetImage('assets/img/default.png')
-                                  as ImageProvider,
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            fullName,
-                            style: const TextStyle(
-                              color: Color(0xFF00A795),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '$profession • $organization',
-                            style: const TextStyle(color: Color(0xFFE7E7E7)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  if (dateOfBirth != null)
-                    _infoRow(
-                      tr('date_of_birth', context: context),
-                      dateOfBirth!,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Card(
+          color: const Color(0xFF2C2C2E),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Color(0xFF2C2C2E),
+                      backgroundImage: photoUrl != null
+                          ? NetworkImage(photoUrl!)
+                          : const AssetImage('assets/img/default.png')
+                                as ImageProvider,
                     ),
-                  _infoRow(
-                    tr('phone', context: context),
-                    KFormat.formatPhone(phone),
-                  ),
-                  _infoRow(tr('email', context: context), email),
-                ],
-              ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          fullName,
+                          style: const TextStyle(
+                            color: Color(0xFF00A795),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '$profession • $organization',
+                          style: const TextStyle(color: Color(0xFFE7E7E7)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (dateOfBirth != null)
+                  _infoRow(tr('date_of_birth', context: context), dateOfBirth!),
+                _infoRow(
+                  tr('phone', context: context),
+                  KFormat.formatPhone(phone),
+                ),
+                _infoRow(tr('email', context: context), email),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          GestureDetector(
-            onTap: onLanguageTap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2B2B2E),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    selectedLanguage,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  SvgPicture.asset(selectedFlag, height: 48),
-                ],
-              ),
+        ),
+        const SizedBox(height: 16),
+        GestureDetector(
+          onTap: onLanguageTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2B2B2E),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedLanguage,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                SvgPicture.asset(selectedFlag, height: 48),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

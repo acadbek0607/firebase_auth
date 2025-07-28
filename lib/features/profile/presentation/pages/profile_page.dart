@@ -1,4 +1,5 @@
 // profile_page.dart
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
@@ -19,14 +20,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final _fullNameController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _professionController = TextEditingController();
-  final _organizationController = TextEditingController();
-  final _dobController = TextEditingController();
-
-  DateTime? _selectedDate;
-
   String _selectedLanguage = 'English (USA)';
   String _selectedFlagPath = 'assets/flags/us.svg';
   Locale? _prevLocale;
@@ -106,21 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
         : null;
 
     return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) {
-        if (state.status == BlocStatus.loaded) {
-          _fullNameController.text = state.profile!.fullName;
-          _phoneController.text = state.profile!.phone;
-          _professionController.text = state.profile!.profession;
-          _organizationController.text = state.profile!.organization;
-          _selectedDate = state.profile!.dateOfBirth != null
-              ? DateTime.tryParse(state.profile!.dateOfBirth!)
-              : null;
-          if (_selectedDate != null) {
-            _dobController.text =
-                "${_selectedDate!.day.toString().padLeft(2, '0')}.${_selectedDate!.month.toString().padLeft(2, '0')}.${_selectedDate!.year}";
-          }
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -151,12 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ProfileCard(
-                    fullName: 'Asadbek Mamutov',
-                    phone: '+998906620706',
                     email: authUser?.email ?? '',
-                    profession: 'Mobile developer',
-                    organization: 'UIC',
-                    dateOfBirth: '06.07.2000',
                     onLanguageTap: _showLanguageDialog,
                     selectedLanguage: _selectedLanguage,
                     selectedFlag: _selectedFlagPath,

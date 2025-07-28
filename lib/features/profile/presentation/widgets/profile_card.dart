@@ -4,26 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfileCard extends StatelessWidget {
-  final String fullName;
-  final String phone;
   final String email;
-  final String profession;
-  final String organization;
-  final String? photoUrl;
-  final String? dateOfBirth;
   final VoidCallback onLanguageTap;
   final String selectedLanguage;
   final String selectedFlag;
 
   const ProfileCard({
     super.key,
-    required this.fullName,
-    required this.phone,
     required this.email,
-    required this.profession,
-    required this.organization,
-    this.photoUrl,
-    this.dateOfBirth,
     required this.onLanguageTap,
     required this.selectedLanguage,
     required this.selectedFlag,
@@ -45,17 +33,16 @@ class ProfileCard extends StatelessWidget {
                     CircleAvatar(
                       radius: 28,
                       backgroundColor: Color(0xFF2C2C2E),
-                      backgroundImage: photoUrl != null
-                          ? NetworkImage(photoUrl!)
-                          : const AssetImage('assets/img/default.png')
-                                as ImageProvider,
+                      backgroundImage:
+                          const AssetImage('assets/img/default.png')
+                              as ImageProvider,
                     ),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          fullName,
+                          'Asadbek Mamutov',
                           style: const TextStyle(
                             color: Color(0xFF00A795),
                             fontSize: 16,
@@ -63,7 +50,7 @@ class ProfileCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '$profession • $organization',
+                          'Mobile developer • UIC',
                           style: const TextStyle(color: Color(0xFFE7E7E7)),
                         ),
                       ],
@@ -71,11 +58,10 @@ class ProfileCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (dateOfBirth != null)
-                  _infoRow(tr('date_of_birth', context: context), dateOfBirth!),
+                _infoRow(tr('date_of_birth', context: context), '06.07.2000'),
                 _infoRow(
                   tr('phone', context: context),
-                  KFormat.formatPhone(phone),
+                  KFormat.formatPhone('+998906620706'),
                 ),
                 _infoRow(tr('email', context: context), email),
               ],

@@ -77,6 +77,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                   child: ContractDetailPage(
                     contract: match,
                     allContracts: state.contracts,
+                    openFromDetail: false,
                   ),
                 ),
               ),
@@ -100,7 +101,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       Text('Entity', style: Kstyle.textStyle),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: tr('entity_type', context: context),
+                        label: '',
                         value: _selectedType ?? '',
                         items: [
                           tr('personal', context: context),
@@ -160,7 +161,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       ),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: tr('status', context: context),
+                        label: '',
                         // value: _selectedStatus.toFirestoreString(),
                         value: _selectedStatus?.label(context) ?? '',
                         items: StatusType.values

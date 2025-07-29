@@ -62,7 +62,7 @@ class ContractCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(10, 12, 12, 12),
         decoration: BoxDecoration(
           color: AppColors.dark,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(6.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

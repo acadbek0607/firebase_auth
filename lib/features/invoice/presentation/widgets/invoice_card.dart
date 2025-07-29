@@ -25,7 +25,7 @@ class InvoiceCard extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: const Color(0xFF2C2C2E),
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(6.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

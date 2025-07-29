@@ -17,6 +17,7 @@ class ContractDetailInfoCard extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
         color: AppColors.darker,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -42,7 +43,7 @@ class ContractDetailInfoCard extends StatelessWidget {
               _detailText(tr('itn', context: context), ' ${contract.inn}'),
               _detailText(
                 tr('created_at', context: context),
-                ' ${contract.createdAt.day}.${contract.createdAt.month}.${contract.createdAt.year}',
+                ' ${KFormat.dateFormat.format(contract.createdAt)}',
               ),
             ],
           ),

@@ -133,52 +133,55 @@ class _ContractDetailPageState extends State<ContractDetailPage>
             children: [
               ContractDetailInfoCard(contract: contract),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => showDeleteContractDialog(
-                        context,
-                        contract.id!,
-                        contract,
-                      ),
-                      style: Kstyle.buttonStyle.copyWith(
-                        backgroundColor: WidgetStateProperty.all(
-                          AppColors.statusRejected.withAlpha(60),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => showDeleteContractDialog(
+                          context,
+                          contract.id!,
+                          contract,
                         ),
-                        elevation: WidgetStateProperty.all(0.0),
-                      ),
-                      child: Text(
-                        tr('delete_contract', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.statusRejected,
+                        style: Kstyle.buttonStyle.copyWith(
+                          backgroundColor: WidgetStateProperty.all(
+                            AppColors.statusRejected.withAlpha(60),
+                          ),
+                          elevation: WidgetStateProperty.all(0.0),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        selectedPageNotifier.value = 5;
-                        Navigator.pushReplacementNamed(context, '/main');
-                      },
-                      style: Kstyle.buttonStyle.copyWith(
-                        backgroundColor: WidgetStateProperty.all(
-                          AppColors.darkGreen,
-                        ),
-                      ),
-                      child: Text(
-                        tr('create_contract', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                        child: Text(
+                          tr('delete_contract', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.statusRejected,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          selectedPageNotifier.value = 5;
+                          Navigator.pushReplacementNamed(context, '/main');
+                        },
+                        style: Kstyle.buttonStyle.copyWith(
+                          backgroundColor: WidgetStateProperty.all(
+                            AppColors.darkGreen,
+                          ),
+                        ),
+                        child: Text(
+                          tr('create_contract', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
               Text(

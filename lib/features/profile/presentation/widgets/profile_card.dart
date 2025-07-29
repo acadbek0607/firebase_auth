@@ -77,6 +77,7 @@ class ProfileCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Container(
+              height: 44.0,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: const Color(0xFF2B2B2E),
@@ -85,11 +86,15 @@ class ProfileCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    selectedLanguage,
-                    style: const TextStyle(color: Colors.white),
+                  Text(selectedLanguage, style: Kstyle.textStyle),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SvgPicture.asset(
+                      selectedFlag,
+                      height: 20,
+                      width: 20,
+                    ),
                   ),
-                  SvgPicture.asset(selectedFlag, height: 48),
                 ],
               ),
             ),
@@ -106,12 +111,9 @@ class ProfileCard extends StatelessWidget {
         children: [
           Text(
             '$title:  ',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+            style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
           ),
-          Text(value, style: const TextStyle(color: Colors.grey)),
+          Text(value, style: const TextStyle(color: Color(0xFF999999))),
         ],
       ),
     );

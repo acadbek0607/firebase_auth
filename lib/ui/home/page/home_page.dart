@@ -172,6 +172,8 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Color(0xFF141416),
         title: Text(
           tr('contracts', context: context),
           style: Kstyle.textStyle.copyWith(
@@ -204,56 +206,59 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      body: Column(
-        children: [
-          CalendarWidget(
-            initialDate: _selectedDay,
-            onDaySelected: _onCalendarDaySelected,
-          ),
-          Expanded(
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: Column(
+      body: Container(
+        color: Colors.black,
+        child: Column(
+          children: [
+            CalendarWidget(
+              initialDate: _selectedDay,
+              onDaySelected: _onCalendarDaySelected,
+            ),
+            Expanded(
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 32),
+                        const ToggleButtonsWidget(),
+                        const SizedBox(height: 20.0),
+                      ],
+                    ),
+                  ),
+                ],
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TabBarView(
+                    controller: _tabController,
                     children: [
-                      const SizedBox(height: 32),
-                      const ToggleButtonsWidget(),
-                      const SizedBox(height: 20.0),
+                      BlocBuilder<ContractBloc, ContractState>(
+                        builder: (context, state) {
+                          return ContractsPage(
+                            contracts: state.contracts,
+                            canLoadMore: state.canLoadMore,
+                            isLoadingMore: state.isLoadingMore,
+                            onLoadMore: _onLoadMore,
+                          );
+                        },
+                      ),
+                      BlocBuilder<InvoiceBloc, InvoiceState>(
+                        builder: (context, state) {
+                          return InvoicesPage(
+                            invoices: state.invoices,
+                            canLoadMore: state.canLoadMore,
+                            isLoadingMore: state.isLoadingMore,
+                            onLoadMore: _onLoadMore,
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
-              ],
-              body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    BlocBuilder<ContractBloc, ContractState>(
-                      builder: (context, state) {
-                        return ContractsPage(
-                          contracts: state.contracts,
-                          canLoadMore: state.canLoadMore,
-                          isLoadingMore: state.isLoadingMore,
-                          onLoadMore: _onLoadMore,
-                        );
-                      },
-                    ),
-                    BlocBuilder<InvoiceBloc, InvoiceState>(
-                      builder: (context, state) {
-                        return InvoicesPage(
-                          invoices: state.invoices,
-                          canLoadMore: state.canLoadMore,
-                          isLoadingMore: state.isLoadingMore,
-                          onLoadMore: _onLoadMore,
-                        );
-                      },
-                    ),
-                  ],
-                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

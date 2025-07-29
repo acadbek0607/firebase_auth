@@ -32,7 +32,7 @@ class LanguageDialog {
                   ),
                   insetPadding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 28, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(28, 16, 28, 28),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -43,7 +43,7 @@ class LanguageDialog {
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 28),
                         _buildLangOption(
                           label: 'O‘zbek (Lotin)',
                           flagAsset: 'assets/flags/uz.svg',
@@ -55,6 +55,7 @@ class LanguageDialog {
                             });
                           },
                         ),
+                        const SizedBox(height: 24.0),
                         _buildLangOption(
                           label: 'Русский',
                           flagAsset: 'assets/flags/ru.svg',
@@ -66,6 +67,7 @@ class LanguageDialog {
                             });
                           },
                         ),
+                        const SizedBox(height: 24.0),
                         _buildLangOption(
                           label: 'English (USA)',
                           flagAsset: 'assets/flags/us.svg',
@@ -77,7 +79,7 @@ class LanguageDialog {
                             });
                           },
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 32),
                         Row(
                           children: [
                             Expanded(
@@ -142,27 +144,28 @@ class LanguageDialog {
   }) {
     final bool isSelected = selected == label;
 
-    return ListTile(
-      dense: true,
-      horizontalTitleGap: 0,
-      contentPadding: EdgeInsets.zero,
-      leading: Container(
-        color: Colors.black,
-        child: SvgPicture.asset(flagAsset),
-      ),
-      title: Container(
-        color: Colors.black12,
-        child: Text(label, style: Kstyle.textStyle),
-      ),
-      trailing: GestureDetector(
-        onTap: () => onSelected(label, flagAsset),
-        child: SvgPicture.asset(
-          isSelected ? 'assets/svg/s_toggle.svg' : 'assets/svg/toggle.svg',
-          width: 20,
-          height: 20,
-        ),
-      ),
+    return GestureDetector(
       onTap: () => onSelected(label, flagAsset),
+      child: Row(
+        children: [
+          // Flag
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SvgPicture.asset(flagAsset, height: 24, width: 24),
+          ),
+          const SizedBox(width: 12.0),
+
+          // Label
+          Expanded(child: Text(label, style: Kstyle.textStyle)),
+
+          // Toggle icon
+          SvgPicture.asset(
+            isSelected ? 'assets/svg/s_toggle.svg' : 'assets/svg/toggle.svg',
+            width: 20,
+            height: 20,
+          ),
+        ],
+      ),
     );
   }
 }

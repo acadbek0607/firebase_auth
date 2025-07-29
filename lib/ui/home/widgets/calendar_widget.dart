@@ -168,6 +168,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   IconButton(
                     onPressed: _goToPreviousWeek,
                     icon: SvgPicture.asset('assets/svg/left.svg', height: 32.0),
+                    highlightColor: Color(0xFF1E1E20),
+                    hoverColor: Color(0xFF1E1E20),
                     color: const Color(0xFFD1D1D1),
                   ),
                   IconButton(
@@ -176,6 +178,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       'assets/svg/right.svg',
                       height: 32.0,
                     ),
+                    highlightColor: Color(0xFF1E1E20),
+                    hoverColor: Color(0xFF1E1E20),
                     color: const Color(0xFFD1D1D1),
                   ),
                 ],

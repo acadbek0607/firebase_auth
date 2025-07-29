@@ -6,6 +6,8 @@ A Flutter application that demonstrates Firebase Authentication with contract an
 
 - Email sign in and sign up using **Firebase Authentication**
 - Manage contracts and invoices stored in **Cloud Firestore**
+- Firestore queries for contracts and invoices timeout after **2 seconds** to
+  keep the UI responsive
 - Upload assets with **Firebase Storage**
 - Multi-language support using **easy_localization** (English, Russian and Uzbek)
 - Calendar based filtering and search

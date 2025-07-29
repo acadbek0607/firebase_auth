@@ -125,15 +125,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
                 child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.logout),
-                  onPressed: () {
-                    context.read<AuthBloc>().add(SignOutRequested());
-                    Navigator.pushReplacementNamed(context, '/signin');
-                  },
-                ),
-              ],
             ),
             body: state.status == BlocStatus.loading
                 ? const Center(child: CircularProgressIndicator())

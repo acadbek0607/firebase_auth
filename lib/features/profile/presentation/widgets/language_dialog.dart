@@ -32,7 +32,7 @@ class LanguageDialog {
                   ),
                   insetPadding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(28, 16, 16, 16),
+                    padding: const EdgeInsets.fromLTRB(16, 28, 16, 16),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -146,10 +146,13 @@ class LanguageDialog {
       dense: true,
       horizontalTitleGap: 0,
       contentPadding: EdgeInsets.zero,
-      leading: SvgPicture.asset(flagAsset),
-      title: Text(
-        label,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+      leading: Container(
+        color: Colors.black,
+        child: SvgPicture.asset(flagAsset),
+      ),
+      title: Container(
+        color: Colors.black12,
+        child: Text(label, style: Kstyle.textStyle),
       ),
       trailing: GestureDetector(
         onTap: () => onSelected(label, flagAsset),

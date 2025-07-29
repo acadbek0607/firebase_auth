@@ -110,7 +110,13 @@ class _MainScaffoldState extends State<MainScaffold> {
             ? 2
             : _selectedIndex, // highlight "New"
         onDestinationSelected: _onTabTapped,
-        indicatorColor: Colors.transparent,
+        indicatorColor: Color(0xFF141416),
+        indicatorShape: CircleBorder(
+          eccentricity: BorderSide.strokeAlignCenter,
+        ),
+        overlayColor: WidgetStateProperty.all(Color(0xFF141416).withAlpha(11)),
+
+        backgroundColor: Color(0xFF141416),
         destinations: List.generate(5, (i) {
           final isSelected = (_selectedIndex > 4 ? 2 : _selectedIndex) == i;
           return NavigationDestination(

@@ -24,6 +24,9 @@ class ProfileCard extends StatelessWidget {
       children: [
         Card(
           color: const Color(0xFF2C2C2E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -71,21 +74,24 @@ class ProfileCard extends StatelessWidget {
         const SizedBox(height: 16),
         GestureDetector(
           onTap: onLanguageTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF2B2B2E),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  selectedLanguage,
-                  style: const TextStyle(color: Colors.white),
-                ),
-                SvgPicture.asset(selectedFlag, height: 48),
-              ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF2B2B2E),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    selectedLanguage,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  SvgPicture.asset(selectedFlag, height: 48),
+                ],
+              ),
             ),
           ),
         ),

@@ -105,8 +105,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           onTap: () => _selectDay(day),
           child: Container(
             padding: const EdgeInsets.symmetric(
-              vertical: 14.0,
-              horizontal: 12.0,
+              vertical: 12.0,
+              horizontal: 14.0,
             ),
             decoration: isSelected
                 ? BoxDecoration(
@@ -127,13 +127,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 Text(
                   '${day.day}',
                   style: Kstyle.textStyle.copyWith(
+                    fontWeight: FontWeight.bold,
                     color: isSelected ? Colors.white : Color(0xFF999999),
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 4),
                   height: 1,
-                  width: 20,
+                  width: 14.53,
                   color: isSelected ? Colors.white : Color(0xFF999999),
                 ),
               ],

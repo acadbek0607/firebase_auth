@@ -33,9 +33,19 @@ class ProfileRepoImpl implements ProfileRepo {
     final docRef = firestore.collection('profiles').doc(uid);
     final doc = await docRef.get();
 
-    if (!doc.exists) return;
+    List<String> current = [];
+    if (!doc.exists) {
+      final email = auth.currentUser?.email ?? '';
+      current = [contractId];
+      await docRef.set({
+        'uid': uid,
+        'email': email,
+        'savedContractIds': current,
+      });
+      return;
+    }
 
-    final current = List<String>.from(doc.data()?['savedContractIds'] ?? []);
+    current = List<String>.from(doc.data()?['savedContractIds'] ?? []);
     if (current.contains(contractId)) {
       current.remove(contractId);
     } else {

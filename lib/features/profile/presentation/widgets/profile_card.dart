@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,7 +24,7 @@ class ProfileCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Card(
-          color: const Color(0xFF2C2C2E),
+          color: AppColors.dark,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
           ),
@@ -35,7 +36,7 @@ class ProfileCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 28,
-                      backgroundColor: Color(0xFF2C2C2E),
+                      backgroundColor: AppColors.dark,
                       backgroundImage:
                           const AssetImage('assets/img/default.png')
                               as ImageProvider,
@@ -46,16 +47,13 @@ class ProfileCard extends StatelessWidget {
                       children: [
                         Text(
                           'Asadbek Mamutov',
-                          style: const TextStyle(
-                            color: Color(0xFF00A795),
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.lightGreen,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          'Mobile developer • UIC',
-                          style: const TextStyle(color: Color(0xFFE7E7E7)),
-                        ),
+                        Text('Mobile developer • UIC', style: Kstyle.textStyle),
                       ],
                     ),
                   ],
@@ -80,7 +78,7 @@ class ProfileCard extends StatelessWidget {
               height: 44.0,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: const Color(0xFF2B2B2E),
+                color: AppColors.dark,
                 borderRadius: BorderRadius.circular(6.0),
               ),
               child: Row(
@@ -113,7 +111,10 @@ class ProfileCard extends StatelessWidget {
             '$title:  ',
             style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
           ),
-          Text(value, style: const TextStyle(color: Color(0xFF999999))),
+          Text(
+            value,
+            style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
+          ),
         ],
       ),
     );

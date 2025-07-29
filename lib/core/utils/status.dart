@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 enum StatusType { paid, inProcess, rejectedByPayme, rejectedByIQ }
@@ -20,13 +21,13 @@ extension StatusTypeExtension on StatusType {
   Color get color {
     switch (this) {
       case StatusType.paid:
-        return const Color(0xFF49B7A5);
+        return AppColors.statusPaid;
       case StatusType.inProcess:
-        return const Color(0xFFFDAB2A);
+        return AppColors.statusInProcess;
       case StatusType.rejectedByPayme:
-        return const Color(0xFFFF426D);
+        return AppColors.statusRejected;
       case StatusType.rejectedByIQ:
-        return const Color(0xFFFF426D);
+        return AppColors.statusRejected;
     }
   }
 

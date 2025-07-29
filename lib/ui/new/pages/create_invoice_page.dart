@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
@@ -27,11 +28,14 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.black,
         title: Text(tr('new_invoice', context: context)),
         centerTitle: false,
         leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
       ),
@@ -61,9 +65,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 20.0),
                       Text(
                         tr('service_name', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: Color(0xFFE7E7E7),
-                        ),
+                        style: Kstyle.textStyle,
                       ),
                       SizedBox(height: 6.0),
                       TextFormField(
@@ -76,9 +78,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 20.0),
                       Text(
                         tr('cost', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: Color(0xFFE7E7E7),
-                        ),
+                        style: Kstyle.textStyle,
                       ),
                       SizedBox(height: 6.0),
                       TextFormField(
@@ -92,9 +92,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 20.0),
                       Text(
                         tr('status_of_invoice', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: Color(0xFFE7E7E7),
-                        ),
+                        style: Kstyle.textStyle,
                       ),
                       SizedBox(height: 6.0),
                       CustomDropdown(

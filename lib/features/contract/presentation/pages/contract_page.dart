@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,8 +35,12 @@ class ContractsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/svg/contracts.svg',
-              colorFilter: ColorFilter.mode(Color(0xFF323232), BlendMode.srcIn),
+              'assets/svg/s_contracts.svg',
+              height: 88.0,
+              colorFilter: ColorFilter.mode(
+                AppColors.iconBlur,
+                BlendMode.srcIn,
+              ),
             ),
             SizedBox(height: 12.0),
             Text(
@@ -43,7 +48,7 @@ class ContractsPage extends StatelessWidget {
               style: Kstyle.textStyle.copyWith(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF323232),
+                color: AppColors.iconBlur,
               ),
             ),
           ],
@@ -71,7 +76,7 @@ class ContractsPage extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF00A795),
+                    color: AppColors.lightGreen,
                   ),
                 ),
               ),

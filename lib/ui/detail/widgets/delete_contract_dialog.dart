@@ -1,5 +1,6 @@
 // delete_contract_dialog.dart
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_auth/core/constants/classes.dart';
@@ -42,7 +43,7 @@ void showDeleteContractDialog(
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.0),
-                color: const Color(0xFF5C5C5C),
+                color: AppColors.commentTF,
               ),
               child: TextField(
                 controller: controller,
@@ -69,14 +70,14 @@ void showDeleteContractDialog(
                         onPressed: () => Navigator.pop(context),
                         style: Kstyle.buttonStyle.copyWith(
                           backgroundColor: WidgetStateProperty.all(
-                            Color(0xFFFF426D).withAlpha(38),
+                            AppColors.statusRejected.withAlpha(38),
                           ),
                         ),
                         child: Text(
                           tr('cancel', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFFF426D),
+                            color: AppColors.statusRejected,
                           ),
                         ),
                       ),
@@ -86,7 +87,7 @@ void showDeleteContractDialog(
                       child: ElevatedButton(
                         style: Kstyle.buttonStyle.copyWith(
                           backgroundColor: WidgetStateProperty.all(
-                            Color(0xFFFF426D),
+                            AppColors.statusRejected,
                           ),
                         ),
                         onPressed: () {

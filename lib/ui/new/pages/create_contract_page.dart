@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
@@ -36,7 +37,10 @@ class _CreateContractPageState extends State<CreateContractPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.black,
         title: Text(
           tr('new_contract', context: context),
           style: Kstyle.textStyle.copyWith(
@@ -46,7 +50,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
         ),
         centerTitle: false,
         leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 0, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
       ),

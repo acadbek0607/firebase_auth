@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
@@ -117,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 child: Text(
                                   tr('privacy_policy', context: context),
                                   style: const TextStyle(
-                                    color: Colors.blue,
+                                    color: AppColors.link,
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),

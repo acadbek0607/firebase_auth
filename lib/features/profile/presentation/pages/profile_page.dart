@@ -1,6 +1,7 @@
 // profile_page.dart
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
@@ -112,7 +113,10 @@ class _ProfilePageState extends State<ProfilePage> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: AppColors.black,
             appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: AppColors.black,
               title: Text(
                 tr('profile', context: context),
                 style: Kstyle.textStyle.copyWith(

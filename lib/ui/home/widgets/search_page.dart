@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:flutter/material.dart';
@@ -53,15 +55,15 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.transparent.withAlpha(210),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A1A),
+        backgroundColor: AppColors.black,
         title: TextField(
           controller: _searchController,
           onChanged: (val) => setState(() => _query = val.trim()),
           autofocus: true,
-          style: const TextStyle(color: Colors.white),
+          style: Kstyle.textStyle,
           decoration: InputDecoration(
             hintText: tr('search', context: context),
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
             border: InputBorder.none,
           ),
         ),
@@ -107,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
             return Center(
               child: Text(
                 tr('no_results_found', context: context),
-                style: TextStyle(color: Colors.grey),
+                style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
               ),
             );
           }

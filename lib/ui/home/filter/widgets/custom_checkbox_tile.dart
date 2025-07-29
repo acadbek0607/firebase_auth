@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,7 +31,7 @@ class CustomCheckboxTile extends StatelessWidget {
           Text(
             label,
             style: Kstyle.textStyle.copyWith(
-              color: isSelected ? Color(0xFFF2F2F2) : Color(0xFFA6A6A6),
+              color: isSelected ? AppColors.sCheck : AppColors.navBar,
               fontWeight: FontWeight.w600,
             ),
           ),

@@ -1,5 +1,6 @@
 // lib/ui/home/filter/pages/filter_page.dart
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
@@ -88,8 +89,10 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF141416),
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.black,
         title: Text(
           tr('filters', context: context),
           style: Kstyle.textStyle.copyWith(
@@ -99,7 +102,7 @@ class _FilterPageState extends State<FilterPage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
+      body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +116,7 @@ class _FilterPageState extends State<FilterPage> {
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.0,
-                    color: Color(0xFF999999),
+                    color: AppColors.cardGrey,
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -161,7 +164,7 @@ class _FilterPageState extends State<FilterPage> {
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.0,
-                    color: Color(0xFF999999),
+                    color: AppColors.cardGrey,
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -174,7 +177,7 @@ class _FilterPageState extends State<FilterPage> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.grey[850],
+                            color: AppColors.dark,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -193,11 +196,7 @@ class _FilterPageState extends State<FilterPage> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
-                    Container(
-                      width: 10.0,
-                      height: 2.0,
-                      color: Color(0xFFD1D1D1),
-                    ),
+                    Container(width: 10.0, height: 2.0, color: AppColors.line),
                     const SizedBox(width: 8.0),
                     SizedBox(
                       width: 120.0,
@@ -206,7 +205,7 @@ class _FilterPageState extends State<FilterPage> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.grey[850],
+                            color: AppColors.dark,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -216,7 +215,7 @@ class _FilterPageState extends State<FilterPage> {
                                 toDate != null
                                     ? formatter.format(toDate!)
                                     : tr('to', context: context),
-                                style: const TextStyle(color: Colors.white),
+                                style: Kstyle.textStyle,
                               ),
                               SvgPicture.asset('assets/svg/calendar.svg'),
                             ],
@@ -238,14 +237,14 @@ class _FilterPageState extends State<FilterPage> {
                         onPressed: _cancelFilters,
                         style: Kstyle.buttonStyle.copyWith(
                           backgroundColor: WidgetStateProperty.all(
-                            Color(0xFF008F7F).withAlpha(50),
+                            AppColors.darkGreen.withAlpha(50),
                           ),
                         ),
                         child: Text(
                           tr('cancel', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF008F7F),
+                            color: AppColors.darkGreen,
                           ),
                         ),
                       ),
@@ -259,7 +258,7 @@ class _FilterPageState extends State<FilterPage> {
                           tr('apply', context: context),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFFFDFDFD),
+                            color: AppColors.line,
                           ),
                         ),
                       ),

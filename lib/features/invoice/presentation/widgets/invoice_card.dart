@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
@@ -39,9 +40,8 @@ class InvoiceCard extends StatelessWidget {
                   SizedBox(width: 8.0),
                   Text(
                     '№ ${invoice.id ?? '—'}',
-                    style: const TextStyle(
+                    style: Kstyle.textStyle.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -57,7 +57,10 @@ class InvoiceCard extends StatelessWidget {
                 ),
                 child: Text(
                   invoice.status.label(context),
-                  style: TextStyle(color: invoice.status.color, fontSize: 12),
+                  style: Kstyle.textStyle.copyWith(
+                    color: invoice.status.color,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],
@@ -66,11 +69,11 @@ class InvoiceCard extends StatelessWidget {
           Text.rich(
             TextSpan(
               text: '${tr('service', context: context)} ',
-              style: const TextStyle(color: Colors.white),
+              style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
               children: [
                 TextSpan(
                   text: invoice.serviceName,
-                  style: const TextStyle(color: Color(0xFF999999)),
+                  style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
                 ),
               ],
             ),
@@ -82,19 +85,21 @@ class InvoiceCard extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   text: '${tr('amount', context: context)} ',
-                  style: const TextStyle(color: Colors.white),
+                  style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
                   children: [
                     TextSpan(
                       text:
                           '$formattedAmount ${tr('currency', context: context)}',
-                      style: const TextStyle(color: Color(0xFF999999)),
+                      style: Kstyle.textStyle.copyWith(
+                        color: AppColors.cardGrey,
+                      ),
                     ),
                   ],
                 ),
               ),
               Text(
                 formattedDate,
-                style: const TextStyle(color: Color(0xFF999999)),
+                style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
               ),
             ],
           ),

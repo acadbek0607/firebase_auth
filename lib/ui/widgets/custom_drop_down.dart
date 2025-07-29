@@ -1,3 +1,5 @@
+import 'package:fire_auth/core/constants/app_colors.dart';
+import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,23 +20,20 @@ class CustomDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16.0, 0.5, 24.0, 0.5),
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 24.0, 0),
       decoration: BoxDecoration(
-        color: const Color(0xFF1F1F1F),
+        color: AppColors.black,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: Colors.grey.shade700),
+        border: Border.all(color: AppColors.cardGrey),
       ),
       child: DropdownButtonFormField<String>(
         isExpanded: true,
         value: value!.isNotEmpty ? value : null,
         onChanged: onChanged,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 14),
-        ),
-        dropdownColor: const Color(0xFF2B2B2B),
+        decoration: const InputDecoration(border: InputBorder.none),
+        dropdownColor: AppColors.dark,
         icon: SvgPicture.asset('assets/svg/drop_down.svg'),
-        iconEnabledColor: Colors.grey,
+        iconEnabledColor: AppColors.cardGrey,
         selectedItemBuilder: (context) => items.map((item) {
           return Align(
             alignment: Alignment.centerLeft,
@@ -51,16 +50,14 @@ class CustomDropdown extends StatelessWidget {
             child: SizedBox(
               height: 48,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
                     child: Text(
                       _capitalize(item),
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey.shade300,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                      style: Kstyle.textStyle.copyWith(
+                        color: AppColors.cardWhite,
                       ),
                     ),
                   ),
@@ -69,7 +66,9 @@ class CustomDropdown extends StatelessWidget {
                     isSelected
                         ? Icons.radio_button_checked
                         : Icons.radio_button_off,
-                    color: isSelected ? Colors.teal : Colors.grey,
+                    color: isSelected
+                        ? AppColors.lightGreen
+                        : AppColors.cardGrey,
                     size: 18,
                   ),
                 ],

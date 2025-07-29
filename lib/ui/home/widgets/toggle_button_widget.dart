@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/ui/home/page/home_page.dart';
@@ -28,14 +29,14 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                 style: Kstyle.buttonStyle.copyWith(
                   backgroundColor: WidgetStateProperty.all(
                     viewType == HomeViewType.contract
-                        ? const Color(0xFF00A795)
-                        : const Color(0xFF00A795).withAlpha(0),
+                        ? AppColors.lightGreen
+                        : AppColors.lightGreen.withAlpha(0),
                   ),
                   elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: Text(
                   tr('contracts', context: context),
-                  style: TextStyle(color: Colors.white),
+                  style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
               const SizedBox(width: 16.0),
@@ -46,14 +47,14 @@ class _ToggleButtonsWidgetState extends State<ToggleButtonsWidget> {
                 style: Kstyle.buttonStyle.copyWith(
                   backgroundColor: WidgetStateProperty.all(
                     viewType != HomeViewType.contract
-                        ? const Color(0xFF008F7F)
+                        ? AppColors.darkGreen
                         : Colors.transparent,
                   ),
                   elevation: WidgetStateProperty.all(0.0),
                 ),
                 child: Text(
                   tr('invoices', context: context),
-                  style: TextStyle(color: Colors.white),
+                  style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
             ],

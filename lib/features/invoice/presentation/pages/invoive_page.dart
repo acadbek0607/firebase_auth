@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 import 'package:fire_auth/features/invoice/presentation/widgets/invoice_card.dart';
@@ -32,7 +33,7 @@ class InvoicesPage extends StatelessWidget {
             SvgPicture.asset(
               'assets/svg/contracts.svg',
               colorFilter: const ColorFilter.mode(
-                Color(0xFF323232),
+                AppColors.iconBlur,
                 BlendMode.srcIn,
               ),
             ),
@@ -42,7 +43,7 @@ class InvoicesPage extends StatelessWidget {
               style: Kstyle.textStyle.copyWith(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF323232),
+                color: AppColors.iconBlur,
               ),
             ),
           ],
@@ -67,7 +68,7 @@ class InvoicesPage extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF00A795),
+                    color: AppColors.lightGreen,
                   ),
                 ),
               ),

@@ -1,5 +1,6 @@
 // contract_detail_page.dart
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -66,7 +67,10 @@ class _ContractDetailPageState extends State<ContractDetailPage>
     return WillPopScope(
       onWillPop: () => _onPop(),
       child: Scaffold(
+        backgroundColor: AppColors.black,
         appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: AppColors.black,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 0, 14),
             child: SvgPicture.asset('assets/svg/contract.svg'),
@@ -92,7 +96,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                       content: Text(
                         tr('failed_to_save_contract', context: context),
                       ),
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.statusRejected,
                     ),
                   );
                 }
@@ -116,7 +120,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
             const SizedBox(width: 10),
           ],
         ),
-        body: Padding(
+        body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +138,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                       ),
                       style: Kstyle.buttonStyle.copyWith(
                         backgroundColor: WidgetStateProperty.all(
-                          Colors.red.withAlpha(60),
+                          AppColors.statusRejected.withAlpha(60),
                         ),
                         elevation: WidgetStateProperty.all(0.0),
                       ),
@@ -142,7 +146,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                         tr('delete_contract', context: context),
                         style: Kstyle.textStyle.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xffFF426D),
+                          color: AppColors.statusRejected,
                         ),
                       ),
                     ),
@@ -156,7 +160,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                       },
                       style: Kstyle.buttonStyle.copyWith(
                         backgroundColor: WidgetStateProperty.all(
-                          const Color(0xff008F7F),
+                          AppColors.darkGreen,
                         ),
                       ),
                       child: Text(

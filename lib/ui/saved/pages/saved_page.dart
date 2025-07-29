@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/filter_utils.dart';
@@ -46,7 +47,10 @@ class _SavedPageState extends State<SavedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.black,
         title: Text(
           tr('saved'),
           style: Kstyle.textStyle.copyWith(
@@ -129,7 +133,7 @@ class _SavedPageState extends State<SavedPage> {
                       'assets/svg/bookmark.svg',
                       height: 88.0,
                       colorFilter: ColorFilter.mode(
-                        Color(0xFF999999).withAlpha(102),
+                        AppColors.cardGrey.withAlpha(102),
                         BlendMode.srcIn,
                       ),
                     ),
@@ -139,7 +143,7 @@ class _SavedPageState extends State<SavedPage> {
                       style: Kstyle.textStyle.copyWith(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF999999).withAlpha(102),
+                        color: AppColors.cardGrey.withAlpha(102),
                       ),
                     ),
                   ],
@@ -175,7 +179,7 @@ class _SavedPageState extends State<SavedPage> {
                             'assets/svg/bookmark.svg',
                             height: 88.0,
                             colorFilter: const ColorFilter.mode(
-                              Color(0xFF323232),
+                              AppColors.iconBlur,
                               BlendMode.srcIn,
                             ),
                           ),
@@ -185,14 +189,13 @@ class _SavedPageState extends State<SavedPage> {
                             style: Kstyle.textStyle.copyWith(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF323232),
+                              color: AppColors.iconBlur,
                             ),
                           ),
                         ],
                       ),
                     );
                   }
-
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
                     child: ContractsPage(

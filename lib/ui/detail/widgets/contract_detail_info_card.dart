@@ -1,5 +1,6 @@
 // contract_detail_info_card.dart
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ContractDetailInfoCard extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Card(
-        color: const Color(0xFF1E1E20),
+        color: AppColors.darker,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -63,7 +64,7 @@ class ContractDetailInfoCard extends StatelessWidget {
             TextSpan(
               text: value,
               style: Kstyle.textStyle.copyWith(
-                color: const Color(0xFF999999),
+                color: AppColors.cardGrey,
                 fontWeight: FontWeight.w400,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -171,9 +172,10 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Color(0xFF141416),
+        backgroundColor: AppColors.black,
         title: Text(
           tr('contracts', context: context),
           style: Kstyle.textStyle.copyWith(
@@ -206,59 +208,57 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      body: Container(
-        color: Colors.black,
-        child: Column(
-          children: [
-            CalendarWidget(
-              initialDate: _selectedDay,
-              onDaySelected: _onCalendarDaySelected,
-            ),
-            Expanded(
-              child: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 32),
-                        const ToggleButtonsWidget(),
-                        const SizedBox(height: 20.0),
-                      ],
-                    ),
-                  ),
-                ],
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TabBarView(
-                    controller: _tabController,
+      body: Column(
+        children: [
+          CalendarWidget(
+            initialDate: _selectedDay,
+            onDaySelected: _onCalendarDaySelected,
+          ),
+          Expanded(
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: Column(
                     children: [
-                      BlocBuilder<ContractBloc, ContractState>(
-                        builder: (context, state) {
-                          return ContractsPage(
-                            contracts: state.contracts,
-                            canLoadMore: state.canLoadMore,
-                            isLoadingMore: state.isLoadingMore,
-                            onLoadMore: _onLoadMore,
-                          );
-                        },
-                      ),
-                      BlocBuilder<InvoiceBloc, InvoiceState>(
-                        builder: (context, state) {
-                          return InvoicesPage(
-                            invoices: state.invoices,
-                            canLoadMore: state.canLoadMore,
-                            isLoadingMore: state.isLoadingMore,
-                            onLoadMore: _onLoadMore,
-                          );
-                        },
-                      ),
+                      const SizedBox(height: 32),
+                      const ToggleButtonsWidget(),
+                      const SizedBox(height: 20.0),
                     ],
                   ),
                 ),
+              ],
+              body: Container(
+                color: AppColors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    BlocBuilder<ContractBloc, ContractState>(
+                      builder: (context, state) {
+                        return ContractsPage(
+                          contracts: state.contracts,
+                          canLoadMore: state.canLoadMore,
+                          isLoadingMore: state.isLoadingMore,
+                          onLoadMore: _onLoadMore,
+                        );
+                      },
+                    ),
+                    BlocBuilder<InvoiceBloc, InvoiceState>(
+                      builder: (context, state) {
+                        return InvoicesPage(
+                          invoices: state.invoices,
+                          canLoadMore: state.canLoadMore,
+                          isLoadingMore: state.isLoadingMore,
+                          onLoadMore: _onLoadMore,
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

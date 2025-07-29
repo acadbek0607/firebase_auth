@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
@@ -115,7 +116,10 @@ class _HistoryPageState extends State<_HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.black,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.black,
         title: Text(
           tr('history', context: context),
           style: Kstyle.textStyle.copyWith(
@@ -184,10 +188,7 @@ class _HistoryPageState extends State<_HistoryPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    tr('date', context: context),
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  Text(tr('date', context: context), style: Kstyle.textStyle),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -197,7 +198,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                           onTap: () => _selectDate(context, true),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[850],
+                              color: AppColors.dark,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.all(12),
@@ -208,7 +209,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                   fromDate != null
                                       ? formatter.format(fromDate!)
                                       : tr('from', context: context),
-                                  style: const TextStyle(color: Colors.white),
+                                  style: Kstyle.textStyle,
                                 ),
                                 SvgPicture.asset('assets/svg/calendar.svg'),
                               ],
@@ -217,7 +218,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Container(height: 2, width: 10, color: Colors.white),
+                      Container(height: 2, width: 10, color: AppColors.white),
                       const SizedBox(width: 12),
                       SizedBox(
                         width: 120,
@@ -225,7 +226,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                           onTap: () => _selectDate(context, false),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[850],
+                              color: AppColors.dark,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.all(12),
@@ -236,7 +237,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                   toDate != null
                                       ? formatter.format(toDate!)
                                       : tr('to', context: context),
-                                  style: const TextStyle(color: Colors.white),
+                                  style: Kstyle.textStyle,
                                 ),
                                 SvgPicture.asset('assets/svg/calendar.svg'),
                               ],
@@ -257,7 +258,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                   'assets/svg/contracts.svg',
                                   height: 88,
                                   colorFilter: const ColorFilter.mode(
-                                    Color(0xFF323232),
+                                    AppColors.iconBlur,
                                     BlendMode.srcIn,
                                   ),
                                 ),
@@ -265,7 +266,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                                 Text(
                                   tr('no_history', context: context),
                                   style: Kstyle.textStyle.copyWith(
-                                    color: Color(0xFF323232),
+                                    color: AppColors.iconBlur,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                   ),

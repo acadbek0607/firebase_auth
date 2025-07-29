@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
@@ -58,10 +59,10 @@ class ContractCard extends StatelessWidget {
           },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6.0),
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(10, 12, 12, 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF2C2C2E),
-          borderRadius: BorderRadius.circular(12.0),
+          color: AppColors.dark,
+          borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +79,6 @@ class ContractCard extends StatelessWidget {
                       '№ ${contract.id ?? '—'}',
                       style: Kstyle.textStyle.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -106,13 +106,11 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('fish', context: context),
-                style: Kstyle.textStyle.copyWith(color: Colors.white),
+                style: Kstyle.textStyle,
                 children: [
                   TextSpan(
                     text: contract.fullName,
-                    style: Kstyle.textStyle.copyWith(
-                      color: const Color(0xFF999999),
-                    ),
+                    style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
                   ),
                 ],
               ),
@@ -122,12 +120,12 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('amount', context: context),
-                style: Kstyle.textStyle.copyWith(color: Colors.white),
+                style: Kstyle.textStyle,
                 children: [
                   TextSpan(
                     text:
                         '$formattedAmount ${tr('currency', context: context)}',
-                    style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
+                    style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
                   ),
                 ],
               ),
@@ -136,11 +134,11 @@ class ContractCard extends StatelessWidget {
             Text.rich(
               TextSpan(
                 text: tr('last_contract', context: context),
-                style: Kstyle.textStyle.copyWith(color: Colors.white),
+                style: Kstyle.textStyle,
                 children: [
                   TextSpan(
                     text: '№ $lastContractId',
-                    style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
+                    style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
                   ),
                 ],
               ),
@@ -156,12 +154,12 @@ class ContractCard extends StatelessWidget {
                     return Text.rich(
                       TextSpan(
                         text: tr('number_of_contracts', context: context),
-                        style: Kstyle.textStyle.copyWith(color: Colors.white),
+                        style: Kstyle.textStyle,
                         children: [
                           TextSpan(
                             text: '$total',
                             style: Kstyle.textStyle.copyWith(
-                              color: const Color(0xFF999999),
+                              color: AppColors.cardGrey,
                             ),
                           ),
                         ],
@@ -171,7 +169,7 @@ class ContractCard extends StatelessWidget {
                 ),
                 Text(
                   formattedDate,
-                  style: Kstyle.textStyle.copyWith(color: Color(0xFF999999)),
+                  style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
                 ),
               ],
             ),

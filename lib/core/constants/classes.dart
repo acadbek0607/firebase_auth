@@ -1,3 +1,4 @@
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,8 +23,8 @@ class KFormat {
 
 class Kstyle {
   static ButtonStyle buttonStyle = ButtonStyle(
-    backgroundColor: WidgetStateProperty.all<Color>(Color(0xFF008F7F)),
-    foregroundColor: WidgetStateProperty.all<Color>(Color(0xFFFDFDFD)),
+    backgroundColor: WidgetStateProperty.all<Color>(AppColors.darkGreen),
+    foregroundColor: WidgetStateProperty.all<Color>(AppColors.buttonFor),
     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
     ),
@@ -34,7 +35,7 @@ class Kstyle {
 
   static TextStyle textStyle = TextStyle(
     fontFamily: 'Ubuntu',
-    color: Color(0xFFE7E7E7),
+    color: AppColors.cardWhite,
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
   );
@@ -44,12 +45,12 @@ class Kstyle {
       borderRadius: BorderRadius.circular(4.0),
       borderSide: BorderSide(
         width: 1.2,
-        color: Color(0xFFF1F1F1).withAlpha(102),
+        color: AppColors.newLabel.withAlpha(102),
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(4.0),
-      borderSide: BorderSide(width: 1.2, color: Color(0xFFF1F1F1)),
+      borderSide: BorderSide(width: 1.2, color: AppColors.newLabel),
     ),
   );
 }

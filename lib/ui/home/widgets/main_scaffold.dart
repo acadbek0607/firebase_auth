@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
@@ -110,13 +111,13 @@ class _MainScaffoldState extends State<MainScaffold> {
             ? 2
             : _selectedIndex, // highlight "New"
         onDestinationSelected: _onTabTapped,
-        indicatorColor: Color(0xFF141416),
+        indicatorColor: AppColors.darkest,
         indicatorShape: CircleBorder(
           eccentricity: BorderSide.strokeAlignCenter,
         ),
-        overlayColor: WidgetStateProperty.all(Color(0xFF141416).withAlpha(11)),
+        overlayColor: WidgetStateProperty.all(AppColors.darkest.withAlpha(11)),
 
-        backgroundColor: Color(0xFF141416),
+        backgroundColor: AppColors.darkest,
         destinations: List.generate(5, (i) {
           final isSelected = (_selectedIndex > 4 ? 2 : _selectedIndex) == i;
           return NavigationDestination(

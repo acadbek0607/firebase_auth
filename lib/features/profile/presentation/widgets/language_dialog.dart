@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fire_auth/core/constants/classes.dart';
@@ -26,7 +27,7 @@ class LanguageDialog {
             child: StatefulBuilder(
               builder: (context, setInnerState) {
                 return Dialog(
-                  backgroundColor: const Color(0xFF2A2A2D),
+                  backgroundColor: AppColors.dark,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -86,14 +87,14 @@ class LanguageDialog {
                               child: ElevatedButton(
                                 style: Kstyle.buttonStyle.copyWith(
                                   backgroundColor: WidgetStateProperty.all(
-                                    const Color(0xFF008F7F).withAlpha(50),
+                                    AppColors.darkGreen.withAlpha(50),
                                   ),
                                 ),
                                 onPressed: () => Navigator.pop(context),
                                 child: Text(
                                   tr('cancel', context: context),
                                   style: Kstyle.textStyle.copyWith(
-                                    color: const Color(0xFF008F7F),
+                                    color: AppColors.darkGreen,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -105,7 +106,7 @@ class LanguageDialog {
                               child: ElevatedButton(
                                 style: Kstyle.buttonStyle.copyWith(
                                   backgroundColor: WidgetStateProperty.all(
-                                    const Color(0xFF008F7F),
+                                    AppColors.darkGreen,
                                   ),
                                 ),
                                 onPressed: () {
@@ -115,7 +116,7 @@ class LanguageDialog {
                                 child: Text(
                                   tr('done', context: context),
                                   style: Kstyle.textStyle.copyWith(
-                                    color: const Color(0xFFFDFDFD),
+                                    color: AppColors.buttonFor,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                   ),

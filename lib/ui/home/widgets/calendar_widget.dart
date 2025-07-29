@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:flutter_svg/svg.dart';
@@ -110,7 +111,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             ),
             decoration: isSelected
                 ? BoxDecoration(
-                    color: Colors.teal,
+                    color: AppColors.lightGreen,
                     borderRadius: BorderRadius.circular(6),
                   )
                 : null,
@@ -120,7 +121,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   dayLabels[day.weekday - 1],
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : Color(0xFF999999),
+                    color: isSelected ? AppColors.white : AppColors.cardGrey,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -128,14 +129,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   '${day.day}',
                   style: Kstyle.textStyle.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : Color(0xFF999999),
+                    color: isSelected ? AppColors.white : AppColors.cardGrey,
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 4),
                   height: 1,
                   width: 14.53,
-                  color: isSelected ? Colors.white : Color(0xFF999999),
+                  color: isSelected ? AppColors.white : AppColors.cardGrey,
                 ),
               ],
             ),
@@ -146,7 +147,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      color: const Color(0xFF1E1E20),
+      color: AppColors.darkest,
       child: Column(
         children: [
           Row(
@@ -159,7 +160,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   style: Kstyle.textStyle.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -168,9 +169,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   IconButton(
                     onPressed: _goToPreviousWeek,
                     icon: SvgPicture.asset('assets/svg/left.svg', height: 32.0),
-                    highlightColor: Color(0xFF1E1E20),
-                    hoverColor: Color(0xFF1E1E20),
-                    color: const Color(0xFFD1D1D1),
+                    highlightColor: AppColors.darkest,
+                    hoverColor: AppColors.darkest,
+                    color: AppColors.line,
                   ),
                   IconButton(
                     onPressed: _goToNextWeek,
@@ -178,9 +179,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       'assets/svg/right.svg',
                       height: 32.0,
                     ),
-                    highlightColor: Color(0xFF1E1E20),
-                    hoverColor: Color(0xFF1E1E20),
-                    color: const Color(0xFFD1D1D1),
+                    highlightColor: AppColors.darkest,
+                    hoverColor: AppColors.darkest,
+                    color: AppColors.line,
                   ),
                 ],
               ),

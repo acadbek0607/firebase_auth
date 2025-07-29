@@ -209,7 +209,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         decoration: BoxDecoration(
-          color: AppColors.black,
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: AppColors.cardGrey),
         ),
@@ -245,10 +245,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           children: widget.items
               .map(
                 (item) => Center(
-                  child: Text(
-                    _capitalize(item),
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  child: Text(_capitalize(item), style: Kstyle.textStyle),
                 ),
               )
               .toList(),

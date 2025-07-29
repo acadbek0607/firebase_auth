@@ -34,6 +34,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         backgroundColor: AppColors.black,
         title: Text(tr('new_invoice', context: context)),
         centerTitle: false,
+        titleSpacing: 4.0,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
@@ -96,7 +97,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       ),
                       SizedBox(height: 6.0),
                       CustomDropdown(
-                        label: tr('status', context: context),
+                        label: '',
                         value: _status?.label(context) ?? '',
                         items: StatusType.values
                             .map((s) => s.label(context))

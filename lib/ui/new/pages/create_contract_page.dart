@@ -48,6 +48,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
             fontSize: 18.0,
           ),
         ),
+        titleSpacing: 4.0,
         centerTitle: false,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),

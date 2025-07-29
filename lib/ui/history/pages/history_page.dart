@@ -279,6 +279,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                             onLoadMore: _onLoadMore,
                             canLoadMore: state.canLoadMore,
                             isLoadingMore: state.isLoadingMore,
+                            openFromDetail: true,
                           ),
                   ),
                 ],

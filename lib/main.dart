@@ -193,9 +193,11 @@ class MyApp extends StatelessWidget {
                 final fromDetail = args['fromDetail'] as bool? ?? false;
                 return MaterialPageRoute(
                   builder: (context) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      selectedPageNotifier.value = 0;
-                    });
+                    if (!fromDetail) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        selectedPageNotifier.value = 0;
+                      });
+                    }
                     return BlocProvider(
                       create: (_) => RelatedBloc(
                         getContractsByFullName: GetContractsByFullName(

@@ -166,8 +166,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
           ),
           menuChildren: widget.items.map((item) {
             final isSelected = item == widget.value;
-            return SizedBox(
+            return Container(
               width: constraints.maxWidth,
+              color: AppColors.dark,
               child: MenuItemButton(
                 onPressed: () {
                   setState(() => _menuOpen = false);

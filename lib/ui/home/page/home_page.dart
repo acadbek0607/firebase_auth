@@ -240,6 +240,7 @@ class _HomePageState extends State<HomePage>
                           canLoadMore: state.canLoadMore,
                           isLoadingMore: state.isLoadingMore,
                           onLoadMore: _onLoadMore,
+                          openFromDetail: true,
                         );
                       },
                     ),

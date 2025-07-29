@@ -31,7 +31,8 @@ class InvoicesPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/svg/contracts.svg',
+              'assets/svg/s_contracts.svg',
+              height: 88.0,
               colorFilter: const ColorFilter.mode(
                 AppColors.iconBlur,
                 BlendMode.srcIn,

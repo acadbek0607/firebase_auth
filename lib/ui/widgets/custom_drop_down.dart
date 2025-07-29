@@ -135,6 +135,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return MenuAnchor(
+          style: MenuStyle(
+            backgroundColor: WidgetStateProperty.all(AppColors.dark),
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
+          ),
           builder: (context, controller, child) => GestureDetector(
             onTap: () {
               setState(() => _menuOpen = !_menuOpen);
@@ -166,9 +170,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
           ),
           menuChildren: widget.items.map((item) {
             final isSelected = item == widget.value;
-            return Container(
+            return SizedBox(
               width: constraints.maxWidth,
-              color: AppColors.dark,
               child: MenuItemButton(
                 onPressed: () {
                   setState(() => _menuOpen = false);

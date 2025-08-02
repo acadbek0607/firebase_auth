@@ -176,7 +176,7 @@ class _HistoryPageState extends State<_HistoryPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<ContractBloc, ContractState>(
           builder: (context, state) {
             if (state.status == BlocStatus.loading) {

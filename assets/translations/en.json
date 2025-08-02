@@ -69,7 +69,7 @@
   "required": "Required",
   "address_of": "Address of the organization",
   "iec": "ITN/IEC",
-  "status_of_contract": "Status of the contract",
+  "status_of_contract": "Status of the contract:",
   "save_contract": "Save Contract",
   "new_invoice": "New Invoice",
   "service_name": "Service Name",

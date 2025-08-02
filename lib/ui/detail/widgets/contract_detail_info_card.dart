@@ -3,17 +3,37 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
+import 'package:fire_auth/features/contract/domain/usecases/get_contracts_count_by_fullname.dart';
 import 'package:flutter/material.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContractDetailInfoCard extends StatelessWidget {
   final ContractEntity contract;
+  final List<ContractEntity> allContracts;
 
-  const ContractDetailInfoCard({super.key, required this.contract});
+  const ContractDetailInfoCard({
+    super.key,
+    required this.contract,
+    required this.allContracts,
+  });
 
   @override
   Widget build(BuildContext context) {
     final formattedAmount = KFormat.amountFormat.format(contract.amount);
+
+    // Determine last contract id for the same full name
+    final related =
+        allContracts.where((c) => c.fullName == contract.fullName).toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    final lastContractId = related.isNotEmpty ? related.first.id ?? '—' : '—';
+
+    // Fetch total number of contracts for this full name
+    final countFuture = GetContractsCountByFullName(
+      context.read<ContractRepository>(),
+    )(contract.fullName);
+
     return SizedBox(
       width: double.infinity,
       child: Card(
@@ -36,10 +56,13 @@ class ContractDetailInfoCard extends StatelessWidget {
                 tr('amount', context: context),
                 '$formattedAmount ${tr('currency', context: context)}',
               ),
-              _detailText(tr('last_contract'), ' ${contract.lastContractId}'),
-              _detailText(
-                tr('number_of_contracts'),
-                ' ${contract.contractCount}',
+              _detailText(tr('last_contract'), ' № $lastContractId'),
+              FutureBuilder<int>(
+                future: countFuture,
+                builder: (context, snapshot) {
+                  final total = snapshot.data ?? related.length;
+                  return _detailText(tr('number_of_contracts'), ' $total');
+                },
               ),
               _detailText(
                 tr('address', context: context),

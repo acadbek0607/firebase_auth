@@ -131,7 +131,10 @@ class _ContractDetailPageState extends State<ContractDetailPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ContractDetailInfoCard(contract: contract),
+              ContractDetailInfoCard(
+                contract: contract,
+                allContracts: widget.allContracts,
+              ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),

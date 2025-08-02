@@ -52,14 +52,10 @@ class _MainScaffoldState extends State<MainScaffold> {
   void _onTabTapped(int index) {
     // If user is in create_contract/create_invoice and taps "New" again, go back to NewPage (index 2)
     if (index == 2) {
-      if (_selectedIndex != 0) {
-        selectedPageNotifier.value = 0;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) showNewPageDialog(context);
-        });
-      } else {
-        showNewPageDialog(context);
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) showNewPageDialog(context);
+      });
+
       return;
     }
     if (widget.child != null) {

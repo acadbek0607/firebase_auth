@@ -152,12 +152,12 @@ class _HomePageState extends State<HomePage>
       },
     );
     // If cancel or empty, always reset to Filters.empty
-    if (result == null || (result is Filters && result == Filters.empty)) {
-      onFilterApplied(Filters.empty);
-      return;
-    }
     if (result is Filters) {
-      onFilterApplied(result);
+      if (result == Filters.empty) {
+        onFilterApplied(Filters.empty);
+      } else {
+        onFilterApplied(result);
+      }
     }
   }
 

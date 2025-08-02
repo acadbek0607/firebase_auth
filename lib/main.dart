@@ -191,27 +191,26 @@ class MyApp extends StatelessWidget {
                 final allContracts =
                     args['allContracts'] as List<ContractEntity>;
                 final fromDetail = args['fromDetail'] as bool? ?? false;
+                final originIndex = args['originIndex'] as int? ?? 0;
                 return MaterialPageRoute(
                   builder: (context) {
-                    if (!fromDetail) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        selectedPageNotifier.value = 0;
-                      });
-                    }
-                    return BlocProvider(
+                    detailOriginIndexNotifier.value = originIndex;
+                    detailPageNotifier.value = BlocProvider(
                       create: (_) => RelatedBloc(
                         getContractsByFullName: GetContractsByFullName(
                           context.read<ContractRepository>(),
                         ),
                       ),
-                      child: MainScaffold(
-                        child: ContractDetailPage(
-                          contract: contract,
-                          allContracts: allContracts,
-                          openFromDetail: fromDetail,
-                        ),
+                      child: ContractDetailPage(
+                        contract: contract,
+                        allContracts: allContracts,
+                        openFromDetail: fromDetail,
                       ),
                     );
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      selectedPageNotifier.value = 8;
+                    });
+                    return const MainScaffold();
                   },
                 );
               case '/filter':
@@ -235,16 +234,16 @@ class MyApp extends StatelessWidget {
 
                 return MaterialPageRoute(
                   builder: (_) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      selectedPageNotifier.value = originIndex;
-                    });
-                    return MainScaffold(
-                      child: FilterPage(
-                        contracts: contracts,
-                        initialFilter: filter,
-                        originIndex: originIndex,
-                      ),
+                    filterOriginIndexNotifier.value = originIndex;
+                    filterPageNotifier.value = FilterPage(
+                      contracts: contracts,
+                      initialFilter: filter,
+                      originIndex: originIndex,
                     );
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      selectedPageNotifier.value = 7;
+                    });
+                    return MainScaffold();
                   },
                 );
             }

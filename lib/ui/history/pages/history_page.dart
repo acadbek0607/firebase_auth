@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
@@ -148,6 +149,7 @@ class _HistoryPageState extends State<_HistoryPage> {
                     'originIndex': 1,
                   },
                 );
+                selectedPageNotifier.value = 1;
 
                 if (result != null && result is Filters) {
                   setState(() {

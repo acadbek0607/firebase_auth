@@ -12,9 +12,7 @@ import 'package:fire_auth/ui/new/pages/new_page.dart';
 import 'package:fire_auth/ui/saved/pages/saved_page.dart';
 
 class MainScaffold extends StatefulWidget {
-  final Widget? child;
-
-  const MainScaffold({super.key, this.child});
+  const MainScaffold({super.key});
 
   @override
   State<MainScaffold> createState() => _MainScaffoldState();
@@ -29,6 +27,16 @@ class _MainScaffoldState extends State<MainScaffold> {
     const ProfilePage(), // 4
     const CreateContractPage(), // 5 (subpage of New)
     const CreateInvoicePage(), // 6 (subpage of New)
+    // 7 - Filter page
+    ValueListenableBuilder<Widget?>(
+      valueListenable: filterPageNotifier,
+      builder: (_, page, __) => page ?? const SizedBox.shrink(),
+    ),
+    // 8 - Contract detail page
+    ValueListenableBuilder<Widget?>(
+      valueListenable: detailPageNotifier,
+      builder: (_, page, __) => page ?? const SizedBox.shrink(),
+    ),
   ];
 
   List<String> _labels() => [
@@ -50,34 +58,14 @@ class _MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = selectedPageNotifier.value;
 
   void _onTabTapped(int index) {
-    // If user is in create_contract/create_invoice and taps "New" again, go back to NewPage (index 2)
+    // If user taps "New" again, show the dialog
     if (index == 2) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) showNewPageDialog(context);
       });
-
       return;
     }
-    if (widget.child != null) {
-      selectedPageNotifier.value = index;
-      switch (index) {
-        case 0:
-          Navigator.pushReplacementNamed(context, '/home');
-          break;
-        case 1:
-          Navigator.pushReplacementNamed(context, '/history');
-          break;
-        case 2:
-          break;
-        case 3:
-          Navigator.pushReplacementNamed(context, '/saved');
-          break;
-        default:
-          Navigator.pushReplacementNamed(context, '/home');
-      }
-    } else {
-      selectedPageNotifier.value = index;
-    }
+    selectedPageNotifier.value = index;
   }
 
   @override
@@ -99,23 +87,30 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     final labels = _labels();
+    // Determine which icon should be active in the navigation bar
+    int navIndex = _selectedIndex;
+    if (_selectedIndex == 7) {
+      navIndex = filterOriginIndexNotifier.value;
+    } else if (_selectedIndex == 8) {
+      navIndex = detailOriginIndexNotifier.value;
+    } else if (_selectedIndex > 4) {
+      navIndex = 2; // highlight "New" for create pages
+    }
+
     return Scaffold(
-      body:
-          widget.child ?? IndexedStack(index: _selectedIndex, children: _pages),
+      body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex > 4
-            ? 2
-            : _selectedIndex, // highlight "New"
+        selectedIndex: navIndex,
         onDestinationSelected: _onTabTapped,
         indicatorColor: AppColors.darkest,
-        indicatorShape: CircleBorder(
+        indicatorShape: const CircleBorder(
           eccentricity: BorderSide.strokeAlignCenter,
         ),
         overlayColor: WidgetStateProperty.all(AppColors.darkest.withAlpha(11)),
 
         backgroundColor: AppColors.darkest,
         destinations: List.generate(5, (i) {
-          final isSelected = (_selectedIndex > 4 ? 2 : _selectedIndex) == i;
+          final isSelected = navIndex == i;
           return NavigationDestination(
             icon: SvgPicture.asset(
               'assets/svg/${isSelected ? 's_' : ''}${_icons[i]}.svg',

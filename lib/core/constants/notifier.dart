@@ -15,3 +15,15 @@ final ValueNotifier<List<ContractEntity>> allContractsNotifier = ValueNotifier(
 final savedContractsNotifier = ValueNotifier<List<ContractEntity>>([]);
 
 final ValueNotifier<UserEntity?> currentUserNotifier = ValueNotifier(null);
+
+/// Holds the currently built FilterPage widget when it is active.
+final ValueNotifier<Widget?> filterPageNotifier = ValueNotifier(null);
+
+/// Remembers the index of the page from which the FilterPage was opened.
+final ValueNotifier<int> filterOriginIndexNotifier = ValueNotifier(0);
+
+/// Holds the currently built ContractDetailPage widget when it is active.
+final ValueNotifier<Widget?> detailPageNotifier = ValueNotifier(null);
+
+/// Remembers the index of the page from which the ContractDetailPage was opened.
+final ValueNotifier<int> detailOriginIndexNotifier = ValueNotifier(0);

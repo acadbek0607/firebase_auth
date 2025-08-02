@@ -14,6 +14,7 @@ class ContractsPage extends StatelessWidget {
   final bool isLoadingMore;
   final VoidCallback? onLoadMore;
   final bool openFromDetail;
+  final int originIndex;
 
   const ContractsPage({
     super.key,
@@ -22,6 +23,7 @@ class ContractsPage extends StatelessWidget {
     this.isLoadingMore = false,
     this.onLoadMore,
     this.openFromDetail = false,
+    this.originIndex = 0,
   });
 
   @override
@@ -64,6 +66,7 @@ class ContractsPage extends StatelessWidget {
             contract: contract,
             allContracts: contracts,
             openFromDetail: openFromDetail,
+            originIndex: originIndex,
           );
         } else {
           if (isLoadingMore) {

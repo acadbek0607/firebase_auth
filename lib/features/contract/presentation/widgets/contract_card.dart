@@ -14,6 +14,7 @@ class ContractCard extends StatelessWidget {
   final List<ContractEntity> allContracts;
   final VoidCallback? onTap;
   final bool openFromDetail;
+  final int originIndex;
 
   const ContractCard({
     super.key,
@@ -21,6 +22,7 @@ class ContractCard extends StatelessWidget {
     required this.allContracts,
     this.onTap,
     this.openFromDetail = false,
+    this.originIndex = 0,
   });
 
   @override
@@ -54,6 +56,7 @@ class ContractCard extends StatelessWidget {
                 'contract': contract,
                 'allContracts': relatedContracts,
                 'fromDetail': openFromDetail,
+                'originIndex': originIndex,
               },
             );
           },

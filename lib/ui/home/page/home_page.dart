@@ -151,6 +151,8 @@ class _HomePageState extends State<HomePage>
         'originIndex': 0,
       },
     );
+    // Reset the selected page back to home after the filter page closes
+    selectedPageNotifier.value = 0;
     // If cancel or empty, always reset to Filters.empty
     if (result is Filters) {
       if (result == Filters.empty) {
@@ -241,6 +243,7 @@ class _HomePageState extends State<HomePage>
                           isLoadingMore: state.isLoadingMore,
                           onLoadMore: _onLoadMore,
                           openFromDetail: true,
+                          originIndex: 0,
                         );
                       },
                     ),

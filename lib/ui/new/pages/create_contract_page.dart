@@ -3,17 +3,12 @@ import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
-import 'package:fire_auth/features/contract/domain/repos/contract_repo.dart';
-import 'package:fire_auth/ui/detail/bloc/related_bloc.dart';
-import 'package:fire_auth/ui/detail/pages/contract_detail_page.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../features/contract/domain/usecases/contract_usecases.dart';
 
 class CreateContractPage extends StatefulWidget {
   const CreateContractPage({super.key});
@@ -66,22 +61,15 @@ class _CreateContractPageState extends State<CreateContractPage> {
               orElse: () => state.contracts.last,
             );
 
-            Navigator.pushReplacement(
+            Navigator.pushReplacementNamed(
               context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider(
-                  create: (_) => RelatedBloc(
-                    getContractsByFullName: GetContractsByFullName(
-                      context.read<ContractRepository>(),
-                    ),
-                  ),
-                  child: ContractDetailPage(
-                    contract: match,
-                    allContracts: state.contracts,
-                    openFromDetail: false,
-                  ),
-                ),
-              ),
+              '/contract_detail',
+              arguments: {
+                'contract': match,
+                'allContracts': state.contracts,
+                'fromDetail': false,
+                'originIndex': 0,
+              },
             );
           } else if (state.status == BlocStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(

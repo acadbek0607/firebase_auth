@@ -54,7 +54,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
       return false;
     }
 
-    selectedPageNotifier.value = 0;
+    selectedPageNotifier.value = detailOriginIndexNotifier.value;
     selectedViewNotifier.value = HomeViewType.contract;
 
     if (Navigator.of(context).canPop()) {
@@ -200,6 +200,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                       canLoadMore: state.canLoadMore,
                       isLoadingMore: state.isLoadingMore,
                       openFromDetail: true,
+                      originIndex: detailOriginIndexNotifier.value,
                       onLoadMore: () {
                         context.read<RelatedBloc>().add(
                           LoadRelatedContracts(

@@ -20,7 +20,7 @@ class ContractDetailInfoCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
         color: AppColors.darker,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,12 +29,17 @@ class ContractDetailInfoCard extends StatelessWidget {
                 ' ${contract.fullName}',
               ),
               _detailText(
-                tr('status', context: context),
+                tr('status_of_contract', context: context),
                 ' ${contract.status.label(context)}',
               ),
               _detailText(
                 tr('amount', context: context),
                 '$formattedAmount ${tr('currency', context: context)}',
+              ),
+              _detailText(tr('last_contract'), ' ${contract.lastContractId}'),
+              _detailText(
+                tr('number_of_contracts'),
+                ' ${contract.contractCount}',
               ),
               _detailText(
                 tr('address', context: context),

@@ -194,20 +194,21 @@ class MyApp extends StatelessWidget {
                 final originIndex = args['originIndex'] as int? ?? 0;
                 return MaterialPageRoute(
                   builder: (context) {
-                    detailOriginIndexNotifier.value = originIndex;
-                    detailPageNotifier.value = BlocProvider(
-                      create: (_) => RelatedBloc(
-                        getContractsByFullName: GetContractsByFullName(
-                          context.read<ContractRepository>(),
+                    final repository = context.read<ContractRepository>();
+                    Future.delayed(Duration.zero, () {
+                      detailOriginIndexNotifier.value = originIndex;
+                      detailPageNotifier.value = BlocProvider(
+                        create: (_) => RelatedBloc(
+                          getContractsByFullName: GetContractsByFullName(
+                            repository,
+                          ),
                         ),
-                      ),
-                      child: ContractDetailPage(
-                        contract: contract,
-                        allContracts: allContracts,
-                        openFromDetail: fromDetail,
-                      ),
-                    );
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                        child: ContractDetailPage(
+                          contract: contract,
+                          allContracts: allContracts,
+                          openFromDetail: fromDetail,
+                        ),
+                      );
                       selectedPageNotifier.value = 8;
                     });
                     return const MainScaffold();
@@ -234,13 +235,13 @@ class MyApp extends StatelessWidget {
 
                 return MaterialPageRoute(
                   builder: (_) {
-                    filterOriginIndexNotifier.value = originIndex;
-                    filterPageNotifier.value = FilterPage(
-                      contracts: contracts,
-                      initialFilter: filter,
-                      originIndex: originIndex,
-                    );
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Future.delayed(Duration.zero, () {
+                      filterOriginIndexNotifier.value = originIndex;
+                      filterPageNotifier.value = FilterPage(
+                        contracts: contracts,
+                        initialFilter: filter,
+                        originIndex: originIndex,
+                      );
                       selectedPageNotifier.value = 7;
                     });
                     return MainScaffold();

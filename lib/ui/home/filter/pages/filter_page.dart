@@ -3,6 +3,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
 import 'package:fire_auth/ui/widgets/filters.dart';
@@ -39,7 +40,10 @@ class _FilterPageState extends State<FilterPage> {
 
   @override
   void initState() {
-    final filter = widget.initialFilter ?? Filters.empty;
+    final filter =
+        widget.initialFilter ??
+        activeFiltersNotifier.value[widget.originIndex] ??
+        Filters.empty;
     paid = filter.statuses.contains(StatusType.paid);
     inProcess = filter.statuses.contains(StatusType.inProcess);
     rejectedByIQ = filter.statuses.contains(StatusType.rejectedByIQ);
@@ -62,11 +66,22 @@ class _FilterPageState extends State<FilterPage> {
       toDate: toDate,
     );
 
+    final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
+    if (filter == Filters.empty) {
+      filters.remove(widget.originIndex);
+    } else {
+      filters[widget.originIndex] = filter;
+    }
+    activeFiltersNotifier.value = filters;
+
     Navigator.pop(context, filter);
     // return filtered contracts
   }
 
   void _cancelFilters() {
+    final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
+    filters.remove(widget.originIndex);
+    activeFiltersNotifier.value = filters;
     Navigator.pop(context, Filters.empty);
   }
 

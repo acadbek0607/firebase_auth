@@ -31,6 +31,7 @@ class _SavedPageState extends State<SavedPage> {
   @override
   void initState() {
     super.initState();
+    currentFilter = activeFiltersNotifier.value[3] ?? Filters.empty;
     final profileState = context.read<ProfileBloc>().state;
     if (profileState.status == BlocStatus.loaded) {
       _loadInitial(profileState.profile!.savedContractIds);
@@ -93,6 +94,15 @@ class _SavedPageState extends State<SavedPage> {
                             ? FilterUtils.apply(savedContracts, result)
                             : null;
                       });
+                      final filters = Map<int, Filters>.from(
+                        activeFiltersNotifier.value,
+                      );
+                      if (currentFilter == Filters.empty) {
+                        filters.remove(3);
+                      } else {
+                        filters[3] = currentFilter;
+                      }
+                      activeFiltersNotifier.value = filters;
                     }
                   }
                 },

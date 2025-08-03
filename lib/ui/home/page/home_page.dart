@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+    _currentFilter = activeFiltersNotifier.value[0] ?? Filters.empty;
     _tabController = TabController(
       length: 2,
       vsync: this,
@@ -109,6 +110,9 @@ class _HomePageState extends State<HomePage>
       _selectedDay = day;
       _currentFilter = Filters.empty;
     });
+    final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
+    filters.remove(0);
+    activeFiltersNotifier.value = filters;
     _loadContracts();
     _loadInvoices();
   }
@@ -124,6 +128,14 @@ class _HomePageState extends State<HomePage>
         _selectedDay = null;
       }
     });
+    final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
+    if (filter == Filters.empty) {
+      filters.remove(0);
+    } else {
+      filters[0] = filter;
+    }
+    activeFiltersNotifier.value = filters;
+
     _loadContracts();
 
     _loadInvoices();

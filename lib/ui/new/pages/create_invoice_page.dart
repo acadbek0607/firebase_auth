@@ -25,6 +25,29 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   StatusType? _status;
   bool _isCreating = false;
 
+  late final VoidCallback _pageListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageListener = () {
+      if (selectedPageNotifier.value != 6) {
+        _serviceNameController.clear();
+        _costController.clear();
+        setState(() => _status = null);
+      }
+    };
+    selectedPageNotifier.addListener(_pageListener);
+  }
+
+  @override
+  void dispose() {
+    selectedPageNotifier.removeListener(_pageListener);
+    _serviceNameController.dispose();
+    _costController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

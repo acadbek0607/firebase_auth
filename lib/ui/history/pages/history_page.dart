@@ -52,6 +52,9 @@ class _HistoryPageState extends State<_HistoryPage> {
   @override
   void initState() {
     super.initState();
+    currentFilter = activeFiltersNotifier.value[1] ?? Filters.empty;
+    fromDate = currentFilter.fromDate;
+    toDate = currentFilter.toDate;
     _loadContracts();
   }
 
@@ -99,6 +102,7 @@ class _HistoryPageState extends State<_HistoryPage> {
           fromDate = picked;
           currentFilter = currentFilter.copyWith(fromDate: picked);
         });
+        _updateSavedFilter();
         _loadContracts();
       } else {
         if (fromDate != null && picked.isBefore(fromDate!)) {
@@ -111,9 +115,20 @@ class _HistoryPageState extends State<_HistoryPage> {
           toDate = picked;
           currentFilter = currentFilter.copyWith(toDate: picked);
         });
+        _updateSavedFilter();
         _loadContracts();
       }
     }
+  }
+
+  void _updateSavedFilter() {
+    final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
+    if (currentFilter == Filters.empty) {
+      filters.remove(1);
+    } else {
+      filters[1] = currentFilter;
+    }
+    activeFiltersNotifier.value = filters;
   }
 
   @override

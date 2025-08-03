@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,37 @@ class _CreateContractPageState extends State<CreateContractPage> {
   StatusType? _selectedStatus;
 
   ContractEntity? _createdContract;
+
+  late final VoidCallback _pageListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageListener = () {
+      if (selectedPageNotifier.value != 5) {
+        _fullNameController.clear();
+        _addressController.clear();
+        _innController.clear();
+        _amountController.clear();
+        setState(() {
+          _selectedType = null;
+          _selectedStatus = null;
+        });
+        _createdContract = null;
+      }
+    };
+    selectedPageNotifier.addListener(_pageListener);
+  }
+
+  @override
+  void dispose() {
+    selectedPageNotifier.removeListener(_pageListener);
+    _fullNameController.dispose();
+    _addressController.dispose();
+    _innController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

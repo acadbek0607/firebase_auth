@@ -1,4 +1,6 @@
 // lib/ui/home/filter/pages/filter_page.dart
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/utils/status.dart';
@@ -69,20 +71,35 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   Future<void> _selectDate(bool isFrom) async {
+    final now = DateTime.now();
+    final initialDate = isFrom ? (fromDate ?? now) : (toDate ?? now);
+    final firstDate = isFrom ? DateTime(2000) : (fromDate ?? DateTime(2000));
+    final lastDate = isFrom ? (toDate ?? now) : now;
+
     final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2200),
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
     if (picked != null) {
-      setState(() {
-        if (isFrom) {
-          fromDate = picked;
-        } else {
-          toDate = picked;
+      if (isFrom) {
+        if (toDate != null && picked.isAfter(toDate!)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(tr('from_to', context: context))),
+          );
+          return;
         }
-      });
+        setState(() => fromDate = picked);
+      } else {
+        if (fromDate != null && picked.isBefore(fromDate!)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(tr('to_from', context: context))),
+          );
+          return;
+        }
+        setState(() => toDate = picked);
+      }
     }
   }
 

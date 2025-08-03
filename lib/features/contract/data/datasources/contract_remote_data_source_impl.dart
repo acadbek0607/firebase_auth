@@ -24,8 +24,10 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
 
       final newId = currentId + 1;
 
-      // Update the counter value
-      transaction.update(counterRef, {'contract_id': newId});
+      // Update the counter value, creating the document if it doesn't exist
+      transaction.set(counterRef, {
+        'contract_id': newId,
+      }, SetOptions(merge: true));
 
       // Save contract with numeric ID
       final model = ContractModel.fromEntity(

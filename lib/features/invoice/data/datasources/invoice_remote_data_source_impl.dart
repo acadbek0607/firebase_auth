@@ -24,8 +24,10 @@ class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
 
       final newId = currentId + 1;
 
-      // Update the counter value
-      transaction.update(counterRef, {'invoice_id': newId});
+      // Update the counter value, creating the document if it doesn't exist
+      transaction.set(counterRef, {
+        'invoice_id': newId,
+      }, SetOptions(merge: true));
 
       // Save invoice with numeric ID
       final model = InvoiceModel.fromEntity(

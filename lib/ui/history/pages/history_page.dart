@@ -77,12 +77,14 @@ class _HistoryPageState extends State<_HistoryPage> {
   Future<void> _selectDate(BuildContext context, bool isFrom) async {
     final now = DateTime.now();
     final initialDate = isFrom ? (fromDate ?? now) : (toDate ?? now);
+    final firstDate = isFrom ? DateTime(2000) : (fromDate ?? DateTime(2000));
+    final lastDate = isFrom ? (toDate ?? now) : now;
 
     final picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: now,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
 
     if (picked != null) {

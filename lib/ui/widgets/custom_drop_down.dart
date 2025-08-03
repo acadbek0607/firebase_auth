@@ -145,6 +145,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
               _menuOpen ? controller.open() : controller.close();
             },
             child: Container(
+              height: 50,
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
                 vertical: 12.0,

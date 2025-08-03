@@ -163,7 +163,17 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _fullNameController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _fullNameController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
@@ -179,7 +189,17 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _addressController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _addressController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
@@ -198,7 +218,17 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _innController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _innController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         keyboardType: TextInputType.number,
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
@@ -215,7 +245,6 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       CustomDropdown(
                         label: '',
-                        // value: _selectedStatus.toFirestoreString(),
                         value: _selectedStatus?.label(context) ?? '',
                         items: StatusType.values
                             .map((s) => s.label(context))
@@ -241,7 +270,17 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _amountController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _amountController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         keyboardType: TextInputType.number,
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty

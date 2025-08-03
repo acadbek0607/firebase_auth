@@ -45,11 +45,11 @@ class ContractDetailInfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _detailText(
-                tr('fisher', context: context),
+                tr('fishers', context: context),
                 ' ${contract.fullName}',
               ),
               _detailText(
-                tr('status_of_contract', context: context),
+                tr('status_of_contracts', context: context),
                 ' ${contract.status.label(context)}',
               ),
               _detailText(

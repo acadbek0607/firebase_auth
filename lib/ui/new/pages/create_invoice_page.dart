@@ -108,7 +108,17 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 6.0),
                       TextFormField(
                         controller: _serviceNameController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _serviceNameController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
@@ -122,7 +132,17 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 6.0),
                       TextFormField(
                         controller: _costController,
-                        decoration: Kstyle.textFieldStyle,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                            borderSide: BorderSide(
+                              width: 1.2,
+                              color: _costController.text.isNotEmpty
+                                  ? AppColors.newLabel
+                                  : AppColors.newLabel.withAlpha(102),
+                            ),
+                          ),
+                        ),
                         keyboardType: TextInputType.number,
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty

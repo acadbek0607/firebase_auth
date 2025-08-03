@@ -40,10 +40,8 @@ class _FilterPageState extends State<FilterPage> {
 
   @override
   void initState() {
-    final filter =
-        widget.initialFilter ??
-        activeFiltersNotifier.value[widget.originIndex] ??
-        Filters.empty;
+    final saved = activeFiltersNotifier.value[widget.originIndex];
+    final filter = saved ?? widget.initialFilter ?? Filters.empty;
     paid = filter.statuses.contains(StatusType.paid);
     inProcess = filter.statuses.contains(StatusType.inProcess);
     rejectedByIQ = filter.statuses.contains(StatusType.rejectedByIQ);

@@ -32,8 +32,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     super.initState();
     _pageListener = () {
       if (selectedPageNotifier.value != 6) {
+        _formKey.currentState?.reset();
         _serviceNameController.clear();
         _costController.clear();
+        FocusManager.instance.primaryFocus?.unfocus();
         setState(() => _status = null);
       }
     };

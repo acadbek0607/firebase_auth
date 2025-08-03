@@ -37,10 +37,12 @@ class _CreateContractPageState extends State<CreateContractPage> {
     super.initState();
     _pageListener = () {
       if (selectedPageNotifier.value != 5) {
+        _formKey.currentState?.reset();
         _fullNameController.clear();
         _addressController.clear();
         _innController.clear();
         _amountController.clear();
+        FocusManager.instance.primaryFocus?.unfocus();
         setState(() {
           _selectedType = null;
           _selectedStatus = null;

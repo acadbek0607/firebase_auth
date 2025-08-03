@@ -74,7 +74,7 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
 
       query = query
           .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
-          .where('createdAt', isLessThan: Timestamp.fromDate(end));
+          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(end));
     }
 
     if (statuses != null && statuses.isNotEmpty) {

@@ -196,7 +196,11 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                 child: BlocBuilder<RelatedBloc, RelatedState>(
                   builder: (context, state) {
                     final others = state.relatedContracts
-                        .where((c) => c.id != contract.id)
+                        .where(
+                          (c) =>
+                              c.id != contract.id &&
+                              c.fullName == contract.fullName,
+                        )
                         .toList();
                     return ContractsPage(
                       contracts: others,

@@ -51,6 +51,12 @@ class _FilterPageState extends State<FilterPage> {
     super.initState();
   }
 
+  void _closeFilter(Filters result) {
+    filterPageNotifier.value = null;
+    selectedPageNotifier.value = filterOriginIndexNotifier.value;
+    Navigator.pop(context, result);
+  }
+
   void _applyFilters() {
     final selectedStatuses = <StatusType>[];
     if (paid) selectedStatuses.add(StatusType.paid);
@@ -72,7 +78,7 @@ class _FilterPageState extends State<FilterPage> {
     }
     activeFiltersNotifier.value = filters;
 
-    Navigator.pop(context, filter);
+    _closeFilter(filter);
     // return filtered contracts
   }
 
@@ -80,9 +86,7 @@ class _FilterPageState extends State<FilterPage> {
     final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
     filters.remove(widget.originIndex);
     activeFiltersNotifier.value = filters;
-    // Remove the current filter page so a fresh one is built next time
-    filterPageNotifier.value = null;
-    Navigator.pop(context, Filters.empty);
+    _closeFilter(Filters.empty);
   }
 
   Future<void> _selectDate(bool isFrom) async {
@@ -118,189 +122,202 @@ class _FilterPageState extends State<FilterPage> {
     }
   }
 
+  Future<bool> _onPop() async {
+    _closeFilter(Filters.empty);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
+    return WillPopScope(
+      onWillPop: _onPop,
+      child: Scaffold(
         backgroundColor: AppColors.black,
-        title: Text(
-          tr('filters', context: context),
-          style: Kstyle.textStyle.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 18.0,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: AppColors.black,
+          title: Text(
+            tr('filters', context: context),
+            style: Kstyle.textStyle.copyWith(
+              fontWeight: FontWeight.w500,
+              fontSize: 18.0,
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 28.0),
-                Text(
-                  tr('status', context: context),
-                  style: Kstyle.textStyle.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0,
-                    color: AppColors.cardGrey,
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 28.0),
+                  Text(
+                    tr('status', context: context),
+                    style: Kstyle.textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                      color: AppColors.cardGrey,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    Flexible(
-                      child: CustomCheckboxTile(
-                        label: tr('paid', context: context),
-                        value: paid,
-                        onChanged: (val) => setState(() => paid = val),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: CustomCheckboxTile(
+                          label: tr('paid', context: context),
+                          value: paid,
+                          onChanged: (val) => setState(() => paid = val),
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: CustomCheckboxTile(
-                        label: tr('rejected_iq', context: context),
-                        value: rejectedByIQ,
-                        onChanged: (val) => setState(() => rejectedByIQ = val),
+                      Flexible(
+                        child: CustomCheckboxTile(
+                          label: tr('rejected_iq', context: context),
+                          value: rejectedByIQ,
+                          onChanged: (val) =>
+                              setState(() => rejectedByIQ = val),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Flexible(
-                      child: CustomCheckboxTile(
-                        label: tr('in_process', context: context),
-                        value: inProcess,
-                        onChanged: (val) => setState(() => inProcess = val),
-                      ),
-                    ),
-                    Flexible(
-                      child: CustomCheckboxTile(
-                        label: tr('rejected_payme', context: context),
-                        value: rejectedByPayme,
-                        onChanged: (val) =>
-                            setState(() => rejectedByPayme = val),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32.0),
-                Text(
-                  tr('date', context: context),
-                  style: Kstyle.textStyle.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0,
-                    color: AppColors.cardGrey,
+                    ],
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 120.0,
-                      child: InkWell(
-                        onTap: () => _selectDate(true),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.dark,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                fromDate != null
-                                    ? formatter.format(fromDate!)
-                                    : tr('from', context: context),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              SvgPicture.asset('assets/svg/calendar.svg'),
-                            ],
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: CustomCheckboxTile(
+                          label: tr('in_process', context: context),
+                          value: inProcess,
+                          onChanged: (val) => setState(() => inProcess = val),
+                        ),
+                      ),
+                      Flexible(
+                        child: CustomCheckboxTile(
+                          label: tr('rejected_payme', context: context),
+                          value: rejectedByPayme,
+                          onChanged: (val) =>
+                              setState(() => rejectedByPayme = val),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32.0),
+                  Text(
+                    tr('date', context: context),
+                    style: Kstyle.textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                      color: AppColors.cardGrey,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 120.0,
+                        child: InkWell(
+                          onTap: () => _selectDate(true),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: AppColors.dark,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  fromDate != null
+                                      ? formatter.format(fromDate!)
+                                      : tr('from', context: context),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                SvgPicture.asset('assets/svg/calendar.svg'),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Container(width: 10.0, height: 2.0, color: AppColors.line),
-                    const SizedBox(width: 8.0),
-                    SizedBox(
-                      width: 120.0,
-                      child: InkWell(
-                        onTap: () => _selectDate(false),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.dark,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                toDate != null
-                                    ? formatter.format(toDate!)
-                                    : tr('to', context: context),
-                                style: Kstyle.textStyle,
-                              ),
-                              SvgPicture.asset('assets/svg/calendar.svg'),
-                            ],
+                      const SizedBox(width: 8.0),
+                      Container(
+                        width: 10.0,
+                        height: 2.0,
+                        color: AppColors.line,
+                      ),
+                      const SizedBox(width: 8.0),
+                      SizedBox(
+                        width: 120.0,
+                        child: InkWell(
+                          onTap: () => _selectDate(false),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: AppColors.dark,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  toDate != null
+                                      ? formatter.format(toDate!)
+                                      : tr('to', context: context),
+                                  style: Kstyle.textStyle,
+                                ),
+                                SvgPicture.asset('assets/svg/calendar.svg'),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 32.0),
-              ],
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _cancelFilters,
-                        style: Kstyle.buttonStyle.copyWith(
-                          backgroundColor: WidgetStateProperty.all(
-                            AppColors.darkGreen.withAlpha(50),
+                    ],
+                  ),
+                  SizedBox(height: 32.0),
+                ],
+              ),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _cancelFilters,
+                          style: Kstyle.buttonStyle.copyWith(
+                            backgroundColor: WidgetStateProperty.all(
+                              AppColors.darkGreen.withAlpha(50),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          tr('cancel', context: context),
-                          style: Kstyle.textStyle.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.darkGreen,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _applyFilters,
-                        style: Kstyle.buttonStyle,
-                        child: Text(
-                          tr('apply', context: context),
-                          style: Kstyle.textStyle.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.line,
+                          child: Text(
+                            tr('cancel', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.darkGreen,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30),
-              ],
-            ),
-          ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _applyFilters,
+                          style: Kstyle.buttonStyle,
+                          child: Text(
+                            tr('apply', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.line,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

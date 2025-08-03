@@ -13,7 +13,10 @@ class FilterUtils {
           filter.fromDate == null ||
           !contract.createdAt.isBefore(filter.fromDate!);
       final toMatch =
-          filter.toDate == null || !contract.createdAt.isAfter(filter.toDate!);
+          filter.toDate == null ||
+          contract.createdAt.isBefore(
+            filter.toDate!.add(const Duration(days: 1)),
+          );
       return statusMatch && fromMatch && toMatch;
     }).toList();
   }

@@ -98,10 +98,8 @@ class InvoiceRemoteDataSourceImpl implements InvoiceRemoteDataSource {
       );
     }
     if (toDate != null) {
-      query = query.where(
-        'created_at',
-        isLessThanOrEqualTo: Timestamp.fromDate(toDate),
-      );
+      final end = toDate.add(const Duration(days: 1));
+      query = query.where('created_at', isLessThan: Timestamp.fromDate(end));
     }
 
     if (startAfterDoc != null) {

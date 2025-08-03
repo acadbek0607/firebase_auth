@@ -70,11 +70,11 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
 
     if (day != null) {
       final start = DateTime(day.year, day.month, day.day);
-      final end = start.add(Duration(days: 1));
+      final end = start.add(const Duration(days: 1));
 
       query = query
           .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
-          .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(end));
+          .where('createdAt', isLessThan: Timestamp.fromDate(end));
     }
 
     if (statuses != null && statuses.isNotEmpty) {
@@ -98,10 +98,8 @@ class ContractRemoteDataSourceImpl implements ContractRemoteDataSource {
       );
     }
     if (toDate != null) {
-      query = query.where(
-        'createdAt',
-        isLessThanOrEqualTo: Timestamp.fromDate(toDate),
-      );
+      final end = toDate.add(const Duration(days: 1));
+      query = query.where('createdAt', isLessThan: Timestamp.fromDate(end));
     }
     if (startAfterDoc != null) {
       query = query.startAfterDocument(startAfterDoc);

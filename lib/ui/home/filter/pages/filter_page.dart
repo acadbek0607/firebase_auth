@@ -53,8 +53,8 @@ class _FilterPageState extends State<FilterPage> {
 
   void _closeFilter(Filters result) {
     filterPageNotifier.value = null;
-    // Navigate back to the home page just as if the home icon were tapped.
-    selectedPageNotifier.value = 0;
+    // Navigate back to the page from which the filter was opened.
+    selectedPageNotifier.value = widget.originIndex;
     Navigator.pop(context, result);
   }
 

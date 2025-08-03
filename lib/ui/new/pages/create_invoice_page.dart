@@ -26,25 +26,33 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   bool _isCreating = false;
 
   late final VoidCallback _pageListener;
+  late final VoidCallback _resetListener;
+
+  void _resetForm() {
+    _formKey.currentState?.reset();
+    _serviceNameController.clear();
+    _costController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() => _status = null);
+  }
 
   @override
   void initState() {
     super.initState();
     _pageListener = () {
       if (selectedPageNotifier.value != 6) {
-        _formKey.currentState?.reset();
-        _serviceNameController.clear();
-        _costController.clear();
-        FocusManager.instance.primaryFocus?.unfocus();
-        setState(() => _status = null);
+        _resetForm();
       }
     };
+    _resetListener = _resetForm;
     selectedPageNotifier.addListener(_pageListener);
+    resetInvoiceFormNotifier.addListener(_resetListener);
   }
 
   @override
   void dispose() {
     selectedPageNotifier.removeListener(_pageListener);
+    resetInvoiceFormNotifier.removeListener(_resetListener);
     _serviceNameController.dispose();
     _costController.dispose();
     super.dispose();

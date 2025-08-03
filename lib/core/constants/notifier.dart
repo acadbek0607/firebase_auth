@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 final ValueNotifier<HomeViewType> selectedViewNotifier = ValueNotifier(
   HomeViewType.contract,
 );
+
+/// Notifies create pages to reset their forms when reselected.
+final ValueNotifier<int> resetContractFormNotifier = ValueNotifier(0);
+
+final ValueNotifier<int> resetInvoiceFormNotifier = ValueNotifier(0);
+
 ValueNotifier<int> selectedPageNotifier = ValueNotifier(0);
 
 final ValueNotifier<List<ContractEntity>> allContractsNotifier = ValueNotifier(

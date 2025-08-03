@@ -31,31 +31,39 @@ class _CreateContractPageState extends State<CreateContractPage> {
   ContractEntity? _createdContract;
 
   late final VoidCallback _pageListener;
+  late final VoidCallback _resetListener;
+
+  void _resetForm() {
+    _formKey.currentState?.reset();
+    _fullNameController.clear();
+    _addressController.clear();
+    _innController.clear();
+    _amountController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      _selectedType = null;
+      _selectedStatus = null;
+    });
+    _createdContract = null;
+  }
 
   @override
   void initState() {
     super.initState();
     _pageListener = () {
       if (selectedPageNotifier.value != 5) {
-        _formKey.currentState?.reset();
-        _fullNameController.clear();
-        _addressController.clear();
-        _innController.clear();
-        _amountController.clear();
-        FocusManager.instance.primaryFocus?.unfocus();
-        setState(() {
-          _selectedType = null;
-          _selectedStatus = null;
-        });
-        _createdContract = null;
+        _resetForm();
       }
     };
+    _resetListener = _resetForm;
     selectedPageNotifier.addListener(_pageListener);
+    resetContractFormNotifier.addListener(_resetListener);
   }
 
   @override
   void dispose() {
     selectedPageNotifier.removeListener(_pageListener);
+    resetContractFormNotifier.removeListener(_resetListener);
     _fullNameController.dispose();
     _addressController.dispose();
     _innController.dispose();
@@ -101,7 +109,6 @@ class _CreateContractPageState extends State<CreateContractPage> {
               arguments: {
                 'contract': match,
                 'allContracts': state.contracts,
-                'fromDetail': true,
                 'originIndex': 0,
               },
             );

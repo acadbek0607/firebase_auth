@@ -80,6 +80,8 @@ class _FilterPageState extends State<FilterPage> {
     final filters = Map<int, Filters>.from(activeFiltersNotifier.value);
     filters.remove(widget.originIndex);
     activeFiltersNotifier.value = filters;
+    // Remove the current filter page so a fresh one is built next time
+    filterPageNotifier.value = null;
     Navigator.pop(context, Filters.empty);
   }
 

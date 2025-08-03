@@ -36,7 +36,11 @@ class NewPage extends StatelessWidget {
                 text: tr('contract', context: context),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  selectedPageNotifier.value = 5;
+                  if (selectedPageNotifier.value == 5) {
+                    resetContractFormNotifier.value++;
+                  } else {
+                    selectedPageNotifier.value = 5;
+                  }
                 },
               ),
               const SizedBox(height: 12),
@@ -45,7 +49,11 @@ class NewPage extends StatelessWidget {
                 text: tr('invoice', context: context),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  selectedPageNotifier.value = 6;
+                  if (selectedPageNotifier.value == 6) {
+                    resetInvoiceFormNotifier.value++;
+                  } else {
+                    selectedPageNotifier.value = 6;
+                  }
                 },
               ),
             ],

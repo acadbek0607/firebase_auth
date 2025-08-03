@@ -64,7 +64,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
       backgroundColor: AppColors.black,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.black,
+        backgroundColor: AppColors.darkest,
         title: Text(tr('new_invoice', context: context)),
         centerTitle: false,
         titleSpacing: 4.0,
@@ -95,7 +95,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           return Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Form(
                   key: _formKey,
                   child: ListView(

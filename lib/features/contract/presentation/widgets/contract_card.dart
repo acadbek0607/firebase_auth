@@ -49,16 +49,20 @@ class ContractCard extends StatelessWidget {
       onTap:
           onTap ??
           () {
-            Navigator.pushNamed(
-              context,
-              '/contract_detail',
-              arguments: {
-                'contract': contract,
-                'allContracts': relatedContracts,
-                'fromDetail': openFromDetail,
-                'originIndex': originIndex,
-              },
-            );
+            final args = {
+              'contract': contract,
+              'allContracts': relatedContracts,
+              'originIndex': originIndex,
+            };
+            if (openFromDetail) {
+              Navigator.pushReplacementNamed(
+                context,
+                '/contract_detail',
+                arguments: args,
+              );
+            } else {
+              Navigator.pushNamed(context, '/contract_detail', arguments: args);
+            }
           },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6.0),

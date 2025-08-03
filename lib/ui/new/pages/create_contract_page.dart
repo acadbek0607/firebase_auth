@@ -78,7 +78,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
       backgroundColor: AppColors.black,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.black,
+        backgroundColor: AppColors.darkest,
         title: Text(
           tr('new_contract', context: context),
           style: Kstyle.textStyle.copyWith(

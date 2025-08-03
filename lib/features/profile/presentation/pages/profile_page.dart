@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: AppColors.black,
             appBar: AppBar(
               surfaceTintColor: Colors.transparent,
-              backgroundColor: AppColors.black,
+              backgroundColor: AppColors.darkest,
               title: Text(
                 tr('profile', context: context),
                 style: Kstyle.textStyle.copyWith(
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
             body: state.status == BlocStatus.loading
                 ? const Center(child: CircularProgressIndicator())
                 : Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 0.0),
                     child: ProfileCard(
                       email: authUser?.email ?? '',
                       onLanguageTap: _showLanguageDialog,

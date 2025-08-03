@@ -190,7 +190,6 @@ class MyApp extends StatelessWidget {
                 final contract = args['contract'] as ContractEntity;
                 final allContracts =
                     args['allContracts'] as List<ContractEntity>;
-                final fromDetail = args['fromDetail'] as bool? ?? false;
                 final originIndex = args['originIndex'] as int? ?? 0;
                 return MaterialPageRoute(
                   builder: (context) {
@@ -206,7 +205,6 @@ class MyApp extends StatelessWidget {
                         child: ContractDetailPage(
                           contract: contract,
                           allContracts: allContracts,
-                          openFromDetail: fromDetail,
                         ),
                       );
                       selectedPageNotifier.value = 8;

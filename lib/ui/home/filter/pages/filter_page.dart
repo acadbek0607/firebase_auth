@@ -136,7 +136,7 @@ class _FilterPageState extends State<FilterPage> {
         backgroundColor: AppColors.black,
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          backgroundColor: AppColors.black,
+          backgroundColor: AppColors.darkest,
           title: Text(
             tr('filters', context: context),
             style: Kstyle.textStyle.copyWith(

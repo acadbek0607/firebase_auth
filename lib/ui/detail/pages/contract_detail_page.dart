@@ -20,13 +20,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ContractDetailPage extends StatefulWidget {
   final ContractEntity contract;
   final List<ContractEntity> allContracts;
-  final bool openFromDetail;
 
   const ContractDetailPage({
     super.key,
     required this.contract,
     required this.allContracts,
-    this.openFromDetail = false,
   });
 
   @override
@@ -49,11 +47,6 @@ class _ContractDetailPageState extends State<ContractDetailPage>
   }
 
   Future<bool> _onPop() async {
-    if (widget.openFromDetail) {
-      Navigator.pop(context);
-      return false;
-    }
-
     selectedPageNotifier.value = detailOriginIndexNotifier.value;
     selectedViewNotifier.value = HomeViewType.contract;
 
@@ -76,7 +69,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
         backgroundColor: AppColors.black,
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          backgroundColor: AppColors.black,
+          backgroundColor: AppColors.darkest,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 0, 14),
             child: SvgPicture.asset('assets/svg/contract.svg'),
@@ -127,7 +120,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
           ],
         ),
         body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

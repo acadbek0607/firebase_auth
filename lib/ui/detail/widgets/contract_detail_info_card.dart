@@ -38,7 +38,7 @@ class ContractDetailInfoCard extends StatelessWidget {
       width: double.infinity,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-        color: AppColors.darker,
+        color: AppColors.dark,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 4.0),
           child: Column(

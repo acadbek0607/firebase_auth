@@ -61,12 +61,13 @@ class _CreateContractPageState extends State<CreateContractPage> {
               orElse: () => state.contracts.last,
             );
 
-            Navigator.pushNamed(
+            Navigator.pushReplacementNamed(
               context,
               '/contract_detail',
               arguments: {
                 'contract': match,
                 'allContracts': state.contracts,
+                'fromDetail': true,
                 'originIndex': 0,
               },
             );

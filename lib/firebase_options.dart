@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCH_v6iiPm4-Zl4IQeWrN48G6IvY-_RLlk',
-    appId: '1:37570910829:android:7f6f5b61b82594935ebd64',
-    messagingSenderId: '37570910829',
-    projectId: 'fire-auth-060700',
-    storageBucket: 'fire-auth-060700.firebasestorage.app',
+    apiKey: 'AIzaSyA0QdZPzDxHxPrZCsqKLXkTVjew1DrMY3g',
+    appId: '1:106818411057:android:f82a9c0a2dead099ea9310',
+    messagingSenderId: '106818411057',
+    projectId: 'fire-auth-070600',
+    storageBucket: 'fire-auth-070600.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB5sseq6IMYuYY6Ax126Ei3BNJwRFnDExo',
-    appId: '1:37570910829:ios:d86e462101039c195ebd64',
-    messagingSenderId: '37570910829',
-    projectId: 'fire-auth-060700',
-    storageBucket: 'fire-auth-060700.firebasestorage.app',
+    apiKey: 'AIzaSyAcN7PT0vw5bFiyaXmbOU-Z5dilIslGm3g',
+    appId: '1:106818411057:ios:bce9edd69332440bea9310',
+    messagingSenderId: '106818411057',
+    projectId: 'fire-auth-070600',
+    storageBucket: 'fire-auth-070600.firebasestorage.app',
     iosBundleId: 'org.acad.firebaseAuth',
   );
+
 }

@@ -70,6 +70,7 @@
   "required": "Required",
   "address_of": "Address of the organization",
   "iec": "ITN/IEC",
+  "iec_info": "INN (Taxpayer Identification Number) is a unique 9-digit numerical code assigned by tax authorities to legal entities (companies) and individual entrepreneurs.",
   "status_of_contract": "Status of the contract",
   "status_of_contracts": "Status of the contract:",
   "save_contract": "Save Contract",

@@ -228,6 +228,70 @@ class _CreateContractPageState extends State<CreateContractPage> {
                                   : AppColors.newLabel.withAlpha(102),
                             ),
                           ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                          ),
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: IconButton(
+                              icon: SvgPicture.asset(
+                                'assets/svg/help.svg',
+                                height: 20.0,
+                              ),
+                              color: AppColors.newLabel,
+                              onPressed: () => showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  backgroundColor: AppColors.dark,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16.0,
+                                      16.0,
+                                      16.0,
+                                      0.0,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              6.0,
+                                            ),
+                                            color: AppColors.commentTF,
+                                          ),
+                                          child: Text(
+                                            tr('iec_info', context: context),
+                                            style: Kstyle.textStyle,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4.0),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(),
+                                            child: Text(
+                                              tr('close', context: context),
+                                              style: Kstyle.textStyle.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                         keyboardType: TextInputType.number,
                         onChanged: (_) => setState(() {}),

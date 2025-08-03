@@ -1,5 +1,5 @@
 // lib/ui/home/filter/pages/filter_page.dart
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';

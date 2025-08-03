@@ -98,47 +98,58 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     final weekRow = Row(
       key: ValueKey(_focusedWeekStart.toIso8601String()),
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: weekDays.map((day) {
         final isSelected =
             _selectedDay != null && _isSameDay(day, _selectedDay!);
-        return GestureDetector(
-          onTap: () => _selectDay(day),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12.0,
-              horizontal: 14.0,
-            ),
-            decoration: isSelected
-                ? BoxDecoration(
-                    color: AppColors.lightGreen,
-                    borderRadius: BorderRadius.circular(6),
-                  )
-                : null,
-            child: Column(
-              children: [
-                Text(
-                  dayLabels[day.weekday - 1],
-                  style: Kstyle.textStyle.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.white : AppColors.cardGrey,
-                  ),
+        return Expanded(
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => _selectDay(day),
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 14.53,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '${day.day}',
-                  style: Kstyle.textStyle.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.white : AppColors.cardGrey,
-                  ),
+                decoration: isSelected
+                    ? BoxDecoration(
+                        color: AppColors.lightGreen,
+                        borderRadius: BorderRadius.circular(6),
+                      )
+                    : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      dayLabels[day.weekday - 1],
+                      style: Kstyle.textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: isSelected
+                            ? AppColors.white
+                            : AppColors.cardGrey,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${day.day}',
+                      style: Kstyle.textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: isSelected
+                            ? AppColors.white
+                            : AppColors.cardGrey,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      height: 1,
+                      width: 14.53,
+                      color: isSelected ? AppColors.white : AppColors.cardGrey,
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 4),
-                  height: 1,
-                  width: 14.53,
-                  color: isSelected ? AppColors.white : AppColors.cardGrey,
-                ),
-              ],
+              ),
             ),
           ),
         );
@@ -146,7 +157,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       color: AppColors.darkest,
       child: Column(
         children: [
@@ -154,7 +165,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Text(
                   '${monthLabels[_focusedWeekStart.month]}, ${_focusedWeekStart.year}',
                   style: Kstyle.textStyle.copyWith(

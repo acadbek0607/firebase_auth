@@ -119,6 +119,13 @@ class _CreateContractPageState extends State<CreateContractPage> {
           }
         },
         builder: (context, state) {
+          final isFormComplete =
+              _selectedType != null &&
+              _fullNameController.text.isNotEmpty &&
+              _addressController.text.isNotEmpty &&
+              _innController.text.isNotEmpty &&
+              _selectedStatus != null &&
+              _amountController.text.isNotEmpty;
           return Stack(
             children: [
               Padding(
@@ -128,7 +135,12 @@ class _CreateContractPageState extends State<CreateContractPage> {
                   child: ListView(
                     children: [
                       const SizedBox(height: 20.0),
-                      Text('Entity', style: Kstyle.textStyle),
+                      Text(
+                        'Entity',
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
+                      ),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
                         label: '',
@@ -144,12 +156,15 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 16.0),
                       Text(
                         tr('fisher', context: context),
-                        style: Kstyle.textStyle,
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
                       ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _fullNameController,
                         decoration: Kstyle.textFieldStyle,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
@@ -157,12 +172,15 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 16.0),
                       Text(
                         tr('address_of', context: context),
-                        style: Kstyle.textStyle,
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
                       ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _addressController,
                         decoration: Kstyle.textFieldStyle,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
@@ -173,13 +191,16 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 16.0),
                       Text(
                         tr('iec', context: context),
-                        style: Kstyle.textStyle,
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
                       ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _innController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
@@ -187,7 +208,9 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 16.0),
                       Text(
                         tr('status_of_contract', context: context),
-                        style: Kstyle.textStyle,
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
                       ),
                       const SizedBox(height: 6.0),
                       CustomDropdown(
@@ -209,46 +232,54 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      Text('Cost of the contract', style: Kstyle.textStyle),
+                      Text(
+                        'Cost of the contract',
+                        style: Kstyle.textStyle.copyWith(
+                          color: AppColors.cardGrey,
+                        ),
+                      ),
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _amountController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
                       ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            final contract = ContractEntity(
-                              type: _selectedType!,
-                              fullName: _fullNameController.text,
-                              organizationAddress: _addressController.text,
-                              inn: _innController.text,
-                              status: _selectedStatus!,
-                              amount: double.parse(_amountController.text),
-                              createdAt: DateTime.now(),
-                            );
+                      if (isFormComplete) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              final contract = ContractEntity(
+                                type: _selectedType!,
+                                fullName: _fullNameController.text,
+                                organizationAddress: _addressController.text,
+                                inn: _innController.text,
+                                status: _selectedStatus!,
+                                amount: double.parse(_amountController.text),
+                                createdAt: DateTime.now(),
+                              );
 
-                            _createdContract = contract;
+                              _createdContract = contract;
 
-                            context.read<ContractBloc>().add(
-                              CreateContractEvent(contract),
-                            );
-                          }
-                        },
-                        style: Kstyle.buttonStyle,
-                        child: Text(
-                          tr('save_contract', context: context),
-                          style: Kstyle.textStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
+                              context.read<ContractBloc>().add(
+                                CreateContractEvent(contract),
+                              );
+                            }
+                          },
+                          style: Kstyle.buttonStyle,
+                          child: Text(
+                            tr('save_contract', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

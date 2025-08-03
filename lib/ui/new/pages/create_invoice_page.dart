@@ -88,6 +88,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           }
         },
         builder: (context, state) {
+          final isFormComplete =
+              _serviceNameController.text.isNotEmpty &&
+              _costController.text.isNotEmpty &&
+              _status != null;
           return Stack(
             children: [
               Padding(
@@ -105,6 +109,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       TextFormField(
                         controller: _serviceNameController,
                         decoration: Kstyle.textFieldStyle,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
@@ -119,6 +124,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                         controller: _costController,
                         decoration: Kstyle.textFieldStyle,
                         keyboardType: TextInputType.number,
+                        onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
                             : null,
@@ -146,31 +152,33 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                           }
                         },
                       ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            final invoice = InvoiceEntity(
-                              serviceName: _serviceNameController.text,
-                              cost: double.parse(_costController.text),
-                              status: _status!,
-                              createdAt: DateTime.now(),
-                            );
-                            _isCreating = true;
-                            context.read<InvoiceBloc>().add(
-                              CreateInvoiceEvent(invoice),
-                            );
-                          }
-                        },
-                        style: Kstyle.buttonStyle,
-                        child: Text(
-                          tr('save_invoice', context: context),
-                          style: Kstyle.textStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
+                      if (isFormComplete) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              final invoice = InvoiceEntity(
+                                serviceName: _serviceNameController.text,
+                                cost: double.parse(_costController.text),
+                                status: _status!,
+                                createdAt: DateTime.now(),
+                              );
+                              _isCreating = true;
+                              context.read<InvoiceBloc>().add(
+                                CreateInvoiceEvent(invoice),
+                              );
+                            }
+                          },
+                          style: Kstyle.buttonStyle,
+                          child: Text(
+                            tr('save_invoice', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

@@ -152,9 +152,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
               decoration: BoxDecoration(
                 color: AppColors.black,
                 borderRadius: BorderRadius.circular(4),
-                border: widget.value!.isEmpty
-                    ? Border.all(color: AppColors.cardGrey)
-                    : Border.all(color: AppColors.cardWhite),
+                border: (widget.value != null && widget.value!.isNotEmpty)
+                    ? Border.all(color: AppColors.cardWhite)
+                    : Border.all(color: AppColors.cardGrey),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

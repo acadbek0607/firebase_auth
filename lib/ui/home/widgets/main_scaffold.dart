@@ -58,6 +58,12 @@ class _MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = selectedPageNotifier.value;
 
   void _onTabTapped(int index) {
+    // If the filter page is open, close it before navigating away.
+    if (_selectedIndex == 7) {
+      filterPageNotifier.value = null;
+      Navigator.of(context).pop();
+    }
+
     // If user taps "New" again, show the dialog
     if (index == 2) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

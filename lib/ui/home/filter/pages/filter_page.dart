@@ -53,7 +53,8 @@ class _FilterPageState extends State<FilterPage> {
 
   void _closeFilter(Filters result) {
     filterPageNotifier.value = null;
-    selectedPageNotifier.value = filterOriginIndexNotifier.value;
+    // Navigate back to the home page just as if the home icon were tapped.
+    selectedPageNotifier.value = 0;
     Navigator.pop(context, result);
   }
 

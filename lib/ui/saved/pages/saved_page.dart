@@ -85,7 +85,6 @@ class _SavedPageState extends State<SavedPage> {
                         'originIndex': 3,
                       },
                     );
-                    selectedPageNotifier.value = 3;
 
                     if (result != null && result is Filters) {
                       setState(() {

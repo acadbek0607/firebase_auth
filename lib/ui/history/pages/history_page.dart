@@ -166,7 +166,6 @@ class _HistoryPageState extends State<_HistoryPage> {
                     'originIndex': 1,
                   },
                 );
-                selectedPageNotifier.value = 1;
 
                 if (result != null && result is Filters) {
                   setState(() {

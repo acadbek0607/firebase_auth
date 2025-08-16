@@ -124,7 +124,12 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   Future<bool> _onPop() async {
-    _closeFilter(Filters.empty);
+    // _closeFilter(Filters.empty);
+    final savedFilter =
+        activeFiltersNotifier.value[widget.originIndex] ??
+        widget.initialFilter ??
+        Filters.empty;
+    _closeFilter(savedFilter);
     return false;
   }
 

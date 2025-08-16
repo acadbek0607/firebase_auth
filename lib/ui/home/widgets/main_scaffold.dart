@@ -65,6 +65,13 @@ class _MainScaffoldState extends State<MainScaffold> {
       });
       return;
     }
+    // Close the Filter page if navigating away from it
+    if (_selectedIndex == 7) {
+      filterPageNotifier.value = null;
+      selectedPageNotifier.value = index;
+      Navigator.pop(context);
+      return;
+    }
     selectedPageNotifier.value = index;
   }
 

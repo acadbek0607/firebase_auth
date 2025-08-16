@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage>
     _tabController.addListener(_handleTabSelection);
     _loadContracts();
     selectedViewNotifier.addListener(_onViewTypeChanged);
+    selectedPageNotifier.addListener(_onPageChanged);
   }
 
   @override
@@ -48,6 +49,7 @@ class _HomePageState extends State<HomePage>
     _tabController.removeListener(_handleTabSelection);
     _tabController.dispose();
     selectedViewNotifier.removeListener(_onViewTypeChanged);
+    selectedPageNotifier.addListener(_onPageChanged);
     super.dispose();
   }
 
@@ -71,6 +73,21 @@ class _HomePageState extends State<HomePage>
     if (selectedViewNotifier.value != newType) {
       selectedViewNotifier.value = newType;
     }
+  }
+
+  void _onPageChanged() {
+    if (selectedPageNotifier.value != 0) return;
+    final filter = activeFiltersNotifier.value[0] ?? Filters.empty;
+    setState(() {
+      _currentFilter = filter;
+      if (filter == Filters.empty) {
+        _selectedDay = DateTime.now();
+      } else if (filter.fromDate != null || filter.toDate != null) {
+        _selectedDay = null;
+      }
+    });
+    _loadContracts();
+    _loadInvoices();
   }
 
   void _loadContracts({bool nextPage = false}) {

@@ -16,15 +16,24 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscure = true;
   bool _accepted = false;
 
   void _onSignUpPressed() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     context.read<AuthBloc>().add(SignUpRequested(email, password));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,115 +48,145 @@ class _SignUpPageState extends State<SignUpPage> {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
             child: Center(
-              child: Column(
-                children: [
-                  Spacer(flex: 4),
-                  Expanded(
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: Kstyle.textFieldStyle.copyWith(
-                        labelText: tr('email', context: context),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Spacer(flex: 4),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          labelText: tr('email', context: context),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Email is required';
+                          }
+                          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                          if (!emailRegex.hasMatch(value.trim())) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        TextField(
-                          obscureText: _obscure,
-                          controller: _passwordController,
-                          decoration: Kstyle.textFieldStyle.copyWith(
-                            labelText: tr('password', context: context),
-                          ),
-                        ),
-                        Positioned(
-                          right: 8,
-                          top: 4,
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obscure = !_obscure;
-                              });
+                    Spacer(),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          TextFormField(
+                            obscureText: _obscure,
+                            controller: _passwordController,
+                            decoration: Kstyle.textFieldStyle.copyWith(
+                              labelText: tr('password', context: context),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Password is required';
+                              }
+                              if (value.trim().length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
                             },
-                            icon: Icon(
-                              _obscure
-                                  ? Icons.visibility_off_rounded
-                                  : Icons.visibility_rounded,
+                          ),
+                          Positioned(
+                            right: 8,
+                            top: 4,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _obscure = !_obscure;
+                                });
+                              },
+                              icon: Icon(
+                                _obscure
+                                    ? Icons.visibility_off_rounded
+                                    : Icons.visibility_rounded,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Spacer(),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _accepted ? _onSignUpPressed : null,
-                      style: Kstyle.buttonStyle.copyWith(
-                        minimumSize: WidgetStateProperty.all(
-                          const Size(double.infinity, 48),
-                        ),
-                      ),
-                      child: Text(
-                        tr('sign_up'),
-                        style: Kstyle.textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: _accepted,
-                          onChanged: (val) =>
-                              setState(() => _accepted = val ?? false),
-                        ),
-                        Expanded(
-                          child: Wrap(
-                            children: [
-                              Text(
-                                tr('accept_privacy_policy', context: context) +
-                                    ' ',
-                              ),
-                              GestureDetector(
-                                onTap: () =>
-                                    Navigator.pushNamed(context, '/privacy'),
-                                child: Text(
-                                  tr('privacy_policy', context: context),
-                                  style: const TextStyle(
-                                    color: AppColors.link,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ],
+                    Spacer(),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _accepted ? _onSignUpPressed : null,
+                        style: Kstyle.buttonStyle.copyWith(
+                          minimumSize: WidgetStateProperty.all(
+                            const Size(double.infinity, 48),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      trailing: TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/signin'),
                         child: Text(
-                          tr('sign_in', context: context),
+                          tr('sign_up'),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      title: Text(tr('already_have_account', context: context)),
                     ),
-                  ),
-                  if (state.status == AuthStatus.loading)
-                    Center(child: const CircularProgressIndicator.adaptive()),
-                  Spacer(flex: 4),
-                ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: _accepted,
+                            onChanged: (val) =>
+                                setState(() => _accepted = val ?? false),
+                          ),
+                          Expanded(
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  tr(
+                                        'accept_privacy_policy',
+                                        context: context,
+                                      ) +
+                                      ' ',
+                                ),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Navigator.pushNamed(context, '/privacy'),
+                                  child: Text(
+                                    tr('privacy_policy', context: context),
+                                    style: const TextStyle(
+                                      color: AppColors.link,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        trailing: TextButton(
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            '/signin',
+                          ),
+                          child: Text(
+                            tr('sign_in', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          tr('already_have_account', context: context),
+                        ),
+                      ),
+                    ),
+                    if (state.status == AuthStatus.loading)
+                      Center(child: const CircularProgressIndicator.adaptive()),
+                    Spacer(flex: 4),
+                  ],
+                ),
               ),
             ),
           );

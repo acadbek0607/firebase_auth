@@ -13,14 +13,23 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscure = true;
 
   void _onSignInPressed() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     context.read<AuthBloc>().add(SignInRequested(email, password));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,83 +47,108 @@ class _SignInPageState extends State<SignInPage> {
               vertical: 10.0,
             ),
             child: Center(
-              child: Column(
-                children: [
-                  Spacer(flex: 4),
-                  Expanded(
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: Kstyle.textFieldStyle.copyWith(
-                        labelText: tr('email', context: context),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Spacer(flex: 4),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: Kstyle.textFieldStyle.copyWith(
+                          labelText: tr('email', context: context),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Email is required';
+                          }
+                          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                          if (!emailRegex.hasMatch(value.trim())) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                  ),
-                  Spacer(),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        TextField(
-                          obscureText: _obscure,
-                          controller: _passwordController,
-                          decoration: Kstyle.textFieldStyle.copyWith(
-                            labelText: tr('password', context: context),
-                          ),
-                        ),
-                        Positioned(
-                          right: 8,
-                          top: 4,
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obscure = !_obscure;
-                              });
+                    Spacer(),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          TextFormField(
+                            obscureText: _obscure,
+                            controller: _passwordController,
+                            decoration: Kstyle.textFieldStyle.copyWith(
+                              labelText: tr('password', context: context),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Password is required';
+                              }
+                              if (value.trim().length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
                             },
-                            icon: Icon(
-                              _obscure
-                                  ? Icons.visibility_off_rounded
-                                  : Icons.visibility_rounded,
+                          ),
+                          Positioned(
+                            right: 8,
+                            top: 4,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _obscure = !_obscure;
+                                });
+                              },
+                              icon: Icon(
+                                _obscure
+                                    ? Icons.visibility_off_rounded
+                                    : Icons.visibility_rounded,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Spacer(),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _onSignInPressed,
-                      style: Kstyle.buttonStyle.copyWith(
-                        minimumSize: WidgetStateProperty.all(
-                          const Size(double.infinity, 48),
-                        ),
-                      ),
-                      child: Text(
-                        tr('sign_in'),
-                        style: Kstyle.textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      trailing: TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/signup'),
+                    Spacer(),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _onSignInPressed,
+                        style: Kstyle.buttonStyle.copyWith(
+                          minimumSize: WidgetStateProperty.all(
+                            const Size(double.infinity, 48),
+                          ),
+                        ),
                         child: Text(
-                          tr('sign_up', context: context),
+                          tr('sign_in'),
                           style: Kstyle.textStyle.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      title: Text(tr('dont_have_account', context: context)),
                     ),
-                  ),
-                  if (state.status == AuthStatus.loading)
-                    Center(child: const CircularProgressIndicator.adaptive()),
-                  Spacer(flex: 4),
-                ],
+                    Expanded(
+                      child: ListTile(
+                        trailing: TextButton(
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            '/signup',
+                          ),
+                          child: Text(
+                            tr('sign_up', context: context),
+                            style: Kstyle.textStyle.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        title: Text(tr('dont_have_account', context: context)),
+                      ),
+                    ),
+                    if (state.status == AuthStatus.loading)
+                      Center(child: const CircularProgressIndicator.adaptive()),
+                    Spacer(flex: 4),
+                  ],
+                ),
               ),
             ),
           );

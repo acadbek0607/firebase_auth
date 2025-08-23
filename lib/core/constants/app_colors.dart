@@ -21,7 +21,7 @@ class AppColors {
   static const commentTF = Color(0xFF5C5C5C);
   static const buttonFor = Color(0xFFFDFDFD);
   static const iconBlur = Color(0xFF323232);
-  static const link = Color.fromARGB(255, 24, 3, 157);
+  static const link = Color(0xFF1775DA);
   static const line = Color(0xFFD1D1D1);
   static const sCheck = Color(0xFFF2F2F2);
   static const newBtn = Color(0xFF4E4E4E);

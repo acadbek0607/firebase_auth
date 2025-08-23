@@ -142,7 +142,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     if (state.status == AuthStatus.loading)
                       const Center(child: CircularProgressIndicator.adaptive()),
-                    const SizedBox(height: 80),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),

@@ -54,7 +54,6 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 80),
                     TextFormField(
                       controller: _emailController,
                       decoration: Kstyle.textFieldStyle.copyWith(

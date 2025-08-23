@@ -53,7 +53,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   children: [
-                    SizedBox(height: 80),
                     TextFormField(
                       controller: _emailController,
                       decoration: Kstyle.textFieldStyle.copyWith(
@@ -171,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     if (state.status == AuthStatus.loading)
                       Center(child: const CircularProgressIndicator.adaptive()),
-                    SizedBox(height: 80),
+                    SizedBox(height: 32),
                   ],
                 ),
               ),

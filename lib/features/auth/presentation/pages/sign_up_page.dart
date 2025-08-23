@@ -7,6 +7,7 @@ import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -124,10 +125,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Checkbox(
-                          value: _accepted,
-                          onChanged: (val) =>
-                              setState(() => _accepted = val ?? false),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _accepted = !_accepted;
+                            });
+                          },
+                          icon: SvgPicture.asset(
+                            _accepted
+                                ? 'assets/svg/s_check.svg'
+                                : 'assets/svg/check.svg',
+                          ),
                         ),
                         Wrap(
                           children: [

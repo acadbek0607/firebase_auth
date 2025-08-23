@@ -56,6 +56,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   ];
 
   int _selectedIndex = selectedPageNotifier.value;
+  late final VoidCallback _pageListener;
 
   void _onTabTapped(int index) {
     // If user taps "New" again, show the dialog
@@ -78,16 +79,17 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void initState() {
     super.initState();
-    selectedPageNotifier.addListener(() {
+    _pageListener = () {
       if (mounted) {
         setState(() => _selectedIndex = selectedPageNotifier.value);
       }
-    });
+    };
+    selectedPageNotifier.addListener(_pageListener);
   }
 
   @override
   void dispose() {
-    selectedPageNotifier.removeListener(() {});
+    selectedPageNotifier.removeListener(_pageListener);
     super.dispose();
   }
 
@@ -104,28 +106,60 @@ class _MainScaffoldState extends State<MainScaffold> {
       navIndex = 2; // highlight "New" for create pages
     }
 
-    return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _pages),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navIndex,
-        onDestinationSelected: _onTabTapped,
-        indicatorColor: AppColors.darkest,
-        indicatorShape: const CircleBorder(
-          eccentricity: BorderSide.strokeAlignCenter,
-        ),
-        overlayColor: WidgetStateProperty.all(AppColors.darkest.withAlpha(11)),
-
-        backgroundColor: AppColors.darkest,
-        destinations: List.generate(5, (i) {
-          final isSelected = navIndex == i;
-          return NavigationDestination(
-            icon: SvgPicture.asset(
-              'assets/svg/${isSelected ? 's_' : ''}${_icons[i]}.svg',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 600;
+        if (isWide) {
+          return Scaffold(
+            body: Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: navIndex,
+                  onDestinationSelected: _onTabTapped,
+                  backgroundColor: AppColors.darkest,
+                  labelType: NavigationRailLabelType.all,
+                  destinations: List.generate(5, (i) {
+                    return NavigationRailDestination(
+                      icon: SvgPicture.asset('assets/svg/${_icons[i]}.svg'),
+                      selectedIcon: SvgPicture.asset(
+                        'assets/svg/s_${_icons[i]}.svg',
+                      ),
+                      label: Text(labels[i]),
+                    );
+                  }),
+                ),
+                Expanded(
+                  child: IndexedStack(index: _selectedIndex, children: _pages),
+                ),
+              ],
             ),
-            label: labels[i],
           );
-        }),
-      ),
+        }
+        return Scaffold(
+          body: IndexedStack(index: _selectedIndex, children: _pages),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: navIndex,
+            onDestinationSelected: _onTabTapped,
+            indicatorColor: AppColors.darkest,
+            indicatorShape: const CircleBorder(
+              eccentricity: BorderSide.strokeAlignCenter,
+            ),
+            overlayColor: WidgetStateProperty.all(
+              AppColors.darkest.withAlpha(11),
+            ),
+            backgroundColor: AppColors.darkest,
+            destinations: List.generate(5, (i) {
+              final isSelected = navIndex == i;
+              return NavigationDestination(
+                icon: SvgPicture.asset(
+                  'assets/svg/${isSelected ? 's_' : ''}${_icons[i]}.svg',
+                ),
+                label: labels[i],
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }

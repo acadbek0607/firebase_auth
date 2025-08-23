@@ -41,114 +41,104 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
-          return Padding(
+          return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 10.0,
             ),
-            child: Center(
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  children: [
-                    Spacer(flex: 4),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _emailController,
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 80),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: Kstyle.textFieldStyle.copyWith(
+                      labelText: tr('email', context: context),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Email is required';
+                      }
+                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                      if (!emailRegex.hasMatch(value.trim())) {
+                        return 'Enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Stack(
+                    children: [
+                      TextFormField(
+                        obscureText: _obscure,
+                        controller: _passwordController,
                         decoration: Kstyle.textFieldStyle.copyWith(
-                          labelText: tr('email', context: context),
+                          labelText: tr('password', context: context),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Email is required';
+                            return 'Password is required';
                           }
-                          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                          if (!emailRegex.hasMatch(value.trim())) {
-                            return 'Enter a valid email';
+                          if (value.trim().length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
                           return null;
                         },
                       ),
-                    ),
-                    Spacer(),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          TextFormField(
-                            obscureText: _obscure,
-                            controller: _passwordController,
-                            decoration: Kstyle.textFieldStyle.copyWith(
-                              labelText: tr('password', context: context),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Password is required';
-                              }
-                              if (value.trim().length < 6) {
-                                return 'Password must be at least 6 characters';
-                              }
-                              return null;
-                            },
-                          ),
-                          Positioned(
-                            right: 8,
-                            top: 4,
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _obscure = !_obscure;
-                                });
-                              },
-                              icon: Icon(
-                                _obscure
-                                    ? Icons.visibility_off_rounded
-                                    : Icons.visibility_rounded,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Spacer(),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _onSignInPressed,
-                        style: Kstyle.buttonStyle.copyWith(
-                          minimumSize: WidgetStateProperty.all(
-                            const Size(double.infinity, 48),
-                          ),
-                        ),
-                        child: Text(
-                          tr('sign_in'),
-                          style: Kstyle.textStyle.copyWith(
-                            fontWeight: FontWeight.bold,
+                      Positioned(
+                        right: 8,
+                        top: 4,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscure = !_obscure;
+                            });
+                          },
+                          icon: Icon(
+                            _obscure
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded,
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        trailing: TextButton(
-                          onPressed: () => Navigator.pushReplacementNamed(
-                            context,
-                            '/signup',
-                          ),
-                          child: Text(
-                            tr('sign_up', context: context),
-                            style: Kstyle.textStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        title: Text(tr('dont_have_account', context: context)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _onSignInPressed,
+                    style: Kstyle.buttonStyle.copyWith(
+                      minimumSize: WidgetStateProperty.all(
+                        const Size(double.infinity, 48),
                       ),
                     ),
-                    if (state.status == AuthStatus.loading)
-                      Center(child: const CircularProgressIndicator.adaptive()),
-                    Spacer(flex: 4),
-                  ],
-                ),
+                    child: Text(
+                      tr('sign_in'),
+                      style: Kstyle.textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    trailing: TextButton(
+                      onPressed: () =>
+                          Navigator.pushReplacementNamed(context, '/signup'),
+                      child: Text(
+                        tr('sign_up', context: context),
+                        style: Kstyle.textStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    title: Text(tr('dont_have_account', context: context)),
+                  ),
+                  if (state.status == AuthStatus.loading)
+                    const Center(child: CircularProgressIndicator.adaptive()),
+                  const SizedBox(height: 80),
+                ],
               ),
             ),
           );

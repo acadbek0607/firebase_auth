@@ -394,7 +394,10 @@ class _CreateContractPageState extends State<CreateContractPage> {
                                 inn: _innController.text,
                                 status: _selectedStatus!,
                                 amount: double.parse(
-                                  _amountController.text.replaceAll(',', ''),
+                                  _amountController.text.replaceAll(
+                                    RegExp(r'[^0-9]'),
+                                    '',
+                                  ),
                                 ),
                                 createdAt: DateTime.now(),
                               );

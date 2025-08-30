@@ -203,7 +203,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                               final invoice = InvoiceEntity(
                                 serviceName: _serviceNameController.text,
                                 cost: double.parse(
-                                  _costController.text.replaceAll(',', ''),
+                                  _costController.text.replaceAll(
+                                    RegExp(r'[^0-9]'),
+                                    '',
+                                  ),
                                 ),
                                 status: _status!,
                                 createdAt: DateTime.now(),

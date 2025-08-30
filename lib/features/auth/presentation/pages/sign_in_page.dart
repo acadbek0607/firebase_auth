@@ -55,7 +55,9 @@ class _SignInPageState extends State<SignInPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
+                      style: Kstyle.textStyle,
                       decoration: Kstyle.textFieldStyle.copyWith(
                         labelText: tr('email', context: context),
                       ),
@@ -75,7 +77,9 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         TextFormField(
                           obscureText: _obscure,
+                          keyboardType: TextInputType.visiblePassword,
                           controller: _passwordController,
+                          style: Kstyle.textStyle,
                           decoration: Kstyle.textFieldStyle.copyWith(
                             labelText: tr('password', context: context),
                           ),

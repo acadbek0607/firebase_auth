@@ -108,6 +108,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 6.0),
                       TextFormField(
                         controller: _serviceNameController,
+                        style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),
@@ -132,6 +133,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       SizedBox(height: 6.0),
                       TextFormField(
                         controller: _costController,
+                        style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),

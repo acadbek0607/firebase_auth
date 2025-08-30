@@ -164,6 +164,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _fullNameController,
+                        style: Kstyle.textStyle,
+                        textCapitalization: TextCapitalization.words,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),
@@ -190,6 +192,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _addressController,
+                        textCapitalization: TextCapitalization.words,
+                        style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),
@@ -219,6 +223,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _innController,
+                        style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),
@@ -339,6 +344,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                       const SizedBox(height: 6.0),
                       TextFormField(
                         controller: _amountController,
+                        style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4.0),

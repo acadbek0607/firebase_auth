@@ -52,5 +52,17 @@ class Kstyle {
       borderRadius: BorderRadius.circular(4.0),
       borderSide: BorderSide(width: 1.2, color: AppColors.newLabel),
     ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.0),
+      borderSide: BorderSide(
+        width: 1.2,
+        color: AppColors.newLabel.withAlpha(102),
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(4.0),
+      borderSide: BorderSide(width: 1.2, color: AppColors.newLabel),
+    ),
+    errorStyle: TextStyle(color: Colors.red),
   );
 }

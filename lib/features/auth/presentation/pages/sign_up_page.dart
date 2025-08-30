@@ -56,6 +56,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     TextFormField(
                       controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      style: Kstyle.textStyle,
                       decoration: Kstyle.textFieldStyle.copyWith(
                         labelText: tr('email', context: context),
                       ),
@@ -75,6 +77,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         TextFormField(
                           obscureText: _obscure,
+                          keyboardType: TextInputType.visiblePassword,
+                          style: Kstyle.textStyle,
                           controller: _passwordController,
                           decoration: Kstyle.textFieldStyle.copyWith(
                             labelText: tr('password', context: context),

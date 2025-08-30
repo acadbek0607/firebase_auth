@@ -28,11 +28,13 @@ class CustomCheckboxTile extends StatelessWidget {
             isSelected ? 'assets/svg/s_check.svg' : 'assets/svg/check.svg',
           ),
           const SizedBox(width: 10),
-          Text(
-            label,
-            style: Kstyle.textStyle.copyWith(
-              color: isSelected ? AppColors.sCheck : AppColors.navBar,
-              fontWeight: FontWeight.w600,
+          Expanded(
+            child: Text(
+              label,
+              style: Kstyle.textStyle.copyWith(
+                color: isSelected ? AppColors.sCheck : AppColors.navBar,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

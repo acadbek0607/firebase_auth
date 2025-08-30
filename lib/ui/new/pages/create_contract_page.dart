@@ -369,8 +369,10 @@ class _CreateContractPageState extends State<CreateContractPage> {
                             final formatted = KFormat.amountFormat.format(
                               int.parse(digits),
                             );
+                            final withCurrency =
+                                '$formatted ${tr('currency', context: context)}';
                             return TextEditingValue(
-                              text: formatted,
+                              text: withCurrency,
                               selection: TextSelection.collapsed(
                                 offset: formatted.length,
                               ),

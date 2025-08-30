@@ -15,6 +15,8 @@ class ContractsPage extends StatelessWidget {
   final VoidCallback? onLoadMore;
   final bool openFromDetail;
   final int originIndex;
+  final bool shrinkWrap;
+  final ScrollPhysics? physics;
 
   const ContractsPage({
     super.key,
@@ -24,6 +26,8 @@ class ContractsPage extends StatelessWidget {
     this.onLoadMore,
     this.openFromDetail = false,
     this.originIndex = 0,
+    this.shrinkWrap = false,
+    this.physics,
   });
 
   @override
@@ -58,6 +62,8 @@ class ContractsPage extends StatelessWidget {
       );
     }
     return ListView.builder(
+      shrinkWrap: shrinkWrap,
+      physics: physics,
       itemCount: contracts.length + (canLoadMore || isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index < contracts.length) {

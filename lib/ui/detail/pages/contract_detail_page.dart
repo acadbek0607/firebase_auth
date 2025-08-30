@@ -119,7 +119,7 @@ class _ContractDetailPageState extends State<ContractDetailPage>
             const SizedBox(width: 10),
           ],
         ),
-        body: Container(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,33 +185,33 @@ class _ContractDetailPageState extends State<ContractDetailPage>
                 style: Kstyle.textStyle.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Expanded(
-                child: BlocBuilder<RelatedBloc, RelatedState>(
-                  builder: (context, state) {
-                    final others = state.relatedContracts
-                        .where(
-                          (c) =>
-                              c.id != contract.id &&
-                              c.fullName == contract.fullName,
-                        )
-                        .toList();
-                    return ContractsPage(
-                      contracts: others,
-                      canLoadMore: state.canLoadMore,
-                      isLoadingMore: state.isLoadingMore,
-                      openFromDetail: true,
-                      originIndex: detailOriginIndexNotifier.value,
-                      onLoadMore: () {
-                        context.read<RelatedBloc>().add(
-                          LoadRelatedContracts(
-                            fullName: contract.fullName,
-                            startAfterDoc: state.lastDocSnap,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+              BlocBuilder<RelatedBloc, RelatedState>(
+                builder: (context, state) {
+                  final others = state.relatedContracts
+                      .where(
+                        (c) =>
+                            c.id != contract.id &&
+                            c.fullName == contract.fullName,
+                      )
+                      .toList();
+                  return ContractsPage(
+                    contracts: others,
+                    canLoadMore: state.canLoadMore,
+                    isLoadingMore: state.isLoadingMore,
+                    openFromDetail: true,
+                    originIndex: detailOriginIndexNotifier.value,
+                    onLoadMore: () {
+                      context.read<RelatedBloc>().add(
+                        LoadRelatedContracts(
+                          fullName: contract.fullName,
+                          startAfterDoc: state.lastDocSnap,
+                        ),
+                      );
+                    },
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                  );
+                },
               ),
             ],
           ),

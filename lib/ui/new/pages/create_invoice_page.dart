@@ -6,6 +6,7 @@ import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/ui/home/page/home_page.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fire_auth/features/invoice/domain/entities/invoice_entity.dart';
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
@@ -146,6 +147,26 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                           ),
                         ),
                         keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            final digits = newValue.text.replaceAll(
+                              RegExp(r'[^0-9]'),
+                              '',
+                            );
+                            if (digits.isEmpty) {
+                              return const TextEditingValue(text: '');
+                            }
+                            final formatted = KFormat.amountFormat.format(
+                              int.parse(digits),
+                            );
+                            return TextEditingValue(
+                              text: formatted,
+                              selection: TextSelection.collapsed(
+                                offset: formatted.length,
+                              ),
+                            );
+                          }),
+                        ],
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
@@ -181,7 +202,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                             if (_formKey.currentState!.validate()) {
                               final invoice = InvoiceEntity(
                                 serviceName: _serviceNameController.text,
-                                cost: double.parse(_costController.text),
+                                cost: double.parse(
+                                  _costController.text.replaceAll(',', ''),
+                                ),
                                 status: _status!,
                                 createdAt: DateTime.now(),
                               );

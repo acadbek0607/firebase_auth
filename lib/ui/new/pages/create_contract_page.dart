@@ -357,6 +357,26 @@ class _CreateContractPageState extends State<CreateContractPage> {
                           ),
                         ),
                         keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            final digits = newValue.text.replaceAll(
+                              RegExp(r'[^0-9]'),
+                              '',
+                            );
+                            if (digits.isEmpty) {
+                              return const TextEditingValue(text: '');
+                            }
+                            final formatted = KFormat.amountFormat.format(
+                              int.parse(digits),
+                            );
+                            return TextEditingValue(
+                              text: formatted,
+                              selection: TextSelection.collapsed(
+                                offset: formatted.length,
+                              ),
+                            );
+                          }),
+                        ],
                         onChanged: (_) => setState(() {}),
                         validator: (value) => value!.isEmpty
                             ? tr('required', context: context)
@@ -373,7 +393,9 @@ class _CreateContractPageState extends State<CreateContractPage> {
                                 organizationAddress: _addressController.text,
                                 inn: _innController.text,
                                 status: _selectedStatus!,
-                                amount: double.parse(_amountController.text),
+                                amount: double.parse(
+                                  _amountController.text.replaceAll(',', ''),
+                                ),
                                 createdAt: DateTime.now(),
                               );
 

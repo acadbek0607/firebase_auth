@@ -6,71 +6,59 @@ class UzPhoneInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+    final isDeleting = oldValue.text.length > newValue.text.length;
+
+    // Raw digits from new value
     String digits = newValue.text.replaceAll(RegExp(r'\D'), '');
 
-    // Remove leading country code if user tries to input it again
-    if (digits.startsWith('998')) {
-      digits = digits.substring(3);
+    // Always start with 998
+    if (!digits.startsWith('998')) {
+      digits = '998$digits';
     }
 
-    // Keep track of the cursor position relative to the digits entered
-    int digitIndex = newValue.text
-        .substring(0, newValue.selection.baseOffset)
-        .replaceAll(RegExp(r'\D'), '')
-        .length;
-    if (digitIndex > 3) {
-      digitIndex -= 3;
-    } else {
-      digitIndex = 0;
+    // Limit to 12 digits total
+    if (digits.length > 12) {
+      digits = digits.substring(0, 12);
     }
 
-    if (digits.isEmpty) {
-      return const TextEditingValue(
-        text: '',
-        selection: TextSelection.collapsed(offset: 0),
-      );
+    // Build formatted string
+    String formatted = '+998';
+    if (digits.length > 3) {
+      formatted += '(${digits.substring(3, digits.length.clamp(3, 5))}';
+    }
+    if (digits.length >= 5) {
+      formatted += ') ${digits.substring(5, digits.length.clamp(5, 8))}';
+    }
+    if (digits.length >= 8) {
+      formatted += ' ${digits.substring(8, digits.length.clamp(8, 10))}';
+    }
+    if (digits.length >= 10) {
+      formatted += ' ${digits.substring(10, digits.length.clamp(10, 12))}';
     }
 
-    if (digits.length > 9) {
-      digits = digits.substring(0, 9);
-    }
-
-    final buffer = StringBuffer('+998(');
-    if (digits.isNotEmpty) {
-      if (digits.length >= 2) {
-        buffer.write(digits.substring(0, 2));
-        buffer.write(')');
-        if (digits.length > 2) {
-          buffer.write(' ');
-          if (digits.length >= 5) {
-            buffer.write(digits.substring(2, 5));
-            if (digits.length > 5) {
-              buffer.write(' ');
-              if (digits.length >= 7) {
-                buffer.write(digits.substring(5, 7));
-                if (digits.length > 7) {
-                  buffer.write(' ');
-                  buffer.write(digits.substring(7));
-                }
-              } else {
-                buffer.write(digits.substring(5));
-              }
-            } else {
-              buffer.write(digits.substring(2));
-            }
-          } else {
-            buffer.write(digits.substring(2));
-          }
-        }
+    // Figure out new cursor position
+    int cursorPos;
+    if (isDeleting) {
+      // If deleting a space or bracket, move cursor back one more
+      final oldCursor = oldValue.selection.baseOffset;
+      if (oldCursor > 0 &&
+          RegExp(r'\D').hasMatch(oldValue.text[oldCursor - 1])) {
+        cursorPos = oldCursor - 1;
       } else {
-        buffer.write(digits);
+        cursorPos = newValue.selection.baseOffset;
       }
+    } else {
+      cursorPos = formatted.length;
     }
 
-    final formatted = buffer.toString();
+    // Clamp cursor position
+    if (cursorPos > formatted.length) {
+      cursorPos = formatted.length;
+    }
+
     return TextEditingValue(
       text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
+      selection: TextSelection.collapsed(offset: cursorPos),
     );
   }
 }

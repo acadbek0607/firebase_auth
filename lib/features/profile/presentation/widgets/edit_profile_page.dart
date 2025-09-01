@@ -110,6 +110,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   controller: _fullNameController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('full_name', context: context),
@@ -118,6 +120,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   controller: _professionController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('profession', context: context),
@@ -126,6 +130,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   controller: _organizationController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('organization', context: context),
@@ -134,6 +140,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.datetime,
                   controller: _dobController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('date_of_birth', context: context),
@@ -142,6 +149,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.phone,
                   controller: _phoneController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('phone', context: context),
@@ -150,6 +158,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('email', context: context),
@@ -178,6 +187,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     tr('save', context: context),
                     style: Kstyle.textStyle.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
                 ),

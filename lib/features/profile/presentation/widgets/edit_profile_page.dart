@@ -90,25 +90,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    widget.showBack
-                        ? IconButton(
-                            onPressed: widget.onDismiss,
-                            icon: const Icon(Icons.arrow_back),
-                          )
-                        : const SizedBox(width: 48),
-                    Text(
-                      tr('profile', context: context),
-                      style: Kstyle.textStyle.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(width: 48),
                 TextFormField(
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,

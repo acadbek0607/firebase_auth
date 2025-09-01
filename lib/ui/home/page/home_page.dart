@@ -7,6 +7,7 @@ import 'package:fire_auth/features/contract/presentation/bloc/contract_bloc.dart
 import 'package:fire_auth/features/contract/presentation/pages/contract_page.dart';
 import 'package:fire_auth/features/invoice/presentation/bloc/invoice_bloc.dart';
 import 'package:fire_auth/features/invoice/presentation/pages/invoive_page.dart';
+import 'package:fire_auth/ui/detail/widgets/responsive_center.dart';
 import 'package:fire_auth/ui/home/widgets/calendar_widget.dart';
 import 'package:fire_auth/ui/home/widgets/search_page.dart';
 import 'package:fire_auth/ui/home/widgets/toggle_button_widget.dart';
@@ -256,34 +257,36 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
               ],
-              body: Container(
-                color: AppColors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    BlocBuilder<ContractBloc, ContractState>(
-                      builder: (context, state) {
-                        return ContractsPage(
-                          contracts: state.contracts,
-                          canLoadMore: state.canLoadMore,
-                          isLoadingMore: state.isLoadingMore,
-                          onLoadMore: _onLoadMore,
-                          originIndex: 0,
-                        );
-                      },
-                    ),
-                    BlocBuilder<InvoiceBloc, InvoiceState>(
-                      builder: (context, state) {
-                        return InvoicesPage(
-                          invoices: state.invoices,
-                          canLoadMore: state.canLoadMore,
-                          isLoadingMore: state.isLoadingMore,
-                          onLoadMore: _onLoadMore,
-                        );
-                      },
-                    ),
-                  ],
+              body: ResponsiveCenter(
+                child: Container(
+                  color: AppColors.black,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      BlocBuilder<ContractBloc, ContractState>(
+                        builder: (context, state) {
+                          return ContractsPage(
+                            contracts: state.contracts,
+                            canLoadMore: state.canLoadMore,
+                            isLoadingMore: state.isLoadingMore,
+                            onLoadMore: _onLoadMore,
+                            originIndex: 0,
+                          );
+                        },
+                      ),
+                      BlocBuilder<InvoiceBloc, InvoiceState>(
+                        builder: (context, state) {
+                          return InvoicesPage(
+                            invoices: state.invoices,
+                            canLoadMore: state.canLoadMore,
+                            isLoadingMore: state.isLoadingMore,
+                            onLoadMore: _onLoadMore,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

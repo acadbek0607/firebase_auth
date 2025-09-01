@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fire_auth/ui/detail/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
@@ -28,11 +29,14 @@ class PrivacyPolicyPage extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           }
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              snapshot.data ?? '',
-              style: const TextStyle(fontSize: 14.0),
+          return ResponsiveCenter(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                snapshot.data ?? '',
+                style: const TextStyle(fontSize: 14.0),
+              ),
             ),
           );
         },

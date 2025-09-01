@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fire_auth/ui/detail/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,7 +42,7 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
-          return Center(
+          return ResponsiveCenter(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,

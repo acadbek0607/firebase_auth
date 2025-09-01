@@ -5,6 +5,7 @@ import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fire_auth/ui/detail/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         builder: (context, state) {
-          return Center(
+          return ResponsiveCenter(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Form(

@@ -3,6 +3,7 @@ import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/ui/detail/widgets/suggestion_form_field.dart';
 import 'package:fire_auth/ui/home/page/home_page.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                         style: Kstyle.textStyle,
                       ),
                       SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'invoice_service_name',
                         controller: _serviceNameController,
                         style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
@@ -132,7 +134,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                         style: Kstyle.textStyle,
                       ),
                       SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'invoice_cost',
                         controller: _costController,
                         style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(

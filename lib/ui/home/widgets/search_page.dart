@@ -5,6 +5,7 @@ import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/utils/status.dart';
 import 'package:fire_auth/features/contract/domain/entities/contract_entity.dart';
+import 'package:fire_auth/ui/detail/widgets/suggestion_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,10 +57,10 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.transparent.withAlpha(210),
       appBar: AppBar(
         backgroundColor: AppColors.black,
-        title: TextField(
+        title: SuggestionFormField(
+          prefsKey: 'search_queries',
           controller: _searchController,
           onChanged: (val) => setState(() => _query = val.trim()),
-          autofocus: true,
           style: Kstyle.textStyle,
           decoration: InputDecoration(
             hintText: tr('search', context: context),

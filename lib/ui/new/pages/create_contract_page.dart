@@ -4,6 +4,7 @@ import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/core/constants/notifier.dart';
 import 'package:fire_auth/core/utils/status.dart';
+import 'package:fire_auth/ui/detail/widgets/suggestion_form_field.dart';
 import 'package:fire_auth/ui/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -162,7 +163,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         ),
                       ),
                       const SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'contract_full_name',
                         controller: _fullNameController,
                         style: Kstyle.textStyle,
                         textCapitalization: TextCapitalization.words,
@@ -190,7 +192,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         ),
                       ),
                       const SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'contract_address',
                         controller: _addressController,
                         textCapitalization: TextCapitalization.words,
                         style: Kstyle.textStyle,
@@ -221,7 +224,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         ),
                       ),
                       const SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'contract_inn',
                         controller: _innController,
                         style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(
@@ -342,7 +346,8 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         ),
                       ),
                       const SizedBox(height: 6.0),
-                      TextFormField(
+                      SuggestionFormField(
+                        prefsKey: 'contract_amount',
                         controller: _amountController,
                         style: Kstyle.textStyle,
                         decoration: Kstyle.textFieldStyle.copyWith(

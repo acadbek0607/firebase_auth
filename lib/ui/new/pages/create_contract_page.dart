@@ -94,347 +94,356 @@ class _CreateContractPageState extends State<CreateContractPage> {
           child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
         ),
       ),
-      body: BlocConsumer<ContractBloc, ContractState>(
-        listener: (context, state) {
-          if (state.status == BlocStatus.loaded && _createdContract != null) {
-            final match = state.contracts.firstWhere(
-              (c) =>
-                  c.fullName == _createdContract!.fullName &&
-                  c.inn == _createdContract!.inn &&
-                  c.createdAt.isAtSameMomentAs(_createdContract!.createdAt),
-              orElse: () => state.contracts.last,
-            );
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: BlocConsumer<ContractBloc, ContractState>(
+          listener: (context, state) {
+            if (state.status == BlocStatus.loaded && _createdContract != null) {
+              final match = state.contracts.firstWhere(
+                (c) =>
+                    c.fullName == _createdContract!.fullName &&
+                    c.inn == _createdContract!.inn &&
+                    c.createdAt.isAtSameMomentAs(_createdContract!.createdAt),
+                orElse: () => state.contracts.last,
+              );
 
-            Navigator.pushReplacementNamed(
-              context,
-              '/contract_detail',
-              arguments: {
-                'contract': match,
-                'allContracts': state.contracts,
-                'originIndex': 0,
-              },
-            );
-          } else if (state.status == BlocStatus.error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage.toString())),
-            );
-          }
-        },
-        builder: (context, state) {
-          final isFormComplete =
-              _selectedType != null &&
-              _fullNameController.text.isNotEmpty &&
-              _addressController.text.isNotEmpty &&
-              _innController.text.isNotEmpty &&
-              _selectedStatus != null &&
-              _amountController.text.isNotEmpty;
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      const SizedBox(height: 20.0),
-                      Text(
-                        'Entity',
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      CustomDropdown(
-                        label: '',
-                        value: _selectedType ?? '',
-                        items: [
-                          tr('personal', context: context),
-                          tr('legal', context: context),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) setState(() => _selectedType = val);
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        tr('fisher', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      SuggestionFormField(
-                        prefsKey: 'contract_full_name',
-                        controller: _fullNameController,
-                        style: Kstyle.textStyle,
-                        textCapitalization: TextCapitalization.words,
-                        decoration: Kstyle.textFieldStyle.copyWith(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide: BorderSide(
-                              width: 1.2,
-                              color: _fullNameController.text.isNotEmpty
-                                  ? AppColors.newLabel
-                                  : AppColors.newLabel.withAlpha(102),
-                            ),
+              Navigator.pushReplacementNamed(
+                context,
+                '/contract_detail',
+                arguments: {
+                  'contract': match,
+                  'allContracts': state.contracts,
+                  'originIndex': 0,
+                },
+              );
+            } else if (state.status == BlocStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage.toString())),
+              );
+            }
+          },
+          builder: (context, state) {
+            final isFormComplete =
+                _selectedType != null &&
+                _fullNameController.text.isNotEmpty &&
+                _addressController.text.isNotEmpty &&
+                _innController.text.isNotEmpty &&
+                _selectedStatus != null &&
+                _amountController.text.isNotEmpty;
+            return Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: [
+                        const SizedBox(height: 20.0),
+                        Text(
+                          'Entity',
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
                           ),
                         ),
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) => value!.isEmpty
-                            ? tr('required', context: context)
-                            : null,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        tr('address_of', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
+                        const SizedBox(height: 6.0),
+                        CustomDropdown(
+                          label: '',
+                          value: _selectedType ?? '',
+                          items: [
+                            tr('personal', context: context),
+                            tr('legal', context: context),
+                          ],
+                          onChanged: (val) {
+                            if (val != null) {
+                              setState(() => _selectedType = val);
+                            }
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      SuggestionFormField(
-                        prefsKey: 'contract_address',
-                        controller: _addressController,
-                        textCapitalization: TextCapitalization.words,
-                        style: Kstyle.textStyle,
-                        decoration: Kstyle.textFieldStyle.copyWith(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide: BorderSide(
-                              width: 1.2,
-                              color: _addressController.text.isNotEmpty
-                                  ? AppColors.newLabel
-                                  : AppColors.newLabel.withAlpha(102),
-                            ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          tr('fisher', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
                           ),
                         ),
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) => value!.isEmpty
-                            ? tr('required', context: context)
-                            : null,
-                        keyboardType: TextInputType.multiline,
-                        minLines: 1,
-                        maxLines: 2,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        tr('iec', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      SuggestionFormField(
-                        prefsKey: 'contract_inn',
-                        controller: _innController,
-                        style: Kstyle.textStyle,
-                        decoration: Kstyle.textFieldStyle.copyWith(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide: BorderSide(
-                              width: 1.2,
-                              color: _innController.text.isNotEmpty
-                                  ? AppColors.newLabel
-                                  : AppColors.newLabel.withAlpha(102),
-                            ),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                          ),
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(right: 4.0),
-                            child: IconButton(
-                              icon: SvgPicture.asset(
-                                'assets/svg/help.svg',
-                                height: 20.0,
+                        const SizedBox(height: 6.0),
+                        SuggestionFormField(
+                          prefsKey: 'contract_full_name',
+                          controller: _fullNameController,
+                          style: Kstyle.textStyle,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: Kstyle.textFieldStyle.copyWith(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                              borderSide: BorderSide(
+                                width: 1.2,
+                                color: _fullNameController.text.isNotEmpty
+                                    ? AppColors.newLabel
+                                    : AppColors.newLabel.withAlpha(102),
                               ),
-                              color: AppColors.newLabel,
-                              onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) => Dialog(
-                                  backgroundColor: AppColors.dark,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      16.0,
-                                      16.0,
-                                      16.0,
-                                      0.0,
+                            ),
+                          ),
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) => value!.isEmpty
+                              ? tr('required', context: context)
+                              : null,
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          tr('address_of', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
+                          ),
+                        ),
+                        const SizedBox(height: 6.0),
+                        SuggestionFormField(
+                          prefsKey: 'contract_address',
+                          controller: _addressController,
+                          textCapitalization: TextCapitalization.words,
+                          style: Kstyle.textStyle,
+                          decoration: Kstyle.textFieldStyle.copyWith(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                              borderSide: BorderSide(
+                                width: 1.2,
+                                color: _addressController.text.isNotEmpty
+                                    ? AppColors.newLabel
+                                    : AppColors.newLabel.withAlpha(102),
+                              ),
+                            ),
+                          ),
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) => value!.isEmpty
+                              ? tr('required', context: context)
+                              : null,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: 2,
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          tr('iec', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
+                          ),
+                        ),
+                        const SizedBox(height: 6.0),
+                        SuggestionFormField(
+                          prefsKey: 'contract_inn',
+                          controller: _innController,
+                          style: Kstyle.textStyle,
+                          decoration: Kstyle.textFieldStyle.copyWith(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                              borderSide: BorderSide(
+                                width: 1.2,
+                                color: _innController.text.isNotEmpty
+                                    ? AppColors.newLabel
+                                    : AppColors.newLabel.withAlpha(102),
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                            ),
+                            suffixIcon: Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: IconButton(
+                                icon: SvgPicture.asset(
+                                  'assets/svg/help.svg',
+                                  height: 20.0,
+                                ),
+                                color: AppColors.newLabel,
+                                onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                    backgroundColor: AppColors.dark,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6.0),
                                     ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(10.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              6.0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                        16.0,
+                                        16.0,
+                                        16.0,
+                                        0.0,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(10.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(6.0),
+                                              color: AppColors.commentTF,
                                             ),
-                                            color: AppColors.commentTF,
-                                          ),
-                                          child: Text(
-                                            tr('iec_info', context: context),
-                                            style: Kstyle.textStyle,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
                                             child: Text(
-                                              tr('close', context: context),
-                                              style: Kstyle.textStyle.copyWith(
-                                                fontWeight: FontWeight.bold,
+                                              tr('iec_info', context: context),
+                                              style: Kstyle.textStyle,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4.0),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: Text(
+                                                tr('close', context: context),
+                                                style: Kstyle.textStyle
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(9),
+                          ],
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) => value!.isEmpty
+                              ? tr('required', context: context)
+                              : null,
                         ),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(9),
-                        ],
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) => value!.isEmpty
-                            ? tr('required', context: context)
-                            : null,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        tr('status_of_contract', context: context),
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      CustomDropdown(
-                        label: '',
-                        value: _selectedStatus?.label(context) ?? '',
-                        items: StatusType.values
-                            .map((s) => s.label(context))
-                            .toList(),
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() {
-                              _selectedStatus = StatusTypeExtension.fromLabel(
-                                val,
-                                context,
-                              );
-                            });
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Cost of the contract',
-                        style: Kstyle.textStyle.copyWith(
-                          color: AppColors.cardGrey,
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
-                      SuggestionFormField(
-                        prefsKey: 'contract_amount',
-                        controller: _amountController,
-                        style: Kstyle.textStyle,
-                        decoration: Kstyle.textFieldStyle.copyWith(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide: BorderSide(
-                              width: 1.2,
-                              color: _amountController.text.isNotEmpty
-                                  ? AppColors.newLabel
-                                  : AppColors.newLabel.withAlpha(102),
-                            ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          tr('status_of_contract', context: context),
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
                           ),
                         ),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          TextInputFormatter.withFunction((oldValue, newValue) {
-                            final digits = newValue.text.replaceAll(
-                              RegExp(r'[^0-9]'),
-                              '',
-                            );
-                            if (digits.isEmpty) {
-                              return const TextEditingValue(text: '');
-                            }
-                            final formatted = KFormat.amountFormat.format(
-                              int.parse(digits),
-                            );
-                            final withCurrency =
-                                '$formatted ${tr('currency', context: context)}';
-                            return TextEditingValue(
-                              text: withCurrency,
-                              selection: TextSelection.collapsed(
-                                offset: formatted.length,
-                              ),
-                            );
-                          }),
-                        ],
-                        onChanged: (_) => setState(() {}),
-                        validator: (value) => value!.isEmpty
-                            ? tr('required', context: context)
-                            : null,
-                      ),
-                      if (isFormComplete) ...[
-                        const SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              final contract = ContractEntity(
-                                type: _selectedType!,
-                                fullName: _fullNameController.text,
-                                organizationAddress: _addressController.text,
-                                inn: _innController.text,
-                                status: _selectedStatus!,
-                                amount: double.parse(
-                                  _amountController.text.replaceAll(
-                                    RegExp(r'[^0-9]'),
-                                    '',
-                                  ),
-                                ),
-                                createdAt: DateTime.now(),
-                              );
-
-                              _createdContract = contract;
-
-                              context.read<ContractBloc>().add(
-                                CreateContractEvent(contract),
-                              );
+                        const SizedBox(height: 6.0),
+                        CustomDropdown(
+                          label: '',
+                          value: _selectedStatus?.label(context) ?? '',
+                          items: StatusType.values
+                              .map((s) => s.label(context))
+                              .toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              setState(() {
+                                _selectedStatus = StatusTypeExtension.fromLabel(
+                                  val,
+                                  context,
+                                );
+                              });
                             }
                           },
-                          style: Kstyle.buttonStyle,
-                          child: Text(
-                            tr('save_contract', context: context),
-                            style: Kstyle.textStyle.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0,
-                            ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Cost of the contract',
+                          style: Kstyle.textStyle.copyWith(
+                            color: AppColors.cardGrey,
                           ),
                         ),
+                        const SizedBox(height: 6.0),
+                        SuggestionFormField(
+                          prefsKey: 'contract_amount',
+                          controller: _amountController,
+                          style: Kstyle.textStyle,
+                          decoration: Kstyle.textFieldStyle.copyWith(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                              borderSide: BorderSide(
+                                width: 1.2,
+                                color: _amountController.text.isNotEmpty
+                                    ? AppColors.newLabel
+                                    : AppColors.newLabel.withAlpha(102),
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            TextInputFormatter.withFunction((
+                              oldValue,
+                              newValue,
+                            ) {
+                              final digits = newValue.text.replaceAll(
+                                RegExp(r'[^0-9]'),
+                                '',
+                              );
+                              if (digits.isEmpty) {
+                                return const TextEditingValue(text: '');
+                              }
+                              final formatted = KFormat.amountFormat.format(
+                                int.parse(digits),
+                              );
+                              final withCurrency =
+                                  '$formatted ${tr('currency', context: context)}';
+                              return TextEditingValue(
+                                text: withCurrency,
+                                selection: TextSelection.collapsed(
+                                  offset: formatted.length,
+                                ),
+                              );
+                            }),
+                          ],
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) => value!.isEmpty
+                              ? tr('required', context: context)
+                              : null,
+                        ),
+                        if (isFormComplete) ...[
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                final contract = ContractEntity(
+                                  type: _selectedType!,
+                                  fullName: _fullNameController.text,
+                                  organizationAddress: _addressController.text,
+                                  inn: _innController.text,
+                                  status: _selectedStatus!,
+                                  amount: double.parse(
+                                    _amountController.text.replaceAll(
+                                      RegExp(r'[^0-9]'),
+                                      '',
+                                    ),
+                                  ),
+                                  createdAt: DateTime.now(),
+                                );
+
+                                _createdContract = contract;
+
+                                context.read<ContractBloc>().add(
+                                  CreateContractEvent(contract),
+                                );
+                              }
+                            },
+                            style: Kstyle.buttonStyle,
+                            child: Text(
+                              tr('save_contract', context: context),
+                              style: Kstyle.textStyle.copyWith(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
-              if (state.status == BlocStatus.loading)
-                const Center(child: CircularProgressIndicator.adaptive()),
-            ],
-          );
-        },
+                if (state.status == BlocStatus.loading)
+                  const Center(child: CircularProgressIndicator.adaptive()),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

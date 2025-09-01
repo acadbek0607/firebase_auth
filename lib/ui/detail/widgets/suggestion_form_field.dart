@@ -38,6 +38,7 @@ class SuggestionFormField extends StatefulWidget {
 
 class _SuggestionFormFieldState extends State<SuggestionFormField> {
   List<String> _options = [];
+  TextEditingController? _fieldController;
 
   @override
   void initState() {
@@ -82,10 +83,11 @@ class _SuggestionFormFieldState extends State<SuggestionFormField> {
         );
       },
       onSelected: (String selection) {
-        widget.controller.text = selection;
-        widget.controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: selection.length),
-        );
+        widget.controller
+          ..text = selection
+          ..selection = TextSelection.fromPosition(
+            TextPosition(offset: selection.length),
+          );
         _save(selection);
       },
       fieldViewBuilder:
@@ -95,7 +97,15 @@ class _SuggestionFormFieldState extends State<SuggestionFormField> {
             FocusNode focusNode,
             VoidCallback onFieldSubmitted,
           ) {
-            textEditingController.value = widget.controller.value;
+            if (_fieldController != textEditingController) {
+              _fieldController = textEditingController;
+              _fieldController!.value = widget.controller.value;
+              _fieldController!.addListener(() {
+                if (widget.controller.value != _fieldController!.value) {
+                  widget.controller.value = _fieldController!.value;
+                }
+              });
+            }
             return TextFormField(
               controller: textEditingController,
               focusNode: focusNode,

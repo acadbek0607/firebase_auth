@@ -13,6 +13,13 @@ class UzPhoneInputFormatter extends TextInputFormatter {
       digits = digits.substring(3);
     }
 
+    if (digits.isEmpty) {
+      return const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
+    }
+
     if (digits.length > 9) {
       digits = digits.substring(0, 9);
     }

@@ -40,14 +40,13 @@ class _EditProfileFormState extends State<EditProfileForm> {
       _dobController.text = profile.dateOfBirth ?? '';
       _phoneController.text = profile.phone?.isNotEmpty == true
           ? profile.phone!
-          : '+998(';
+          : '';
       _professionController.text = profile.profession ?? '';
       _organizationController.text = profile.organization ?? '';
       _emailController.text = profile.email;
     } else {
       final user = context.read<AuthBloc>().state.user;
       _emailController.text = user?.email ?? '';
-      _phoneController.text = '+998(';
     }
   }
 

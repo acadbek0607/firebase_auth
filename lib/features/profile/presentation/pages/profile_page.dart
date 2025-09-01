@@ -103,13 +103,15 @@ class _ProfilePageState extends State<ProfilePage> {
         : null;
 
     return BlocListener<AuthBloc, AuthState>(
-      listenWhen: (p, c) =>
-          p.status != AuthStatus.authenticated &&
-          c.status == AuthStatus.authenticated,
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        final user = state.user;
-        if (user != null) {
-          context.read<ProfileBloc>().add(LoadProfile(uid: user.uid));
+        if (state.status == AuthStatus.authenticated) {
+          final user = state.user;
+          if (user != null) {
+            context.read<ProfileBloc>().add(LoadProfile(uid: user.uid));
+          }
+        } else if (state.status == AuthStatus.unauthenticated) {
+          Navigator.pushReplacementNamed(context, '/signin');
         }
       },
       child: BlocConsumer<ProfileBloc, ProfileState>(
@@ -133,6 +135,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
                 child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.logout,
+                    color: AppColors.white,
+                    size: 16.0,
+                  ),
+                  onPressed: () {
+                    context.read<AuthBloc>().add(SignOutRequested());
+                  },
+                ),
+                const SizedBox(width: 16.0),
+              ],
             ),
             body: state.status == BlocStatus.loading
                 ? const Center(child: CircularProgressIndicator())

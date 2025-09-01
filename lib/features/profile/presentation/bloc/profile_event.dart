@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 
 abstract class ProfileEvent extends Equatable {
   const ProfileEvent();
@@ -13,8 +14,11 @@ class LoadProfile extends ProfileEvent {
 }
 
 class SaveProfile extends ProfileEvent {
-  final dynamic profile;
+  final ProfileEntity profile;
   const SaveProfile(this.profile);
+
+  @override
+  List<Object?> get props => [profile];
 }
 
 class ToggleSavedContractEvent extends ProfileEvent {

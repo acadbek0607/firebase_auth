@@ -60,11 +60,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) async {
     try {
       await createOrUpdateProfile(event.profile);
+      final updatedProfile = await getProfile(event.profile.uid);
       emit(
         state.copyWith(
           status: BlocStatus.loaded,
-          profile: event.profile,
-          savedContractIds: event.profile.savedContractIds,
+          profile: updatedProfile ?? event.profile,
+          savedContractIds:
+              updatedProfile?.savedContractIds ??
+              event.profile.savedContractIds,
         ),
       );
     } catch (e) {

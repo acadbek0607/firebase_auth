@@ -127,21 +127,23 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        IconButton(
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
                             setState(() {
                               _accepted = !_accepted;
                             });
                           },
-                          icon: SvgPicture.asset(
+                          child: SvgPicture.asset(
                             _accepted
                                 ? 'assets/svg/s_check.svg'
                                 : 'assets/svg/check.svg',
                           ),
                         ),
+                        const SizedBox(width: 8),
                         Wrap(
                           children: [
                             Text(
@@ -193,7 +195,8 @@ class _SignUpPageState extends State<SignUpPage> {
         listener: (context, state) {
           if (state.status == AuthStatus.authenticated) {
             currentUserNotifier.value = state.user;
-            Navigator.pushReplacementNamed(context, '/edit_profile');
+            selectedPageNotifier.value = 4;
+            Navigator.pushReplacementNamed(context, '/profile');
           } else if (state.status == AuthStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.errorMessage.toString())),

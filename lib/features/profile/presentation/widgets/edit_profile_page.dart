@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/core/utils/uz_phone_input_fomatter.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
@@ -37,13 +38,16 @@ class _EditProfileFormState extends State<EditProfileForm> {
     if (profile != null) {
       _fullNameController.text = profile.fullName ?? '';
       _dobController.text = profile.dateOfBirth ?? '';
-      _phoneController.text = profile.phone ?? '';
+      _phoneController.text = profile.phone?.isNotEmpty == true
+          ? profile.phone!
+          : '+998(';
       _professionController.text = profile.profession ?? '';
       _organizationController.text = profile.organization ?? '';
       _emailController.text = profile.email;
     } else {
       final user = context.read<AuthBloc>().state.user;
       _emailController.text = user?.email ?? '';
+      _phoneController.text = '+998(';
     }
   }
 
@@ -99,6 +103,12 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     labelText: tr('full_name', context: context),
                   ),
                   style: Kstyle.textStyle,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Full name is required';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -109,6 +119,12 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     labelText: tr('profession', context: context),
                   ),
                   style: Kstyle.textStyle,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Profession is required';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -119,6 +135,12 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     labelText: tr('organization', context: context),
                   ),
                   style: Kstyle.textStyle,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Organization is required';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -128,6 +150,29 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     labelText: tr('date_of_birth', context: context),
                   ),
                   style: Kstyle.textStyle,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Date of birth is required';
+                    }
+                    return null;
+                  },
+                  readOnly: true,
+                  onTap: () async {
+                    final initialDate = _dobController.text.isNotEmpty
+                        ? DateFormat('dd.MM.yyyy').parse(_dobController.text)
+                        : DateTime.now();
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: initialDate,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null) {
+                      _dobController.text = DateFormat(
+                        'dd.MM.yyyy',
+                      ).format(picked);
+                    }
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -137,6 +182,15 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     labelText: tr('phone', context: context),
                   ),
                   style: Kstyle.textStyle,
+                  inputFormatters: [UzPhoneInputFormatter()],
+                  validator: (value) {
+                    if (value == null) return 'Phone is required';
+                    final digits = value.replaceAll(RegExp(r'\D'), '');
+                    if (digits.length != 12) {
+                      return 'Enter a valid phone number';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(

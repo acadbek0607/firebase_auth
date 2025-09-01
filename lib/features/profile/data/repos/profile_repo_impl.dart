@@ -19,10 +19,14 @@ class ProfileRepoImpl implements ProfileRepo {
     final currentUser = auth.currentUser;
     if (currentUser != null && profile.email != currentUser.email) {
       await currentUser.updateEmail(profile.email);
+      await currentUser.reload();
     }
 
     final model = ProfileModel.fromEntity(profile);
-    await firestore.collection('profiles').doc(uid).set(model.toJson());
+    await firestore
+        .collection('profiles')
+        .doc(uid)
+        .set(model.toJson(), SetOptions(merge: true));
   }
 
   @override

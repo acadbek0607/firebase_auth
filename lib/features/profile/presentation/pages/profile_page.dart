@@ -137,11 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: AppColors.white,
-                    size: 16.0,
-                  ),
+                  icon: Image.asset('assets/img/logout.png', width: 32.0),
                   onPressed: () {
                     context.read<AuthBloc>().add(SignOutRequested());
                   },

@@ -18,7 +18,7 @@ class ProfileRepoImpl implements ProfileRepo {
     // Update email in FirebaseAuth if it has changed
     final currentUser = auth.currentUser;
     if (currentUser != null && profile.email != currentUser.email) {
-      await currentUser.updateEmail(profile.email);
+      await currentUser.verifyBeforeUpdateEmail(profile.email);
       await currentUser.reload();
     }
 

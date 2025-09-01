@@ -197,18 +197,16 @@ class _EditProfileFormState extends State<EditProfileForm> {
                   controller: _emailController,
                   decoration: Kstyle.textFieldStyle.copyWith(
                     labelText: tr('email', context: context),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(
+                        width: 1.2,
+                        color: AppColors.cardGrey,
+                      ),
+                    ),
                   ),
-                  style: Kstyle.textStyle,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Email is required';
-                    }
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                    if (!emailRegex.hasMatch(value.trim())) {
-                      return 'Enter a valid email';
-                    }
-                    return null;
-                  },
+                  style: Kstyle.textStyle.copyWith(color: AppColors.cardGrey),
+                  readOnly: true,
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(

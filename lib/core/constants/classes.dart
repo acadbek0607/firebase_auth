@@ -41,6 +41,7 @@ class Kstyle {
   );
 
   static InputDecoration textFieldStyle = InputDecoration(
+    labelStyle: TextStyle(color: AppColors.newLabel),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(4.0),
       borderSide: BorderSide(

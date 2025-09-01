@@ -13,6 +13,17 @@ class UzPhoneInputFormatter extends TextInputFormatter {
       digits = digits.substring(3);
     }
 
+    // Keep track of the cursor position relative to the digits entered
+    int digitIndex = newValue.text
+        .substring(0, newValue.selection.baseOffset)
+        .replaceAll(RegExp(r'\D'), '')
+        .length;
+    if (digitIndex > 3) {
+      digitIndex -= 3;
+    } else {
+      digitIndex = 0;
+    }
+
     if (digits.isEmpty) {
       return const TextEditingValue(
         text: '',

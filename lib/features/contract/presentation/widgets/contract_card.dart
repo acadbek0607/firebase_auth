@@ -96,7 +96,7 @@ class ContractCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: contract.status.color.withAlpha(44),
+                    color: contract.status.color.withAlpha(77),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -122,7 +122,6 @@ class ContractCard extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 4),
             Text.rich(
               TextSpan(

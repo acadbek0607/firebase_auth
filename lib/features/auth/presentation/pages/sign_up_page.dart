@@ -155,9 +155,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   Navigator.pushNamed(context, '/privacy'),
                               child: Text(
                                 tr('privacy_policy', context: context),
-                                style: const TextStyle(
+                                style: Kstyle.textStyle.copyWith(
                                   color: AppColors.link,
-                                  decoration: TextDecoration.underline,
                                 ),
                               ),
                             ),

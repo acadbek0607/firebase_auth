@@ -16,9 +16,18 @@ class ResponsiveCenter extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth > maxContentWidth
-            ? maxContentWidth
-            : constraints.maxWidth;
+        final screenWidth = constraints.maxWidth;
+        double width = screenWidth;
+
+        // Shrink content by 30% for medium sized layouts
+        if (screenWidth > 700 && screenWidth < 1080) {
+          width = screenWidth * 0.5;
+        }
+
+        if (width > maxContentWidth) {
+          width = maxContentWidth;
+        }
+
         return Align(
           alignment: alignment,
           child: SizedBox(width: width, child: child),

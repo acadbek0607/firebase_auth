@@ -201,64 +201,64 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
+    return ResponsiveCenter(
+      child: Scaffold(
         backgroundColor: AppColors.black,
-        title: Text(
-          tr('contracts', context: context),
-          style: Kstyle.textStyle.copyWith(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w500,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: AppColors.black,
+          title: Text(
+            tr('contracts', context: context),
+            style: Kstyle.textStyle.copyWith(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        titleSpacing: 4.0,
-        centerTitle: false,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
-          child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
-        ),
-        actions: [
-          Row(
-            children: [
-              IconButton(
-                icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
-                onPressed: _openFilterPage,
-              ),
-              const SizedBox(width: 4.0),
-              SvgPicture.asset('assets/svg/divider.svg'),
-              const SizedBox(width: 4.0),
-              IconButton(
-                icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
-                onPressed: () => showSearchPageDialog(context),
-              ),
-              const SizedBox(width: 16.0),
-            ],
+          titleSpacing: 4.0,
+          centerTitle: false,
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
+            child: SvgPicture.asset('assets/svg/appBar_icon.svg'),
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          CalendarWidget(
-            initialDate: _selectedDay,
-            onDaySelected: _onCalendarDaySelected,
-          ),
-          Expanded(
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 32),
-                      const ToggleButtonsWidget(),
-                      const SizedBox(height: 20.0),
-                    ],
-                  ),
+          actions: [
+            Row(
+              children: [
+                IconButton(
+                  icon: SvgPicture.asset('assets/svg/filter.svg', height: 16.0),
+                  onPressed: _openFilterPage,
                 ),
+                const SizedBox(width: 4.0),
+                SvgPicture.asset('assets/svg/divider.svg'),
+                const SizedBox(width: 4.0),
+                IconButton(
+                  icon: SvgPicture.asset('assets/svg/search.svg', height: 16.0),
+                  onPressed: () => showSearchPageDialog(context),
+                ),
+                const SizedBox(width: 16.0),
               ],
-              body: ResponsiveCenter(
-                child: Container(
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            CalendarWidget(
+              initialDate: _selectedDay,
+              onDaySelected: _onCalendarDaySelected,
+            ),
+            Expanded(
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 32),
+                        const ToggleButtonsWidget(),
+                        const SizedBox(height: 20.0),
+                      ],
+                    ),
+                  ),
+                ],
+                body: Container(
                   color: AppColors.black,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TabBarView(
@@ -290,8 +290,8 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

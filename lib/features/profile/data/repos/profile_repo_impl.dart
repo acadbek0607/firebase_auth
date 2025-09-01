@@ -15,6 +15,12 @@ class ProfileRepoImpl implements ProfileRepo {
     final uid = auth.currentUser?.uid;
     if (uid == null) throw Exception('User not authenticated');
 
+    // Update email in FirebaseAuth if it has changed
+    final currentUser = auth.currentUser;
+    if (currentUser != null && profile.email != currentUser.email) {
+      await currentUser.updateEmail(profile.email);
+    }
+
     final model = ProfileModel.fromEntity(profile);
     await firestore.collection('profiles').doc(uid).set(model.toJson());
   }

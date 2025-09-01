@@ -5,9 +5,11 @@ import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/bloc_status.dart';
 import 'package:fire_auth/core/constants/classes.dart';
 import 'package:fire_auth/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_event.dart';
 import 'package:fire_auth/features/profile/presentation/bloc/profile_state.dart';
+import 'package:fire_auth/features/profile/presentation/widgets/edit_profile_page.dart';
 import 'package:fire_auth/features/profile/presentation/widgets/profile_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String _selectedLanguage = 'English (USA)';
   String _selectedFlagPath = 'assets/flags/us.svg';
   Locale? _prevLocale;
+  bool _showForm = false;
 
   @override
   void didChangeDependencies() {
@@ -133,14 +136,42 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             body: state.status == BlocStatus.loading
                 ? const Center(child: CircularProgressIndicator())
-                : Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 0.0),
-                    child: ProfileCard(
-                      email: authUser?.email ?? '',
-                      onLanguageTap: _showLanguageDialog,
-                      selectedLanguage: _selectedLanguage,
-                      selectedFlag: _selectedFlagPath,
-                    ),
+                : Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          16.0,
+                          20.0,
+                          16.0,
+                          0.0,
+                        ),
+                        child: ProfileCard(
+                          profile:
+                              state.profile ??
+                              ProfileEntity(
+                                uid: authUser?.uid ?? '',
+                                email: authUser?.email ?? '',
+                              ),
+                          onLanguageTap: _showLanguageDialog,
+                          selectedLanguage: _selectedLanguage,
+                          selectedFlag: _selectedFlagPath,
+                          onProfileTap: () {
+                            setState(() {
+                              _showForm = true;
+                            });
+                          },
+                        ),
+                      ),
+                      if (_showForm || state.profile == null)
+                        EditProfileForm(
+                          showBack: state.profile != null,
+                          onDismiss: () {
+                            setState(() {
+                              _showForm = false;
+                            });
+                          },
+                        ),
+                    ],
                   ),
           );
         },

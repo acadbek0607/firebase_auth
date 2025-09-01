@@ -1,21 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fire_auth/core/constants/app_colors.dart';
 import 'package:fire_auth/core/constants/classes.dart';
+import 'package:fire_auth/features/profile/domain/entities/profile_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfileCard extends StatelessWidget {
-  final String email;
+  final ProfileEntity profile;
   final VoidCallback onLanguageTap;
   final String selectedLanguage;
   final String selectedFlag;
+  final VoidCallback onProfileTap;
 
   const ProfileCard({
     super.key,
-    required this.email,
+    required this.profile,
     required this.onLanguageTap,
     required this.selectedLanguage,
     required this.selectedFlag,
+    required this.onProfileTap,
   });
 
   @override
@@ -23,49 +26,60 @@ class ProfileCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Card(
-          color: AppColors.dark,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: AppColors.dark,
-                      backgroundImage:
-                          const AssetImage('assets/img/default.png')
-                              as ImageProvider,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Asadbek Mamutov',
-                          style: Kstyle.textStyle.copyWith(
-                            color: AppColors.lightGreen,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: onProfileTap,
+          child: Card(
+            color: AppColors.dark,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundColor: AppColors.dark,
+                        backgroundImage:
+                            const AssetImage('assets/img/default.png')
+                                as ImageProvider,
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            profile.fullName ?? '-',
+                            style: Kstyle.textStyle.copyWith(
+                              color: AppColors.lightGreen,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text('Mobile developer • UIC', style: Kstyle.textStyle),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _infoRow(tr('date_of_birth', context: context), '06.07.2000'),
-                _infoRow(
-                  tr('phone', context: context),
-                  KFormat.formatPhone('+998906620706'),
-                ),
-                _infoRow(tr('email', context: context), email),
-              ],
+                          Text(
+                            '${profile.profession ?? ''} • ${profile.organization ?? ''}',
+                            style: Kstyle.textStyle,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  _infoRow(
+                    tr('date_of_birth', context: context),
+                    profile.dateOfBirth ?? '-',
+                  ),
+                  _infoRow(
+                    tr('phone', context: context),
+                    profile.phone != null
+                        ? KFormat.formatPhone(profile.phone!)
+                        : '-',
+                  ),
+                  _infoRow(tr('email', context: context), profile.email),
+                ],
+              ),
             ),
           ),
         ),

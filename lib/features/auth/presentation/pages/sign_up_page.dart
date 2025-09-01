@@ -193,7 +193,7 @@ class _SignUpPageState extends State<SignUpPage> {
         listener: (context, state) {
           if (state.status == AuthStatus.authenticated) {
             currentUserNotifier.value = state.user;
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/edit_profile');
           } else if (state.status == AuthStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.errorMessage.toString())),
